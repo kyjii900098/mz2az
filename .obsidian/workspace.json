@@ -11,10 +11,14 @@
             "id": "22de25877441649b",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "01_Raw/김태환/Daily/2026-07-21.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "새 탭"
+              "title": "2026-07-21"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "01_Raw/김태환/Daily/2026-07-21.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "백링크"
+              "title": "2026-07-21 의 백링크"
             }
           },
           {
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "01_Raw/김태환/Daily/2026-07-21.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "나가는 링크"
+              "title": "2026-07-21 의 나가는 링크"
             }
           },
           {
@@ -150,12 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "01_Raw/김태환/Daily/2026-07-21.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "개요"
+              "title": "2026-07-21 의 개요"
             }
           },
           {
@@ -187,6 +194,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "bbbcdff8ecb2ed9b",
-  "lastOpenFiles": []
+  "active": "22de25877441649b",
+  "lastOpenFiles": [
+    "01_Raw/김태환/Daily/2026-07-20.md",
+    "01_Raw/김태환/Daily/2026-07-18.md",
+    "01_Raw/김태환/Daily/2026-07-16.md",
+    "01_Raw/김태환/Daily/2026-07-15.md",
+    "01_Raw/김태환/Daily/2026-07-21.md",
+    "01_Raw/김태환/Daily/2026-07-24.md"
+  ]
 }
