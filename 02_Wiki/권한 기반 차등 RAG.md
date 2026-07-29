@@ -1,5 +1,6 @@
 ---
 title: "권한 기반 차등 RAG"
+summary: "같은 질문이라도 무료 유저와 패스 유저에게 다른 답이 나간다 — 차이는 RAG 검색 범위에서 갈린다."
 type: concept
 status: draft
 date: 2026-07-28

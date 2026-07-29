@@ -1,5 +1,6 @@
 ---
 title: "BM 3단계 재설계"
+summary: "구독을 버리고 무료 · 기간 패스 · 루트 단품 3단계로. 목업까지 갔다가 다시 뒤집힌다."
 type: decision
 status: draft
 date: 2026-07-13

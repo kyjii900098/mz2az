@@ -1,5 +1,6 @@
 ---
 title: "일정 계획과 1차 MVP 목표일"
+summary: "1차 MVP 8/29, 중간발표 9/18~19. 목표일이 8/22에서 8/29로 한 주 밀렸다."
 type: decision
 status: draft
 date: 2026-07-28

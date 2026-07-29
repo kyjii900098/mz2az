@@ -1,5 +1,6 @@
 ---
 title: "MVP 범위 축소"
+summary: "기능이 계속 깎여 나간 궤적. 7개 기능 → 4개 → MVP1은 3개."
 type: decision
 status: draft
 date: 2026-07-28

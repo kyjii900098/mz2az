@@ -1,5 +1,6 @@
 ---
 title: "K-Loca 브라우저 확장 컨셉"
+summary: "정승길이 그린 폐기된 초안. 유튜브 시청 화면 위에 장소·지도·루트 레이어를 얹는 브라우저 확장프로그램이었다."
 type: artifact
 status: draft
 date: 2026-06-17

@@ -1,5 +1,6 @@
 ---
 title: "검증된 K-콘텐츠 촬영지 데이터로 재정의"
+summary: "정체성을 \"여행\"에서 \"검증된 데이터\"로 옮긴 것 — 소프트 피벗의 실질적 내용."
 type: decision
 status: draft
 date: 2026-07-13

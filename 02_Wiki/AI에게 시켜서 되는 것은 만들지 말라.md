@@ -1,5 +1,6 @@
 ---
 title: "AI에게 시켜서 되는 것은 만들지 말라"
+summary: "김대호 멘토의 프로덕트 판별 기준 — \"클로드한테 이거 해줘 했을 때 나오는 건 만들면 안 된다.\""
 type: feedback
 status: draft
 date: 2026-06-03

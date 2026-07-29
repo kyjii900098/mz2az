@@ -1,5 +1,6 @@
 ---
 title: "LLM 플래너 어시스턴트"
+summary: "사용자가 직접 코스를 짜는 대신 LLM이 대화로 짜준다 — NotebookLM 방식."
 type: concept
 status: draft
 date: 2026-07-21
