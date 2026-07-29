@@ -1,12 +1,20 @@
 ---
 source: "[[SceneTrip_QA_방어집.pdf]]"
-source_path: "01_Raw/Project/기획심의/SceneTrip_QA_방어집.md"
+source_path: "01_Raw/Project/기획심의/SceneTrip_QA_방어집.pdf"
 author: 팀공동
 date_est: 2026-06-19
 type: raw-transcription
-method: text-extraction
-visual_review: pending
+method: vision-transcription
+visual_review: complete
+visual_review_date: 2026-07-29
 ---
+
+> [!check] 검수 완료 (2026-07-29) — 수정 사항 없음
+> 원본 pdf 7쪽은 「가장 날카로울 Top 5」 표 1개 외에 도식·이미지가 없다. 그 표는 p1 페이지 이미지로 5행 전부 직접 대조했고 일치한다. p7 「발표 직전 체크리스트」와 하단 주석도 육안 확인했다.
+>
+> 검증 방법: pdf 텍스트 레이어 전 페이지 추출 후 문장 단위 전수 대조 → 내용 불일치 **0건**.
+>
+> **`method` 를 `text-extraction` → `vision-transcription` 으로 정정한 근거**: 이 pdf의 텍스트 레이어에는 원문자 ①②③④가 **`\x00`(NUL)로 깨져 있다**(폰트에 유니코드 매핑이 없음). 그런데 전사본에는 ①②③④가 정확히 들어가 있다. 즉 이 전사본은 텍스트 추출물이 아니라 **렌더링된 페이지를 보고 옮긴 것** 이다.
 
 ## p1
 

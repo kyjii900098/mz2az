@@ -4,8 +4,8 @@ source_path: "01_Raw/Project/기획심의/기획_가이드라인_for_codex.md"
 author: 팀공동
 date_est: 2026-06-15
 type: raw-transcription
-method: text-extraction
-visual_review: pending
+method: native-md
+visual_review: n-a
 ---
 # K-콘텐츠 성지순례 서비스 기획 가이드라인
 

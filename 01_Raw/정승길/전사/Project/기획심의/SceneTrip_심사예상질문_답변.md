@@ -1,12 +1,20 @@
 ---
 source: "[[SceneTrip_심사예상질문_답변.pdf]]"
-source_path: "01_Raw/Project/기획심의/SceneTrip_심사예상질문_답변.md"
+source_path: "01_Raw/Project/기획심의/SceneTrip_심사예상질문_답변.pdf"
 author: 팀공동
 date_est: 2026-06-19
 type: raw-transcription
 method: text-extraction
-visual_review: pending
+visual_review: complete
+visual_review_date: 2026-07-29
 ---
+
+> [!check] 검수 완료 (2026-07-29) — 수정 사항 없음
+> 원본 pdf 8쪽에는 **표·도식·이미지가 하나도 없다.** 본문 텍스트와 "발표용 답변" 음영 박스·"보충 설명" 불릿으로만 구성된 순수 텍스트 문서다.
+>
+> 검증 방법: pdf 텍스트 레이어를 전 페이지 추출해 이 전사본과 문장 단위로 전수 대조했고(따옴표·공백·원문자 정규화 후) **불일치 0건** 이다. p1은 페이지 이미지로 레이아웃까지 직접 확인했다.
+>
+> 도식이 없으므로 `method` 는 `text-extraction` 그대로 두되, §5 규칙에 따라 원본 대조를 마쳤으므로 `visual_review` 만 `complete` 로 올린다.
 
 ## p1
 
