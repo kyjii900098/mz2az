@@ -1,5 +1,6 @@
 ---
 title: "Google Places 저장 금지와 표시 허용"
+summary: "\"제공이 안 된다\"가 아니라 \"저장이 안 된다\" — 이 구분 하나로 맛집 정보 문제가 풀렸다."
 type: concept
 status: draft
 date: 2026-07-28

@@ -1,5 +1,6 @@
 ---
 title: "AI 구현 범위 M1~M6"
+summary: "목업 화면 하나하나에 번호를 달고 그 뒤에 돌아야 할 AI 모듈을 매핑한 것. 김태환의 담당 범위 전체."
 type: artifact
 status: draft
 date: 2026-07-28

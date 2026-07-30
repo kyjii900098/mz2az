@@ -1,5 +1,6 @@
 ---
 title: "기획심의 제출본 SceneTrip"
+summary: "06-19 제출본. 12쪽. 프로젝트명은 「(SceneTrip) K-콘텐츠 속 그 장면, 그 장소를 실제 촬영지와 맞춤형 여행 코스로 연결하는 외국인 대상 팬덤 여행 앱」."
 type: artifact
 status: draft
 date: 2026-06-19

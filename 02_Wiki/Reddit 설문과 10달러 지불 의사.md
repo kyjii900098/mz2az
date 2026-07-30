@@ -1,5 +1,6 @@
 ---
 title: "Reddit 설문과 10달러 지불 의사"
+summary: "김상규가 피봇팅 의견서에서 인용한 유일한 정량 근거 — \"10달러 이상 지불할 의사가 있다\"."
 type: artifact
 status: draft
 date: 2026-07-13
