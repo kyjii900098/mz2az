@@ -2,532 +2,477 @@
 title: "SceneTrip DB 스키마"
 type: design
 status: draft
-updated: 2026-07-29
-source: ["[[MZ2AZ-111 촬영지 데이터 수집용 스키마]]", "[[SceneTrip 아키텍처 — 기능·API·데이터 전략]]", "[[촬영지 수집 스키마 15컬럼]]"]
-related: ["[[프로젝트 결정사항]]", "[[MVP1 데이터 모델 (7·24 화이트보드)]]", "[[데이터 3계층 전략]]"]
+updated: 2026-07-30
+source: ["[[MZ2AZ-111 촬영지 데이터 수집용 스키마]]", "[[촬영지 수집 스키마 15컬럼]]"]
+related: ["[[데이터 3계층 전략]]", "[[MVP1 데이터 모델 (7·24 화이트보드)]]"]
 ---
 
-> [!summary] SceneTrip **1계층(우리 자산 = 직접 수집한 촬영지)** 의 DB 스키마 설계안.
-> 수집용 15컬럼 플랫 CSV를 정규화한 구조. 테이블 13개 + 머티리얼라이즈드 뷰 1개.
-
-- 작성: 2026-07-29 (정권호)
-- 범위: [[데이터 3계층 전략]] 의 **1계층만.** 2계층(TourAPI·공공데이터)·3계층(Google Places 라이브)은 별도
-- 수집 템플릿: [[MZ2AZ-111 촬영지 데이터 수집용 스키마]] — 사람이 채우는 15컬럼 포맷
-- 이 문서: 그 CSV가 **적재될 DB 구조**
+> [!summary] 수집용 15컬럼 CSV를 적재할 DB 구조. 테이블 14개 + 머티리얼라이즈드 뷰 1개.
+> `i18n` = internationalization(국제화). 언어별로 갈리는 값을 담는 테이블.
+> ERD·DDL 생성용 DBML은 [[SceneTrip DB 스키마 (DBML)]] 참조.
 
 ---
 
-## 0. 현재 수집 데이터 현황 (2026-07-29 기준)
-
-| 파일 | 행수 | 컬럼 | 성격 |
-|---|---|---|---|
-| `kdramamap_drama_촬영지_2026-07-29.csv` | **20,080** | 15 | 드라마 촬영지 전수 |
-| `kdramamap_상위100_성지_2026-07-29.csv` | **5,740** | 18 | 상위 100작 큐레이션 (+`work_rank`, `scene_source`, `scene_source_url`) |
-| `kdramamap_작품마스터_2026-07-29.csv` | **477** | 28 | **작품 마스터** (인기도·위키데이터 포함) |
-| `촬영지_수집_영화전수.csv` | 6,944 | 16 (+`audience_acc`) | 영화 |
-| `촬영지_수집_2026-07-28.csv` | 7,443 | 15 | 통합본 |
-| `한국문화정보원_…_20221125.csv` | 15,034 | 14 | 공공데이터 (**cp949 인코딩**) |
-| `드라마_해외인기_TOP100.csv` | 100 | 6 | 해외 인기 순위 |
-
-**드라마 촬영지 20,080행 분석:**
-
-- 고유 작품 **476** / 고유 장소명 **14,290**
-- **작품 2개 이상이 걸린 장소 2,047개** (조이마당스튜디오 89작, 서강대교 70작, 양주한국병원 58작)
-- `title_aliases` 96.8% 채움, **`;` 구분**, 이미 다국어:
-  `1%의 어떤 것;1% of Anything;1%の奇跡;1%的可能性;1%ui Eoddungut`
-- 좌표 97.0% / `place_naver_url` 100% / `place_image_url` **14.2%**
-- `place_type` 중 **`기타` 가 10,273건(51.2%)**
-
-이 수치가 스키마 설계의 근거다. 특히 **2,047개 장소가 여러 작품에 걸려 있다** 는 것이 플랫 테이블을 못 쓰는 결정적 이유다.
-
----
-
-## 1. 왜 정규화하는가
-
-수집 CSV 한 행은 "장소"가 아니라 **작품 × 장소** 다. 서강대교는 70개 작품에 걸려 있으므로 CSV에 **70행** 이 있고, 그때마다 `title`, `title_aliases`, `title_cast` 가 통째로 반복된다.
-
-```
-서강대교 | 작품A | 배우들… | 37.54, 126.93 | 마포구 …
-서강대교 | 작품B | 배우들… | 37.54, 126.93 | 마포구 …
-…70행
-```
-
-- 좌표·주소를 고치려면 **70군데** 를 다 고쳐야 한다 (하나 빠지면 지도에 핀이 두 개 찍힌다)
-- 작품 제목 오타를 고치려면 그 작품이 걸린 장소 수만큼 고쳐야 한다
-- "아이유가 나온 작품"을 찾으려면 `title_cast` 문자열 안을 뒤져야 해 인덱스를 못 탄다
-
-요구 구조는 **장소 하나에 여러 작품** + **작품 하나에 여러 장소** 인 N:M 관계이고, 연결 테이블 없이는 표현할 수 없다.
-
----
-
-## 2. 전체 구조
+## 1. 구조
 
 ```
                     ┌─ place_i18n (언어별 이름·주소)
-                    │
-        place ──────┼─ place_alias (별칭)
-          │         │
-          │    popularity_score
+        place ──────┤
+          │         └─ place_alias (별칭)
           │
-    place_content ──── place_content_i18n (언어별 관계 설명)
+    place_content ──── place_content_i18n (언어별 장면 설명)
           │
         content ─────┬─ content_i18n (언어별 제목)
           │          └─ content_alias (별칭)
-          │
      content_cast
           │
         person ────── person_i18n (언어별 이름)
 
-
-    search_term  (MV: 위 이름·별칭 전부 펼친 자동완성 색인)
-    user_event   (MVP2: 행동 로그)
+    search_term  (MV · 자동완성 색인)
+    user_event   (MVP2 · 행동 로그)
 ```
 
-| 분류 | 테이블 |
-|---|---|
-| **실체(entity)** | `place`, `content`, `person` |
-| **연결(junction)** | `place_content`, `content_cast` |
-| **번역(i18n)** | `place_i18n`, `content_i18n`, `person_i18n`, `place_content_i18n` |
-| **별칭** | `place_alias`, `content_alias` |
-| **검색** | `search_term` (MATERIALIZED VIEW) |
-| **로그** | `user_event` (MVP2) |
+수집 CSV 한 행 = **작품 × 장소** 이므로 그대로 넣으면 작품 정보가 반복 저장된다. 실제로 서강대교는 70개 작품, 조이마당스튜디오는 89개 작품에 걸려 있다. `place_content` 가 이 N:M을 흡수한다.
 
 ---
 
-## 3. 테이블 정의
+## 2. 테이블
 
-### 3.1 `place` — 장소
+### `place`
 
-| 컬럼 | 타입 | 출처 / 설명 |
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `id` | BIGSERIAL **PK** | auto increment |
-| `category` | TEXT | `place_type` → **코드값** (§8 참조) |
-| `geom` | GEOGRAPHY(Point,4326) | `place_latitude` + `place_longitude` |
-| `coordinate_status` | TEXT | `geocoded` / `manual` / `missing` (좌표 97%) |
-| `naver_map_url` | TEXT NULL | `place_naver_url` (100% 채움) |
-| `image_url` | TEXT NULL | `place_image_url` (**14.2%만 채움**) |
-| `kakao_place_id` | TEXT NULL | 참고용. **UNIQUE 아님, 필수 아님** (§7) |
-| `popularity_score` | NUMERIC DEFAULT 0 | 지도 핀 우선순위. 배치 계산 |
+| `id` | BIGSERIAL PK | |
+| `type` | TEXT | `place_type` 을 코드로 변환 |
+| `geom` | GEOGRAPHY(Point,4326) | 위도·경도 |
+| `naver_place_url` | TEXT NULL | 네이버 지도 **장소 페이지** URL · dedupe 1차 키 |
+| `popularity_score` | NUMERIC DEFAULT 0 | 핀 우선순위 |
 | `created_at` / `updated_at` | TIMESTAMPTZ | |
 
-`category` 를 한글이 아니라 코드로 두는 이유 — 종류가 수십 개뿐이라 행마다 번역할 게 아니라 앱 언어 사전에서 한 번만 번역하면 된다.
+`naver_place_url` 은 `https://map.naver.com/p/entry/place/{id}` 형태의 **장소 고유 URL** 이다. 표기가 달라도 같은 장소면 같은 값이 나오므로 dedupe 기준이 된다.
 
-### 3.2 `place_i18n` — 장소 (언어별)
+현재 수집된 `place_naver_url` 은 이 형태가 아니다. 20,080행 전부가 `place_address` 를 URL 인코딩한 검색 링크(`/p/search/서울 마포구 …`)라 주소와 정보량이 같고 식별자 역할을 못 한다. **장소 URL은 재수집이 필요하다.**
 
-| 컬럼 | 타입 | 설명 |
+URL 대신 `{id}` 부분만 `naver_place_id` 로 저장하고 URL은 화면에서 조립하는 방법도 있다. 그쪽이 `UNIQUE` 제약을 걸기에 안정적이다.
+
+### `place_i18n`
+
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `place_id` | BIGINT FK → place | **PK** (복합) |
-| `lang` | TEXT | `ko` / `en` / `ja` / `zh-Hant` **PK** (복합) |
-| `name` | TEXT | `place_name` |
-| `address` | TEXT | `place_address` |
+| `place_id` | BIGINT FK | PK (복합) |
+| `lang` | TEXT | PK (복합) · `ko`/`en`/`ja`/`zh-Hant` |
+| `name` | TEXT | |
+| `address` | TEXT | |
+| `description` | TEXT NULL | 장소 자체에 대한 설명 |
 | `trans_status` | TEXT | `machine` / `reviewed` / `human` |
 
-### 3.3 `place_alias` — 장소 별칭
+`description` 은 작품과 무관한 장소 본연의 설명이다(&ldquo;제주 동쪽 끝의 응회구로 유네스코 세계자연유산&rdquo;). 특정 작품에서의 장면 설명은 `place_content_i18n.relation_description` 에 따로 있다 — 장소 상세 화면에서 전자는 상단 고정, 후자는 작품 목록 안에서 펼쳐진다.
 
-| 컬럼 | 타입 | 설명 |
+공공데이터(한국문화정보원 15,034행)의 `장소설명` 컬럼이 이 필드의 수집 소스가 된다. 공공누리라 저장·재배포가 자유롭다.
+
+### `place_image`
+
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `id` | BIGSERIAL **PK** | |
+| `id` | BIGSERIAL PK | |
 | `place_id` | BIGINT FK → place | |
-| `alias` | TEXT | 통용명 / 옛이름 / 로마자 |
-| `alias_type` | TEXT | `common` / `former` / `romanized` |
-| `lang` | TEXT NULL | 로마자는 언어 무관 → NULL |
-
-장소당 **0~3개. 대부분 0개가 정상.**
-
-### 3.4 `content` — 작품
-
-`작품마스터` CSV(477행·28컬럼)가 거의 그대로 대응된다.
-
-| 컬럼 | 타입 | 출처 / 설명 |
-|---|---|---|
-| `id` | BIGSERIAL **PK** | **우리 PK** |
-| `type` | TEXT | `title_category` — `drama`/`movie`/`variety`/`kpop` |
-| `broadcaster` | TEXT NULL | 방송사 |
-| `air_period` | TEXT NULL | 방영 기간 |
-| `air_status` | TEXT NULL | 방영 상태 |
-| `poster_url` | TEXT NULL | |
-| `kdramamap_url` | TEXT NULL | 수집 출처 |
-| **`wikidata_qid`** | TEXT NULL | **다국어 제목 자동 확보 키** (§6) |
-| `wiki_lang_count` | INT NULL | 위키 언어 수 |
-| `en_wiki_title` | TEXT NULL | |
-| `en_views_12m` | INT NULL | 영문 위키 12개월 조회수 |
-| `score_global` / `score_interest` / `score_data` | NUMERIC NULL | 인기도 구성 점수 |
-| **`score_total`** | NUMERIC NULL | **인기도 종합 (기수집)** |
-| `rank` | INT NULL | 순위 |
-| `is_top100` | BOOLEAN | 상위 100작 여부 |
-| `audience_acc` | BIGINT NULL | 영화 누적 관객수 |
-| `is_featured` | BOOLEAN DEFAULT false | 운영자 수동 상단 고정 |
-| `popularity_score` | NUMERIC DEFAULT 0 | **최종 정렬값** (§5) |
-| `tmdb_id` | INT NULL | 선택. PK 아님 |
-| `created_at` / `updated_at` | TIMESTAMPTZ | |
-
-`tmdb_id` 를 PK로 쓰지 않는다 — TMDB에 없는 작품(K-POP·예능)은 등록 자체가 불가능해진다. `wikidata_qid` 도 마찬가지로 참조용이다.
-
-### 3.5 `content_i18n` — 작품 (언어별)
-
-| 컬럼 | 타입 | 설명 |
-|---|---|---|
-| `content_id` | BIGINT FK → content | **PK** (복합) |
-| `lang` | TEXT | **PK** (복합) |
-| `title` | TEXT | `title` / `title_official` / `title_en` |
-| `description` | TEXT NULL | 작품 소개 |
-| `trans_status` | TEXT | |
-
-### 3.6 `content_alias` — 작품 별칭
-
-| 컬럼 | 타입 | 설명 |
-|---|---|---|
-| `id` | BIGSERIAL **PK** | |
-| `content_id` | BIGINT FK → content | |
-| `alias` | TEXT | `title_aliases` 를 **`;` 로 분리** |
-| `alias_type` | TEXT | `abbrev` / `official` / `subtitle` / `romanized` |
-| `lang` | TEXT NULL | 로마자·미상은 NULL |
-
-> [!important] `title_aliases` 는 이미 다국어다.
-> `1%의 어떤 것;1% of Anything;1%の奇跡;1%的可能性;1%ui Eoddungut`
-> 적재 시 **언어를 자동 판별해 `lang` 을 채운다** — 한글/라틴/가나/한자/로마자 표기를 문자 범위로 구분. 그러면 `content_i18n` 의 다국어 제목도 상당 부분 여기서 파생 가능하다.
-
-### 3.7 `person` — 인물
-
-| 컬럼 | 타입 | 설명 |
-|---|---|---|
-| `id` | BIGSERIAL **PK** | |
-| `tmdb_person_id` | INT NULL | 선택 |
+| `url` | TEXT | |
+| `sort_order` | INT DEFAULT 0 | 표시 순서. `10, 20, 30` 처럼 띄워 넣으면 중간 삽입이 쉽다 |
 | `created_at` | TIMESTAMPTZ | |
 
-### 3.8 `person_i18n` — 인물 (언어별)
+**장소 사진만 담는다.** 작품과 엮지 않는다. 한 장짜리 컬럼(`place.image_url`)으로 두면 외관·내부·계절별 사진이 늘어나는 순간 `image_url_2` 를 만들게 되므로 테이블로 분리했다.
 
-| 컬럼 | 타입 | 설명 |
+대표 이미지는 별도 컬럼 없이 `sort_order` 첫 번째로 결정된다.
+
+사용자 리뷰 사진은 이 테이블에 섞지 않고 리뷰에 딸린 별도 테이블(`review_image`)로 둔다 — 생명주기(리뷰 삭제 시 함께 삭제)와 신고·숨김 처리가 다르고, 화면에서도 &ldquo;공식 사진 / 여행자 사진&rdquo;으로 구분해 보여주기 때문이다.
+
+> [!note] `scene_image` — **미결정 메모.** 도입하지 않은 상태이며 DBML·ERD에도 포함하지 않았다.
+> 작품별 장면 스틸이 필요해지면 `place_content` 를 부모로 삼는 테이블을 새로 만든다.
+>
+> ```sql
+> scene_image (
+>   id               BIGSERIAL PK,
+>   place_content_id BIGINT FK → place_content,
+>   url              TEXT,
+>   sort_order       INT DEFAULT 0,
+>   created_at       TIMESTAMPTZ
+> )
+> ```
+>
+> `place_id` 는 두지 않는다 — `place_content` 를 조인하면 도달하므로, 두 컬럼이 어긋날 위험이 없다. `place_content` 에 복합키 대신 대리키 `id` 를 둔 이유가 이처럼 자식 테이블이 컬럼 하나로 참조하게 하려는 것이며, `place_content_i18n` 이 이미 같은 방식이다.
+>
+> 실제 관문은 스키마가 아니라 **저작권** 이다. 스틸컷은 방송사·제작사 저작물이라 무단 저장·게시가 위험하다. 라이선스가 명시된 이미지만 쓰거나 제휴가 필요하므로, 권리 문제가 정리되는 시점에 도입한다.
+
+### `place_alias`
+
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `person_id` | BIGINT FK → person | **PK** (복합) |
-| `lang` | TEXT | **PK** (복합) |
+| `id` | BIGSERIAL PK | |
+| `place_id` | BIGINT FK | |
+| `alias` | TEXT | |
+| `lang` | TEXT NULL | 문자 범위로 자동 판별 (§ 아래) |
+
+dedupe로 병합된 이름들이 여기 보존된다.
+
+**`lang` 판별 규칙** — `place_alias` · `content_alias` 공통. 적재 시 문자 범위로 기계적으로 채운다.
+
+| 문자 | `lang` |
+|---|---|
+| 한글 | `ko` |
+| 가나 | `ja` |
+| 한자 | `zh-Hant` |
+| **라틴 문자** | **NULL** |
+
+라틴 문자를 전부 NULL로 두는 것이 핵심이다. `Squid Game`(공식 영문)이든 `Ojingeo Geim`(로마자 음차)이든 `Lovley-Runner`(오타)든 **어느 언어 사용자가 입력해도 매칭되어야** 하므로, 영어인지 로마자인지 구분할 실익이 없다.
+
+별칭 종류를 분류하는 `alias_type` 컬럼은 두지 않는다. 실제 수집 데이터에 공식 번역·직역·로마자·오타·가제가 뒤섞여 있어 4~5개 분류로 담기지 않고(예: `Round Six`, `Lovley-Runner`, `Runaway with Sun-jae on Piggyback`), 자동 판별이 불가능한데 19,434건을 손으로 분류할 수도 없다. `lang` 만으로 검색 요건은 충족된다.
+
+### `content`
+
+| 컬럼 | 타입 | 비고 |
+|---|---|---|
+| `id` | BIGSERIAL PK | |
+| `category` | TEXT | `drama` / `movie` / `variety` / `kpop` |
+| `broadcaster` | TEXT NULL | |
+| `poster_url` | TEXT NULL | |
+| `popularity_score` | NUMERIC DEFAULT 0 | 정렬값. 적재 시 직접 계산해 입력 |
+| `created_at` / `updated_at` | TIMESTAMPTZ | |
+
+**수집 원본 지표는 DB에 저장하지 않는다.** `score_total` · `en_views_12m` · `audience_acc` · `rank` · `is_top100` · `wikidata_qid` 는 작품마스터 CSV에 있지만 컬럼으로 두지 않는다.
+
+| 컬럼 | 안 두는 이유 |
+|---|---|
+| 인기 지표 4종 | 적재 시 `popularity_score` 계산에만 쓰고 버린다. 원본을 같이 저장하면 우리 정렬값과 외부 순위가 공존해 &ldquo;1위인데 왜 목록에선 5번째냐&rdquo;는 혼란이 생기고, 외부 값은 갱신되지 않아 낡는다 |
+| `air_period` · `air_status` | **방영 정보는 두지 않는다.** `air_status` 는 476행 전량이 `방영종료` 로 분산이 0이고, 애초에 방영 종료일과 오늘 날짜로 계산되는 파생값이라 저장하면 낡는다 — `김부장`(종료 2026-07-25)처럼 수집 며칠 전에 끝난 작품이 있어, 방영 중에 수집했으면 `방영중` 이 종영 후에도 그대로 남는다. `air_period` 는 `'2021-09-17 ~ 2021-09-17'` 형태의 TEXT 범위여서 정렬·필터에 쓸 수 없고(넷플릭스 단일 공개작 80건은 시작 == 종료), 앱이 읽지 않는다. 원본 값은 작품마스터 CSV에 보존된다 |
+| `wikidata_qid` | 다국어 제목을 채울 때 참고하는 값일 뿐 앱이 읽지 않는다. 값 자체는 `01_Raw/김태환/DataCollection/kdramamap_작품마스터_2026-07-29.csv` 에 보존돼 있어 나중에 언어를 추가할 때 그 파일을 다시 보면 된다 |
+| `is_featured` | 자동 계산을 덮어쓰는 장치인데 점수를 직접 입력하므로 덮어쓸 대상이 없다. MVP2에서 배치 계산으로 전환할 때 다시 필요해지면 추가한다 |
+
+### `content_i18n`
+
+| 컬럼 | 타입 | 비고 |
+|---|---|---|
+| `content_id` | BIGINT FK | PK (복합) |
+| `lang` | TEXT | PK (복합) |
+| `title` | TEXT | |
+| `description` | TEXT NULL | |
+| `trans_status` | TEXT | |
+
+### `content_alias`
+
+| 컬럼 | 타입 | 비고 |
+|---|---|---|
+| `id` | BIGSERIAL PK | |
+| `content_id` | BIGINT FK | |
+| `alias` | TEXT | `title_aliases` 를 `;` 로 분리 |
+| `lang` | TEXT NULL | `place_alias` 와 동일한 판별 규칙 |
+
+`title_aliases` 는 이미 다국어다 (96.8% 채움) — `오징어 게임;Squid Game;イカゲーム;魷魚遊戲;Ojingeo Geim;Round Six;오겜`.
+
+### `person`
+
+| 컬럼 | 타입 |
+|---|---|
+| `id` | BIGSERIAL PK |
+| `created_at` | TIMESTAMPTZ |
+
+### `person_i18n`
+
+| 컬럼 | 타입 | 비고 |
+|---|---|---|
+| `person_id` | BIGINT FK | PK (복합) |
+| `lang` | TEXT | PK (복합) |
 | `name` | TEXT | 아이유 / IU / アイユー |
 
-### 3.9 `content_cast` — 작품 × 인물 **(연결)**
+인물을 `content_cast` 에 이름 문자열로 직접 넣지 않고 별도 실체로 분리한 이유는 **번역 단위 때문** 이다. 실측상 고유 인물 554명에 출연 관계는 1,209건이다(서인국 9작품, 지창욱 9작품). 이름 번역은 사람 단위로 한 번 하면 되는데 관계 단위로 저장하면 같은 번역을 9번 써야 하고, 한 곳에 오타가 나면 그 작품에서만 검색이 갈라진다.
 
-| 컬럼 | 타입 | 설명 |
+배우 이름은 **기계 번역이 불가능** 하다. 장소명과 달리 관용 표기가 따로 있어 로마자 표기법대로 변환하면 틀린다(변우석 → 규칙상 `Byeon U-seok`, 실제 `Byeon Woo-seok` / 아이유 → 실제 `IU`). 통용 표기를 외부(위키데이터·TMDB 등)에서 수집해야 하며, 그 참조 데이터는 DB 컬럼이 아니라 `01_Raw` 의 CSV로 보관한다.
+
+### `content_cast`
+
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `content_id` | BIGINT FK → content | **PK** (복합) |
-| `person_id` | BIGINT FK → person | **PK** (복합) |
-| `role_name` | TEXT NULL | 배역명 (MVP1은 한국어만) |
-| `is_main` | BOOLEAN | 주연 여부. 검색 가중치 |
+| `content_id` | BIGINT FK | PK (복합) |
+| `person_id` | BIGINT FK | PK (복합) |
+| `sort_order` | INT | `title_cast` 나열 순서 = 비중 |
 
-> **결정(2026-07-29): 작품 단위 출연진으로 한다.** 장면별 출연진은 저장하지 않는다.
-> 근거 — 수집 비용이 크고 출처 확인이 어려워 품질이 떨어진다. "아이유 나온 촬영지" 검색은 작품 단위로도 충분하다. 필요해지면 `place_content_cast` 를 추가하면 되고 소급도 가능하다.
-> 수집 CSV의 `title_cast` 는 작품 단위로 반복 저장돼 있으므로 **작품별 1회만 적재** 한다.
+**작품 단위 출연진만 저장한다.** 장면별 출연진은 저장하지 않는다. `title_cast` 는 CSV에 작품마다 반복되므로 작품별 1회만 적재한다.
 
-### 3.10 `place_content` — 장소 × 작품 **(핵심 연결)**
+`sort_order` 는 `변우석;김혜윤` 의 순서를 그대로 넣는다. 나열 순서가 곧 비중이므로 화면 표시 순서와 검색 가중치에 함께 쓰인다. 주연 여부는 `sort_order <= 2` 로 계산되므로 별도 컬럼(`is_main`)을 두지 않는다.
 
-| 컬럼 | 타입 | 출처 / 설명 |
+**배역명(`role_name`)은 두지 않는다.** 수집 CSV에 배역 정보가 없어 전량 NULL이 되고, 채우려면 476작품 × 2~3역을 새로 수집해야 한다. 배역명 검색(&ldquo;우영우&rdquo;, &ldquo;애순&rdquo;)을 지원하기로 결정하면 `search_term` 소스 추가와 배역명 다국어 테이블까지 함께 설계해야 하므로, 그때 세트로 도입한다.
+
+### `place_content`
+
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `id` | BIGSERIAL **PK** | |
-| `place_id` | BIGINT FK → place | |
-| `content_id` | BIGINT FK → content | |
-| `relation_type` | TEXT | `filming`(촬영지) / `related`(성지·사옥·공연장) |
-| `scene_source` | TEXT NULL | `나무위키` / `영문위키백과` / `미확보` |
-| `source_url` | TEXT NULL | `source_url` |
-| `scene_source_url` | TEXT NULL | 장면 설명의 출처 (상위100 전용) |
-| `image_url` | TEXT NULL | 장면 스틸 |
-| `collected_by` | TEXT | 수집자 |
+| `id` | BIGSERIAL PK | |
+| `place_id` | BIGINT FK | |
+| `content_id` | BIGINT FK | |
 | `updated_at` | TIMESTAMPTZ | `last_updated` |
 
-`UNIQUE(place_id, content_id)`. **수집 CSV 한 행이 여기에 해당.**
+`UNIQUE(place_id, content_id)`. 수집 CSV 한 행이 여기에 해당한다. 실제 내용(장면 설명)은 `place_content_i18n` 에 있고 이 테이블은 연결과 갱신 시점만 담는다.
 
-`relation_type` 이 필요한 이유 — 사옥·공연장 같은 곳은 뭘 찍은 데가 아니라 팬들이 가는 곳이다. 구분해야 UI 필터도 되고 "여기서 촬영됐습니다"라는 오표기도 막는다.
+`relation_type`(촬영지/성지 구분)은 두지 않는다. 현재 수집분이 전량 촬영지라 값이 하나뿐이고, 장소에 장면이 딸려 있는 구조 자체로 충분하다.
 
-### 3.11 `place_content_i18n` — 관계 설명 (언어별)
+출처·수집 메타(`source_url` · `scene_source` · `scene_source_url` · `collected_by`)는 두지 않는다. `collected_by` 는 현재 15컬럼 CSV에 아예 없고, 나머지는 앱이 읽지 않으며 값은 `01_Raw` 의 수집 CSV에 보존된다. 장면 설명을 전량 채우기로 했으므로 검증본과 플레이스홀더를 구분하던 `scene_source` 의 역할도 사라졌다.
 
-| 컬럼 | 타입 | 설명 |
+### `place_content_i18n`
+
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `place_content_id` | BIGINT FK | **PK** (복합) |
-| `lang` | TEXT | **PK** (복합) |
+| `place_content_id` | BIGINT FK | PK (복합) |
+| `lang` | TEXT | PK (복합) |
 | `relation_description` | TEXT | `scene_description` |
 | `trans_status` | TEXT | |
 
-> [!warning] **`scene_description` 은 사실상 비어 있다.** (§9 참조)
-> 드라마 전수 20,080행에서 채움률 **0%**. 상위100_성지 5,740행은 100% 채움으로 보이지만
-> **5,680건(99%)이 `"촬영지로 확인됨 — 구체적인 장면 정보 미확인."` 플레이스홀더** 다.
-> 실제 장면 설명이 있는 건 **60건뿐** (나무위키 53 + 영문위키 7).
+> [!warning] 현재 수집분에는 실질적으로 비어 있다 — 드라마 전수 20,080행 0% 채움, 상위100 5,740행 중 5,680건이 `"촬영지로 확인됨 — 구체적인 장면 정보 미확인."` 플레이스홀더로 **실제 설명은 60건.** 이 필드를 전량 채우는 것을 전제로 한 설계다.
 
-### 3.12 `search_term` — 자동완성 색인 (MATERIALIZED VIEW)
+### `search_term` (MATERIALIZED VIEW)
 
-| 컬럼 | 타입 | 설명 |
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
 | `term_norm` | TEXT | 소문자 + 공백·특수문자 제거 |
-| `term_display` | TEXT | 화면 표시용 원본 |
+| `term_display` | TEXT | 표시용 원본 |
 | `entity_type` | TEXT | `place` / `content` / `person` |
-| `entity_id` | BIGINT | 원본 테이블 id |
-| `lang` | TEXT NULL | 언어별 우선 노출 |
+| `entity_id` | BIGINT | |
+| `lang` | TEXT NULL | |
 | `weight` | INT | 기본가중치 + `popularity_score`/10 |
 
-**출처 5곳:** `place_i18n` · `place_alias` · `content_i18n` · `content_alias` · `person_i18n`
+`place_i18n` · `place_alias` · `content_i18n` · `content_alias` · `person_i18n` 5곳을 UNION ALL. 적재 후 `REFRESH MATERIALIZED VIEW CONCURRENTLY`.
 
-수집 배치 후 `REFRESH MATERIALIZED VIEW CONCURRENTLY search_term;`
+자동완성이 5개 테이블 조인 없이 이 뷰 하나만 조회하게 하는 것이 목적이다. 예상 10만 행.
 
-예상 규모 — 장소 14,290 + 작품 476 + 별칭·다국어 포함해 **약 10만 행**. 인덱스 타면 5ms 내외.
+### `user_event` (MVP2)
 
-### 3.13 `user_event` — 행동 로그 **(MVP2)**
-
-| 컬럼 | 타입 | 설명 |
+| 컬럼 | 타입 | 비고 |
 |---|---|---|
-| `id` | BIGSERIAL **PK** | |
+| `id` | BIGSERIAL PK | |
 | `user_id` | BIGINT NULL | 비로그인 허용 |
-| `session_id` | TEXT | 중복 제거·어뷰징 탐지 |
+| `session_id` | TEXT | 중복 제거 |
 | `event_type` | TEXT | `impression` / `search` / `click` / `view` / `save` / `route_add` / `review` |
-| `entity_type` | TEXT | `place` / `content` |
-| `entity_id` | BIGINT | |
-| `query` | TEXT NULL | 검색어 |
-| `position` | INT NULL | 목록에서 몇 번째 (CTR 보정) |
+| `entity_type` / `entity_id` | TEXT / BIGINT | |
+| `query` | TEXT NULL | |
+| `position` | INT NULL | 목록 순번 · CTR 보정 |
 | `created_at` | TIMESTAMPTZ | |
 
-> [!warning] `impression` 과 `position` 을 반드시 로깅할 것.
-> 없으면 부익부 루프(§5.3)를 풀 수 없고 **소급이 불가능하다.**
+`impression` 과 `position` 은 소급 수집이 불가능하므로 로깅 시작 시점부터 포함해야 한다.
+
+### `saved_place` — 찜 (MVP2)
+
+| 컬럼 | 타입 | 비고 |
+|---|---|---|
+| `user_id` | BIGINT | PK (복합) |
+| `place_id` | BIGINT FK → place | PK (복합) |
+| `source_content_id` | BIGINT FK → content NULL | 어떤 작품을 보다가 찜했는지 (선택) |
+| `created_at` | TIMESTAMPTZ | |
+
+**찜은 `place` 기준이지 `place_content`(성지) 기준이 아니다.** 루트담기가 물리적 장소 단위인 것과 맞춰야 한다 — 같은 장소가 작품 A 성지로도, 작품 B 성지로도 걸려 있을 때 성지 기준으로 찜하면 같은 곳을 두 번 저장하는 꼴이 되고, 루트에 담을 땐 결국 장소 하나로 합쳐져야 하니 그 경계에서 항상 변환 문제가 생긴다.
+
+"왜 찜했는지"는 잃지 않도록 `source_content_id` 로 남긴다 — 저장 대상(장소)과 저장 이유(작품)를 분리한 것이다.
+
+`user_event` 와 별도 테이블인 이유 — `user_event` 는 append-only 로그(분석용)이고, 찜은 토글·해제가 필요한 **현재 상태** 라 별도의 상태 테이블이 필요하다. `created_at` 은 위 인기도 감쇠 계산에도 그대로 쓰인다.
 
 ---
 
-## 4. 인덱스
+## 3. 인덱스
 
 | 대상 | 종류 | 용도 |
 |---|---|---|
-| `place.geom` | **GiST** | 내 주변 / 지도 영역 검색 |
-| `place.popularity_score DESC, id DESC` | B-tree | 핀 우선순위 (동점 안정화) |
+| `place.geom` | GiST | 반경·영역 검색 |
+| `place.popularity_score DESC, id DESC` | B-tree | 핀 우선순위 |
 | `content.popularity_score DESC, id DESC` | B-tree | 인기순 정렬 |
 | `search_term.term_norm` | B-tree `text_pattern_ops` | 앞글자 일치 |
-| `search_term.term_norm` | **GIN** `gin_trgm_ops` | 부분·유사 일치 |
+| `search_term.term_norm` | GIN `gin_trgm_ops` | 부분·유사 일치 |
 | `place_content(place_id)` / `(content_id)` | B-tree | 양방향 조회 |
-| `content_cast(person_id)` | B-tree | 배우 → 작품 역방향 |
+| `content_cast(person_id)` | B-tree | 배우 → 작품 |
 | `user_event(entity_type, entity_id, created_at DESC)` | B-tree | 집계 배치 |
 
-**필요 확장:** `postgis`, `pg_trgm`
+정렬 인덱스의 `id DESC` 는 동점 시 순서를 고정한다. 없으면 페이지네이션에서 항목이 중복·누락된다.
+
+**확장:** `postgis`, `pg_trgm`
 
 ---
 
-## 5. 인기도
+## 4. 수집 CSV → 테이블
 
-### 5.1 콜드스타트가 이미 해결돼 있다
+### 표준 15컬럼
 
-`작품마스터` 에 **`score_global` · `score_interest` · `score_data` · `score_total` · `rank` · `is_top100` · `en_views_12m`** 가 이미 계산돼 있다. 사용자 행동 데이터 없이도 MVP1 인기순 정렬이 바로 가능하다.
+| CSV 컬럼 | 이동처 |
+|---|---|
+| `id` | 폐기 (재채번) |
+| `title` | `content_i18n.title` (`lang='ko'`) |
+| `title_aliases` | `content_alias` — `;` 분리 + 언어 판별 |
+| `title_category` | `content.category` |
+| `title_cast` | `person` + `person_i18n` + `content_cast` — `;` 분리, 작품별 1회 |
+| `place_name` | `place_i18n.name` (`lang='ko'`) |
+| `place_type` | `place.type` (코드 변환) |
+| `place_address` | `place_i18n.address` (`lang='ko'`) · **dedupe 키** |
+| `place_latitude` / `place_longitude` | `place.geom` |
+| `place_image_url` | `place_image.url` |
+| `place_naver_url` | `place.naver_place_url` — 현재 값은 주소 인코딩본이므로 장소 URL로 재수집 |
+| `scene_description` | `place_content_i18n.relation_description` |
+| `source_url` | 저장하지 않음 (`01_Raw` CSV에 보존) |
+| `last_updated` | `place_content.updated_at` |
+| `audience_acc` (영화) | 저장하지 않음 — 적재 시 `popularity_score` 계산에만 사용 |
 
-### 5.2 MVP1 공식
+### 상위100_성지 추가 3컬럼
 
-```sql
-UPDATE content c SET popularity_score =
-    COALESCE(c.score_total, 0)
-  + (SELECT COUNT(*) FROM place_content WHERE content_id = c.id) * 0.5
-  + CASE WHEN c.is_featured THEN 1000 ELSE 0 END;
-```
+`work_rank` · `scene_source` · `scene_source_url` 모두 저장하지 않는다. 순위는 `popularity_score` 로 대체되고, 출처는 `01_Raw` CSV에 남는다.
 
-`is_featured` 가 필요한 이유 — `작품마스터` 는 드라마 위주라 K-POP·예능·영화는 `score_total` 이 비어 자동 점수가 0이 된다. 밀어야 할 콘텐츠를 사람이 보정할 장치가 없으면 데모에서 이상한 순서가 나온다. 영화는 `audience_acc`(누적 관객수)를 정규화해 대체 지표로 쓸 수 있다.
+### 작품마스터 28컬럼
 
-**장소 인기도** 는 연결된 작품들의 인기도 합에서 시작한다. 줌 아웃 상태에서 핀 14,290개를 다 뿌릴 수 없으므로 필수다.
+`content` / `content_i18n` 으로 적재. 단 아래는 컬럼으로 저장하지 않는다.
 
-### 5.3 MVP2 — 행동 기반 전환
+| CSV 컬럼 | 처리 |
+|---|---|
+| `score_total` · `score_global` · `score_interest` · `score_data` · `en_views_12m` · `rank` · `is_top100` | 적재 시 `popularity_score` 계산에만 사용하고 버린다 |
+| `location_count` · `location_geocoded` · `region_count` · `top_region` | `place_content` 집계로 나오는 파생값 |
+| `air_period` · `air_status` | 저장하지 않음 (§2 `content` 참조) |
 
-```
-score = 30 · log(1+루트담기)
-      + 15 · log(1+찜)
-      +  8 · log(1+상세조회)
-      +  5 · CTR × log(1+노출)
-      +  2 · log(1+검색)
+**적재 순서:** 작품마스터 → `content` 를 먼저 만들고, 촬영지 CSV는 `title` 로 매칭해 `place` + `place_content` 만 추가한다. 그래야 작품 정보가 20,080번 중복 적재되지 않는다.
 
-각 항 × 0.5^(경과일 / 30)          ← 시간 감쇠
-```
+### 공공데이터 (한국문화정보원 15,034행)
 
-설계 근거 세 가지:
+**cp949 인코딩.** utf-8로 읽으면 깨진다.
+`장소설명` · `영업시간` · `브레이크타임` · `휴무일` · `전화번호` 는 15컬럼에 없는 정보이고 공공누리라 저장이 자유롭다. 도입 시 `place` 에 컬럼 추가. MVP1 범위 밖.
 
-1. **스케일 정규화** — 검색수·클릭수·찜수는 자릿수가 다르다(예: 12,400 / 1,830 / 67). 그냥 더하면 검색수가 전부 먹고 가장 신뢰도 높은 찜이 묻힌다 → `log(1+x)`
-2. **부익부 루프 차단** — 클릭수를 그대로 쓰면 `상위 노출 → 클릭 증가 → 더 상위 노출` 로 1등이 영원히 1등이 된다 → 클릭수 대신 **CTR(클릭÷노출)** + 시간 감쇠
-3. **신호 강도 차등** — 사용자가 치른 비용 순으로 가중
+---
 
-| 행동 | 사용자 비용 | 신뢰도 | 어뷰징 난이도 |
+## 5. dedupe (중복 장소 병합)
+
+같은 장소를 수집자마다 다르게 적어 여러 행이 된다. 실측:
+
+| 데이터 | 이름 기준 고유 | 주소 기준 고유 | 중복 그룹 |
 |---|---|---|---|
-| 검색 노출 | 0 | 매우 낮음 | 아주 쉬움 |
-| 검색 클릭 | 탭 1번 | 낮음 | 쉬움 |
-| 상세 조회 | 관심 | 중간 | 쉬움 |
-| 찜 | 로그인 + 의사결정 | 높음 | 어려움 |
-| **루트에 담기** | 실제 여행 계획에 넣음 | **매우 높음** | 매우 어려움 |
-| 리뷰 작성 | 시간 투자 | 최상 | 매우 어려움 |
+| 드라마 전수 20,080행 | 14,290 | 13,145 | **1,414** |
+| 상위100 5,740행 | 4,744 | 4,520 | **343** |
 
-가중치는 **코드에 박지 말고 설정으로 뺀다.** 데모 후 반드시 조정하게 되는데 배포 없이 바꿀 수 있어야 한다.
+```
+같은 주소인데 이름이 다른 예:
+['상암DMC디지털큐브', '상암동DMC디지털큐브', '디지털큐브', '더차이 상암 디지털큐브점', '상암산로']
+['남산', '남산타워']
+```
 
-### 5.4 실무 주의
+병합하지 않으면 같은 자리에 핀이 여러 개 찍히고, 작품 연결·찜·인기도가 조각난다.
 
-- **동점 처리** — `ORDER BY popularity_score DESC, id DESC`. tie-breaker가 없으면 페이지네이션에서 항목이 중복/누락된다
-- **집계는 배치로** — 조회할 때마다 `user_event` 를 `COUNT(*)` 하면 죽는다. 하루 한 번 배치로 `popularity_score` 에 써넣는다
-- **중복 제거** — 같은 사람이 같은 장소를 10번 봐도 1~2회로 캡. `(session_id, entity_id, 날짜)` 단위
+**판정 규칙**
+
+| 순서 | 조건 | 처리 |
+|---|---|---|
+| 1 | `naver_place_url` 동일 | 자동 병합 (확정) |
+| 2 | `place_address` 정규화 후 동일 | 자동 병합 |
+| 3 | 주소는 다르나 좌표 50m 이내 + 이름 유사도 0.6↑ | 검토 큐 → 사람이 판단 |
+| 4 | 그 외 | 신규 |
+
+1번이 채워지면 2·3번은 거의 쓸 일이 없다. 장소 URL이 없는 행에만 적용한다.
+
+주소 기준(2번)은 완전하지 않다. `['마포대교 옆', '여의도한강공원', '크루즈옆']` 처럼 주소만 같고 실제로는 다른 지점이 묶일 수 있다. 반대로 `남산` / `남산타워` 는 같은 곳인데 주소 표기가 달라 3번으로 넘어간다. **장소 URL은 이 두 오류를 모두 없앤다.**
+
+**대표 이름은 최빈 표기를 쓰고, 병합된 나머지 이름은 `place_alias` 로 보존한다.** 그래야 어느 표기로 검색해도 같은 핀이 나온다.
+
+카카오 place_id는 사용하지 않는다 (네이버 지도 SDK 사용).
 
 ---
 
 ## 6. 다국어
 
-**대상: `ko` / `en` / `ja` / `zh-Hant`(대만·번체, 예정)**
+**`ko` / `en` / `ja` / `zh-Hant`** — 대만·홍콩은 번체이므로 `zh-TW` 가 아니라 `zh-Hant`. 중국 본토 `zh-Hans`(간체)와 글자가 다르다.
 
-컬럼 방식(`name_en`, `name_ja`, `name_zh_hant`…)을 쓰지 않고 **번역 테이블을 분리** 한다.
+언어별 컬럼(`name_en`, `name_ja` …)을 쓰지 않고 i18n 테이블로 분리한다. 언어 추가가 **행 추가** 로 끝나고, 미번역분을 `lang` 유무로 바로 찾을 수 있다.
 
-| 컬럼 방식 | 번역 테이블 방식 |
-|---|---|
-| 언어 추가 = 테이블 3개에 컬럼 4~5개 ALTER | 언어 추가 = **행 추가.** 스키마 변경 0 |
-| 미번역분 조회가 어려움 | `lang='ja'` 없는 행으로 즉시 조회 |
-| 대부분 NULL이라 낭비 | 있는 것만 저장 |
-| 번역 품질 상태 관리 불가 | `trans_status` 로 관리 |
+원본 테이블에는 언어중립 값만 남긴다 — 좌표, 카테고리 코드, ID, 점수. 한국어도 `lang='ko'` 행으로 넣는다.
 
-번역 대상은 장소명만이 아니다. 주소, 그리고 가장 긴 `relation_description` 까지 전부다.
+번역 대상 중 작품 제목은 `title_aliases`(96.8% 채움)와 `wikidata_qid` 로 상당 부분 자동 확보된다. 실제 번역이 필요한 것은 **장소명 · 주소 · 장면 설명** 이다.
 
-원본 테이블에는 **언어중립 데이터만** 남긴다 — 좌표, 카테고리 코드, URL, ID, 점수. 한국어도 예외 없이 `lang='ko'` 행으로 넣는다.
-
-**번역 비용이 예상보다 훨씬 싸다.** 두 가지 이유:
-
-1. **`title_aliases` 가 이미 다국어** — 96.8% 채움. 작품 제목의 영·일·중은 별도 번역이 거의 불필요
-2. **`wikidata_qid` 보유** — Wikidata는 한 항목에 수십 개 언어 레이블을 갖고 있다. QID 하나로 `ja`, `zh-Hant` 제목을 **API 한 번에** 끌어올 수 있다
-
-남는 실제 번역 대상은 **장소명·주소·장면 설명** 이다. 장소명은 로마자 표기 규칙으로 상당 부분 자동화되고, 주소는 도로명주소 영문 API가 있다.
-
-**언어 코드 주의:** 대만은 `zh-TW` 보다 **`zh-Hant`(번체)** 를 권장. 홍콩(zh-HK)도 번체라 함께 커버되고, 중국 본토 `zh-Hans`(간체)와는 글자가 달라 반드시 구분해야 한다.
-
-**로마자 별칭은 언어 무관하게 항상 검색되게** 한다 — 일본인도 "Seongsan"으로 칠 수 있다.
-
-**운영:** LLM 초벌 번역 → `trans_status='machine'` → 인기 장소부터 사람이 검수해 `reviewed` 로 승격.
+로마자 별칭은 `lang` 을 NULL로 두어 어느 언어에서든 검색되게 한다.
 
 ---
 
-## 7. 중복 장소 방지
+## 7. 인기도
 
-**결정(2026-07-29): `kakao_place_id` 는 두되 UNIQUE 제약도, 필수 수집도 걸지 않는다.**
+**MVP1 — 적재 시 직접 입력.** 외부 지표(`score_total` · `en_views_12m` · `audience_acc`)를 DB에 저장하지 않으므로, 수집·적재 단계에서 이 값들을 참고해 계산한 결과를 `popularity_score` 에 바로 넣는다. 사용자 행동 데이터가 없는 MVP1에서는 이것으로 인기순 정렬이 성립한다.
 
-컬럼 자체는 비워두는 비용이 0이고 다음 용도가 있다:
+계산 기준은 적재 스크립트에 두며, 드라마는 `score_total`, 영화는 `audience_acc`, 지표가 없는 K-POP·예능은 수집자가 직접 값을 부여한다.
 
-- 카카오맵 SDK 연동 (핀 탭 → 장소 상세·길찾기)
-- 도로명 변경·장소 이전 시 좌표·주소 자동 갱신
-- 수집 자동화 시 dedupe 기준
+`place.popularity_score` 도 같은 방식으로, 연결된 작품 인기도의 합에서 시작한다. 장소가 14,000개 이상이라 줌 아웃 시 핀 솎아내기에 필요하다.
 
-나중에 주소·좌표로 카카오 API를 돌려 소급 채우기가 가능하다 (`user_event` 로깅과 달리 되돌릴 수 있는 결정).
-
-**다만 적재 시 dedupe는 반드시 필요하다.** 고유 장소명이 14,290개인데 이건 **문자열 기준** 이라, 표기가 다른 동일 장소가 그 안에 섞여 있다. 적재 시 다음 순서로 판정한다:
-
-1. `place_naver_url` 이 같으면 동일 장소 (100% 채움이라 1차 기준으로 강력)
-2. 좌표 반경 50m + 이름 유사도(trigram) 0.6 이상이면 동일 후보 → 검토 큐
-3. 둘 다 아니면 신규
+**MVP2 — "요즘 인기" (작품)** — `user_event` 를 시간 감쇠(decay)로 집계해 전환한다. 감쇠 반감기는 스키마가 아니라 배치 쿼리의 상수이므로 값은 튜닝 가능하다(제안: 작품 14일).
 
 ```sql
--- 신규 장소 추가 전 근접 확인
-SELECT p.id, i.name, i.address,
-       ROUND(ST_Distance(p.geom, ST_MakePoint(:lng, :lat)::geography)) AS dist_m
-FROM place p
-JOIN place_i18n i ON i.place_id = p.id AND i.lang = 'ko'
-WHERE ST_DWithin(p.geom, ST_MakePoint(:lng, :lat)::geography, 100)
-ORDER BY dist_m;
+UPDATE content c SET popularity_score = sub.score
+FROM (
+  SELECT entity_id AS content_id,
+         SUM(
+           CASE event_type
+             WHEN 'route_add' THEN 30
+             WHEN 'save'      THEN 15
+             WHEN 'view'      THEN 8
+             WHEN 'search'    THEN 2
+           END
+           * POWER(0.5, EXTRACT(EPOCH FROM (now() - created_at)) / 86400.0 / 14)
+                                                                -- ↑ 반감기 14일
+         ) AS score
+  FROM user_event
+  WHERE entity_type = 'content'
+  GROUP BY entity_id
+) sub
+WHERE c.id = sub.content_id;
 ```
 
----
+행동마다 가중치가 다른 것은 사용자가 치른 비용 순이다 — 루트담기(30) > 찜(15) > 조회(8) > 검색(2). 클릭수 대신 CTR을 쓰면(노출 대비 클릭) 상위 노출이 클릭을 부르는 순환을 끊을 수 있다.
 
-## 8. 수집 CSV → 테이블 매핑
+#### 감쇠(decay)가 작동하는 방식
 
-### 8.1 표준 15컬럼 (드라마 전수 · 영화 · 통합본)
+**저장된 점수가 저절로 줄어드는 것이 아니다.** 배치를 돌릴 때마다 `user_event` 원본에서 처음부터 다시 계산하고, 그 시점에 각 이벤트를 나이만큼 할인한다. 시간 자체가 입력값이므로 &ldquo;이벤트 발생 시 더하기&rdquo; 방식으로는 유지할 수 없고, 주기적 전체 재계산이 유일한 방법이다.
 
-| CSV 컬럼 | 이동처 |
-|---|---|
-| `id` | ❌ 폐기 (id 재채번) |
-| `title` | → `content_i18n.title` (`lang='ko'`) |
-| `title_aliases` | → `content_alias` (**`;` 분리 + 언어 자동 판별**) |
-| `title_category` | → `content.type` |
-| `title_cast` | → `person` + `person_i18n` + `content_cast` (**`;` 분리, 작품별 1회**) |
-| `place_name` | → `place_i18n.name` (`lang='ko'`) |
-| `place_type` | → `place.category` (**코드로 변환**, §8.3) |
-| `place_address` | → `place_i18n.address` (`lang='ko'`) |
-| `place_latitude` / `place_longitude` | → `place.geom` |
-| `place_image_url` | → `place.image_url` |
-| `place_naver_url` | → `place.naver_map_url` (+ **dedupe 1차 키**) |
-| `scene_description` | → `place_content_i18n.relation_description` |
-| `source_url` | → `place_content.source_url` |
-| `last_updated` | → `place_content.updated_at` |
-| `audience_acc` (영화 전용) | → `content.audience_acc` |
+찜(가중치 15) 3건이 2주 간격으로 쌓인 작품을 7/30에 계산하면:
 
-### 8.2 상위100_성지 추가 3컬럼
+| 이벤트 | 며칠 전 | `0.5^(일수/14)` | 점수 |
+|---|---|---|---|
+| 7/30 찜 | 0일 | 1.0 | 15.00 |
+| 7/16 찜 | 14일 | 0.5 | 7.50 |
+| 7/02 찜 | 28일 | 0.25 | 3.75 |
+| | | **합계** | **26.25** |
 
-| CSV 컬럼 | 이동처 |
-|---|---|
-| `work_rank` | → `content.rank` |
-| `scene_source` | → `place_content.scene_source` |
-| `scene_source_url` | → `place_content.scene_source_url` |
+14일 뒤 새 이벤트가 하나도 없으면 같은 계산이 **13.125** 가 된다. 아무 일도 없었는데 정확히 절반 — 이것이 반감기 14일의 의미다.
 
-### 8.3 작품마스터 28컬럼 → `content`
+**급상승은 눌리지 않는다.** 감쇠는 과거 이벤트에만 걸리고 새 이벤트는 할인율 0%로 들어온다. 점수 20이던 작품에 찜 50개가 몰리면:
 
-`work_id`, `title`, `title_official`, `title_en`, `title_aliases`, `title_category`, `title_cast`, `broadcaster`, `air_period`, `air_status`, `wikidata_qid`, `wiki_lang_count`, `en_wiki_title`, `en_views_12m`, `score_global`, `score_interest`, `score_data`, `score_total`, `rank`, `is_top100`, `poster_url`, `description`, `kdramamap_url`, `last_updated` → `content` / `content_i18n`
+| | 계산 | 점수 |
+|---|---|---|
+| 기존 누적분 | 20 × 0.95 | 19 |
+| 신규 찜 50개 | 50 × 15 × **1.0** | 750 |
+| | **합계** | **769** |
 
-`location_count`, `location_geocoded`, `region_count`, `top_region` 은 **저장하지 않는다** — `place_content` 에서 집계로 나오는 파생값이라 중복 저장하면 어긋난다.
+감쇠가 깎은 것은 1점이고 새 활동이 750점을 올렸다. 규모가 달라 감쇠가 급상승과 경쟁하지 못한다.
 
-> **적재 순서:** `작품마스터` 를 먼저 넣어 `content` 를 만들고, 촬영지 CSV들은 `title` 로 매칭해 `place` + `place_content` 만 추가한다. 이렇게 해야 작품 정보가 20,080번 중복 적재되지 않는다.
+**감쇠의 실제 효과는 점수를 &ldquo;누적 총량&rdquo;이 아니라 &ldquo;현재 속도&rdquo;로 바꾸는 것이다.** 활동이 일정하면 유입과 감쇠가 같아지는 지점에서 멈춘다 — 대략 `하루 활동량 × 20`.
 
-### 8.4 `place_type` 코드 정리 필요
+| 상태 | 하루 활동 | 평형 점수 |
+|---|---|---|
+| 방영 중 · 하루 찜 10개 | 150점 | 약 3,100 |
+| 종영 후 · 하루 찜 1개 | 15점 | 약 310 |
 
-현재 값 분포(드라마 전수 기준): `기타` **10,273(51.2%)**, `거리` 2,045, `빌딩` 1,150, `공원` 686, `카페` 571, `다리` 554, `음식점` 525, `대학교` 470, `숙박` 408, `스튜디오` 374, `주거` 372, `학교` 273, `병원` 269, `해변` 227, `교회` 155, `편의점` 140, `역` 126, `시장` 124, `터미널` 119, `박물관` 108, `호수` 105, `미술관` 98, `마을` 94, `항구` 89, `마트` 88 …
+감쇠가 없으면 점수가 누적 총량이 되어, 4년치가 쌓인 옛 대작이 지금 아무도 찾지 않아도 영구 1위가 되고 신작은 따라잡을 수 없다.
 
-> [!question] 확인 필요
-> **`기타` 가 절반이 넘는다.** 카테고리 필터·아이콘·핀 색상이 사실상 작동하지 않는다는 뜻이다.
-> ① 코드 체계를 상위 10~15개로 재정의하고 ② `기타` 를 주소·장소명 키워드로 재분류하는 작업이 필요하다.
-> 이건 스키마가 아니라 **데이터 정제 작업** 이므로 별도 티켓으로 뺄 것.
+**배치 주기는 하루 1회면 충분하다.** 반감기 14일에서 1시간의 감쇠는 0.2%, 하루는 4.8%다. 시간당 재계산해도 순위가 바뀌지 않는다. 신작 반영이 느리다고 판단되면 주기가 아니라 **반감기를 줄인다**(7일이면 민감, 30일이면 안정). 배치 쿼리의 상수라 스키마 변경 없이 조정된다.
 
-### 8.5 공공데이터 (한국문화정보원 15,034행)
+**MVP2 — "요즘 인기" (장소)** — 장소는 직접 신호만으로는 부족하다. 서강대교처럼 89개 작품에 걸린 장소는 실제로는 인기가 높아도, 사용자가 "서강대교"를 직접 검색·클릭하는 일은 드물고 작품 화면에서 성지 목록으로만 스치듯 지나갈 수 있다. 그래서 **직접 신호 + 연결된 작품의 인기도 일부**를 더한다.
 
-**cp949 인코딩** — utf-8로 읽으면 깨진다. 적재 스크립트에서 명시할 것.
+```sql
+UPDATE place p SET popularity_score =
+    COALESCE(direct.score, 0)
+  + 0.3 * COALESCE(inherited.score, 0)   -- α=0.3 · 연결된 작품 인기도 전이 비율
+FROM
+  (SELECT entity_id AS place_id,
+          SUM(... 위와 동일한 decay 가중합, entity_type='place' ...) AS score
+   FROM user_event WHERE entity_type = 'place' GROUP BY entity_id) direct
+  FULL OUTER JOIN
+  (SELECT pc.place_id, SUM(c.popularity_score) AS score
+   FROM place_content pc JOIN content c ON c.id = pc.content_id
+   GROUP BY pc.place_id) inherited
+  ON direct.place_id = inherited.place_id
+WHERE p.id = COALESCE(direct.place_id, inherited.place_id);
+```
 
-컬럼: `연번` `미디어타입` `제목` `장소명` `장소타입` `장소설명` `영업시간` `브레이크타임` `휴무일` `주소` `위도` `경도` `전화번호` `최종작성일`
-
-**`장소설명`·`영업시간`·`브레이크타임`·`휴무일`·`전화번호` 는 우리 15컬럼에 없는 정보** 다. 공공누리라 **저장·재배포가 자유** 로우므로 ([[데이터 3계층 전략]] 2계층), Google Places로 라이브 호출해야 하는 항목을 일부 대체할 수 있다. 다만 2022-11 기준 데이터라 최신성 확인이 필요하다.
-
-→ 도입한다면 `place` 에 `business_hours`, `phone`, `closed_days` 컬럼을 추가하고 출처를 `data_source` 로 표기. **MVP1 범위 밖으로 두고 별도 판단.**
-
----
-
-## 9. ⚠️ 스키마와 별개의 최대 리스크 — `scene_description`
-
-| 파일 | `scene_description` 상태 |
-|---|---|
-| 드라마 전수 20,080행 | **0% 채움** |
-| 상위100_성지 5,740행 | 100% 채움이지만 **5,680건(99%)이 플레이스홀더** |
-| | `"촬영지로 확인됨 — 구체적인 장면 정보 미확인."` |
-| **실제 장면 설명** | **60건** (나무위키 53 + 영문위키 7) |
-
-**"이 장소가 그 작품에서 어떤 장면이었나"가 SceneTrip의 핵심 가치인데, 그게 25,820행 중 60건뿐이다.**
-
-지금 데이터는 정확히 말하면 *"어떤 작품이 어디서 찍었다"* 목록이고, *"거기서 무슨 일이 있었나"* 는 없다. 사용자가 핀을 눌렀을 때 보여줄 게 제목과 주소밖에 없다는 뜻이다.
-
-스키마는 이 문제를 못 푼다 — `place_content_i18n.relation_description` 자리는 이미 있고 비어 있을 뿐이다. **수집 전략의 문제** 이므로 별도 논의가 필요하다. 선택지:
-
-1. **범위 축소** — 상위 100작 × 주요 장소만 장면 설명을 채우고 나머지는 목록으로 제공
-2. **LLM 생성** — 작품·장소·회차 정보로 생성. 단 **환각 리스크가 크고** 출처 표기가 불가능
-3. **크라우드소싱** — 사용자 기여. MVP1 일정엔 불가능
-4. **위키 확대 수집** — 나무위키·위키백과 파싱 범위를 넓힘. 현재 60건이 나온 경로
-
-`scene_source` 컬럼을 스키마에 넣어둔 이유가 이거다. **어떤 설명이 검증된 것이고 어떤 게 플레이스홀더인지 DB 레벨에서 구분** 되어야 화면에서 걸러낼 수 있다.
-
----
-
-## 10. 남은 작업
-
-- [ ] 수집 템플릿에 `place_aliases`, `relation_type` 컬럼 추가 ([[MZ2AZ-111 촬영지 데이터 수집용 스키마]])
-- [ ] 적재 스크립트 — 작품마스터 → `content` 선적재 후 촬영지 CSV 매칭 (§8.3)
-- [ ] `place_type` 코드 체계 재정의 + `기타` 51% 재분류 (§8.4) — **별도 티켓**
-- [ ] `relation_type` 판정 규칙 (사옥·공연장·스튜디오 → `related`)
-- [ ] dedupe 로직 — `place_naver_url` 1차, 좌표+유사도 2차 (§7)
-- [ ] **`scene_description` 수집 전략 결정 (§9)** — 최우선
-- [ ] 데모 전 `user_event` 로깅 활성화 (`impression`·`position` 포함)
-
----
-
-## 별칭 수집 규칙 (수집자 전달용)
-
-| 넣는다 | 예시 |
-|---|---|
-| 줄임말 | 케이팝 데몬 헌터스 → `케데헌` |
-| 영문 정식 제목 | 오징어 게임 → `Squid Game` |
-| 로마자 표기 | `Ojingeo Geim` (외국인 대상이라 중요) |
-| 부제·원제 | 도깨비 → `쓸쓸하고 찬란하神-도깨비` |
-
-| 넣지 않는다 | 이유 |
-|---|---|
-| 조합형 (`도깨비 방파제`) | (작품 수 × 장소 수)만큼 늘어나 관리 불가. 검색은 토큰 분리로 잡힘 — `도깨비` 는 content에, `방파제` 는 place에 매칭돼 AND 스코어링으로 수렴한다 |
-| 오타 (`이태원 클래스`) | 검색 엔진이 처리할 일 |
-| 배우 이름 | `content_cast` 로 따로 들어감 |
-
-**구분자는 `;`** — 기존 `title_aliases` 규칙과 통일.
+반감기는 장소가 더 길게(제안: 30일) — 작품은 방영 종료 후 화제성이 빠르게 식지만, 장소는 방영이 끝나도 관광지로서 인기가 오래 유지되기 때문이다. α(전이 비율)도 코드가 아닌 설정값으로 두고 실사용 데이터로 튜닝한다.
