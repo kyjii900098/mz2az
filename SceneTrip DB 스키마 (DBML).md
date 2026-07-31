@@ -1,12 +1,13 @@
 ---
-title: "SceneTrip DB 스키마 (DBML)"
+title: SceneTrip DB 스키마 (DBML)
 type: design
 status: draft
 updated: 2026-07-30
-source: ["[[SceneTrip DB 스키마]]"]
+source:
+  - "[[MZ2AZ-111 SceneTrip DB 스키마]]"
 ---
 
-> [!summary] [[SceneTrip DB 스키마]] 의 DBML 표현. 아래 블록을 [dbdiagram.io](https://dbdiagram.io) 에 붙여넣으면 ERD가 나온다.
+> [!summary] [[MZ2AZ-111 SceneTrip DB 스키마]] 의 DBML 표현. 아래 블록을 [dbdiagram.io](https://dbdiagram.io) 에 붙여넣으면 ERD가 나온다.
 > `Export to PostgreSQL` 로 DDL도 바로 뽑을 수 있다.
 
 ## ERD
@@ -15,7 +16,7 @@ source: ["[[SceneTrip DB 스키마]]"]
 
 작게 보이면 [[scenetrip.svg]] 로 파일을 직접 열면 된다 — 벡터라 확대해도 깨지지 않는다. 아래 DBML 블록을 dbdiagram.io에 다시 붙여넣으면 갱신본을 받을 수 있다(`Export to SVG` → `assets/scenetrip.svg` 덮어쓰기).
 
-컬럼의 의미·설계 근거는 [[SceneTrip DB 스키마]] 를 볼 것. 이 문서는 도식·DDL 생성용이다.
+컬럼의 의미·설계 근거는 [[MZ2AZ-111 SceneTrip DB 스키마]] 를 볼 것. 이 문서는 도식·DDL 생성용이다.
 
 ## DBML
 
@@ -370,6 +371,6 @@ TableGroup "검색·로그" {
 |---|---|
 | `search_term.subtitle` | 동명이인(&ldquo;한강&rdquo;이 장소·작품 둘 다) 구별용으로 제안했으나 추가 확정 안 됨 |
 | `user_event.surface` | 어느 화면(검색/지도/상세)에서 난 이벤트인지 구분용으로 제안했으나 추가 확정 안 됨 |
-| `scene_image` | 작품별 장면 스틸 — [[SceneTrip DB 스키마]] §`place_image` 아래 메모 참조. 저작권 문제로 미도입 |
+| `scene_image` | 작품별 장면 스틸 — [[MZ2AZ-111 SceneTrip DB 스키마]] §`place_image` 아래 메모 참조. 저작권 문제로 미도입 |
 | `route` / `route_item` | 루트(코스) 기능. MVP1 8/10~8/14 주차 예정이나 아직 미설계 |
 | 사용자 테이블 (`app_user` 등) | `saved_place.user_id` · `user_event.user_id` 가 참조할 대상이 스키마에 없음 |
