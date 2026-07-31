@@ -249,16 +249,17 @@ dedupe로 병합된 이름들이 여기 보존된다.
 
 ### `user_event` (MVP2)
 
-| 컬럼                          | 타입            | 비고                                                                           |
-| --------------------------- | ------------- | ---------------------------------------------------------------------------- |
-| `id`                        | BIGSERIAL PK  |                                                                              |
-| `user_id`                   | BIGINT NULL   | 비로그인 허용                                                                      |
-| `session_id`                | TEXT          | 중복 제거                                                                        |
-| `event_type`                | TEXT          | `impression` / `search` / `click` / `view` / `save` / `route_add` / `review` |
-| `entity_type` / `entity_id` | TEXT / BIGINT |                                                                              |
-| `query`                     | TEXT NULL     |                                                                              |
-| `position`                  | INT NULL      | 목록 순번 · CTR 보정                                                               |
-| `created_at`                | TIMESTAMPTZ   |                                                                              |
+| 컬럼            | 타입           | 비고                                                                           |
+| ------------- | ------------ | ---------------------------------------------------------------------------- |
+| `id`          | BIGSERIAL PK |                                                                              |
+| `user_id`     | BIGINT NULL  | 비로그인 허용                                                                      |
+| `session_id`  | TEXT         | 중복 제거                                                                        |
+| `event_type`  | TEXT         | `impression` / `search` / `click` / `save` / `route_add` / `review`          |
+| `entity_type` | TEXT NULL    | `place` / `content` / `person` · 대상 없는 이벤트는 NULL (`search`)                  |
+| `entity_id`   | BIGINT NULL  |                                                                              |
+| `query`       | TEXT NULL    |                                                                              |
+| `position`    | INT NULL     | 목록 순번 · CTR 보정                                                               |
+| `created_at`  | TIMESTAMPTZ  |                                                                              |
 
 `impression` 과 `position` 은 소급 수집이 불가능하므로 로깅 시작 시점부터 포함해야 한다.
 
@@ -411,7 +412,6 @@ FROM (
            CASE event_type
              WHEN 'route_add' THEN 30
              WHEN 'save'      THEN 15
-             WHEN 'view'      THEN 8
              WHEN 'search'    THEN 2
            END
            * POWER(0.5, EXTRACT(EPOCH FROM (now() - created_at)) / 86400.0 / 14)
@@ -424,7 +424,9 @@ FROM (
 WHERE c.id = sub.content_id;
 ```
 
-행동마다 가중치가 다른 것은 사용자가 치른 비용 순이다 — 루트담기(30) > 찜(15) > 조회(8) > 검색(2). 클릭수 대신 CTR을 쓰면(노출 대비 클릭) 상위 노출이 클릭을 부르는 순환을 끊을 수 있다.
+행동마다 가중치가 다른 것은 사용자가 치른 비용 순이다 — 루트담기(30) > 찜(15) > 검색(2). 클릭수 대신 CTR을 쓰면(노출 대비 클릭) 상위 노출이 클릭을 부르는 순환을 끊을 수 있다.
+
+> [!question] 확인 필요 — `click` 가중치가 비어 있다. `view` 를 없애면서 함께 삭제했으므로, 가중치 재검토 시 `click` 항목을 다시 넣어야 한다.
 
 #### 감쇠(decay)가 작동하는 방식
 
