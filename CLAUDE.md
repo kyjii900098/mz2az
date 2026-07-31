@@ -38,12 +38,3 @@ A note is promoted from draft to stable in three steps: (1) hallucination check 
 ## Markdown formatting convention
 
 When bold text (`**word**`) is immediately followed by a Korean particle/postposition, insert a space before the particle to avoid rendering breakage, e.g. `**단어** 다` (not `**단어**다`).
-
-# Wiki operating rules
-
-1. Start at `03_MOC/index.md`.
-2. Search `02_WIKI` for a seed note.
-3. Follow only relevant links.
-4. Verify claims in `01_RAWS`.
-5. Separate facts from inference.
-6. List notes and sources used.

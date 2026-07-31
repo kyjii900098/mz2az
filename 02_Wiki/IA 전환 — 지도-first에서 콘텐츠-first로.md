@@ -1,5 +1,6 @@
 ---
 title: "IA 전환 — 지도-first에서 콘텐츠-first로"
+summary: "\"지도만 뜨면 사용자가 뭘 해야 할지 모른다\" — 첫 화면이 지도에서 콘텐츠 목록으로 뒤집혔다."
 type: decision
 status: draft
 date: 2026-07-24

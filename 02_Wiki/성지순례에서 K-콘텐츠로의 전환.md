@@ -1,5 +1,6 @@
 ---
 title: "성지순례에서 K-콘텐츠로의 전환"
+summary: "\"애니메이션은 결국 일본 얘기가 된다\" — 이 한 문장이 프로젝트의 국적을 바꿨다."
 type: decision
 status: draft
 date: 2026-06-11

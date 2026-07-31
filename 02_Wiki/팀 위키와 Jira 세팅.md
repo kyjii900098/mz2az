@@ -1,5 +1,6 @@
 ---
 title: "팀 위키와 Jira 세팅"
+summary: "옵시디언 볼트를 깃으로 관리하는 팀 공용 위키 — 지금 이 볼트가 그 결과물이다."
 type: decision
 status: draft
 date: 2026-07-18

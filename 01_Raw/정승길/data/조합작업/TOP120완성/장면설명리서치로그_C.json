@@ -1,0 +1,194 @@
+{
+  "스프링피버": {
+    "rows": 98,
+    "filled": 18,
+    "blank": 80,
+    "note": "hsc_one1 1·7·12화, location_info, ryu71s, majara78, starkimpt 원문 확인; 장소·주소 불명확 행 제외"
+  },
+  "스프링 피버": {
+    "rows": 4,
+    "filled": 2,
+    "blank": 2,
+    "note": "표기 변형 4행 중 삽교호·죽도시장 2행만 기존 원문과 주소 대조 후 기입"
+  },
+  "멋진신세계": {
+    "rows": 110,
+    "filled": 24,
+    "blank": 86,
+    "note": "hsc_one1 1·2화·제주편, redmee2 7화, ryu71s 27곳 원문 확인; 24행 확정"
+  },
+  "조각도시": {
+    "rows": 89,
+    "filled": 3,
+    "blank": 86,
+    "note": "redmee2 1~6화·7~8화와 hsc_one1 대조; 장면-장소 연결 확실한 3행만 확정"
+  },
+  "언더커버미쓰홍": {
+    "rows": 77,
+    "filled": 4,
+    "blank": 73,
+    "note": "hsc_one1 1·2화, redmee2 1화, ryu71s, buja1202 원문 확인; 행동-장소 일치 4행 확정"
+  },
+  "내남편과결혼해줘": {
+    "rows": 70,
+    "filled": 2,
+    "blank": 68,
+    "note": "preferred episode-location posts checked; 2 exact place/action matches; adjacent/address-mismatched and list-only items left blank"
+  },
+  "경이로운소문2": {
+    "rows": 59,
+    "filled": 31,
+    "blank": 28,
+    "note": "hsc_one1 title-wide location article checked against input place names/addresses; explicit action/location statements only"
+  },
+  "참교육": {
+    "rows": 59,
+    "filled": 26,
+    "blank": 33,
+    "note": "hsc_one1, redmee2 and ryu71s title/episode location articles checked; exact place/action matches retained, list-only rows left blank"
+  },
+  "트웰브": {
+    "rows": 47,
+    "filled": 10,
+    "blank": 37,
+    "note": "five title/episode location posts checked; explicit actions at exact locations retained; pre-air and mere sponsorship lists excluded"
+  },
+  "선재업고튀어": {
+    "rows": 38,
+    "filled": 2,
+    "blank": 36,
+    "note": "preferred episode posts checked; two exact action/location matches retained; coastal address mismatch and background-only lists left blank"
+  },
+  "광장": {
+    "rows": 35,
+    "filled": 18,
+    "blank": 17,
+    "note": "hsc_one1 episode 1-7 posts and location_info checked; exact action/location matches retained"
+  },
+  "약한영웅2": {
+    "rows": 28,
+    "filled": 0,
+    "blank": 28,
+    "note": "existing location_info/redmee2/beerry title-wide research checked; remaining C rows had no action-supported exact match"
+  },
+  "스터디그룹": {
+    "rows": 24,
+    "filled": 3,
+    "blank": 21,
+    "note": "hsc_one1/location_info title and school-location posts checked; three explicit action/location matches retained"
+  },
+  "호텔델루나": {
+    "rows": 22,
+    "filled": 3,
+    "blank": 19,
+    "note": "editorial filming-location guide checked; three exact place/action matches retained; featured-only attraction rows left blank"
+  },
+  "미지의서울": {
+    "rows": 19,
+    "filled": 1,
+    "blank": 18,
+    "note": "ten episode/location posts plus Seoul official location article checked; one exact remaining C-row action match retained"
+  },
+  "더킹": {
+    "rows": 18,
+    "filled": 3,
+    "blank": 15,
+    "note": "Busan Metropolitan City official drama-location guide checked; three explicit scene/location matches retained"
+  },
+  "웰컴투삼달리": {
+    "rows": 17,
+    "filled": 1,
+    "blank": 16,
+    "note": "Jeju Tourism Organization official 15-location scene guide checked; one exact C address/action match retained"
+  },
+  "알고있지만": {
+    "rows": 13,
+    "filled": 2,
+    "blank": 11,
+    "note": "Creatrip의 주소·다트 장면과 KoreaTravelPost의 미미옥 생일 축하 장면을 확인. 나머지는 장면 서술 또는 주소 대조 부족."
+  },
+  "폭군의셰프": {
+    "rows": 12,
+    "filled": 2,
+    "blank": 10,
+    "note": "고산정 첫 만남 보도와 오봉산 마당바위 1~2화 절벽 추락 장면을 확인. 나머지는 배경·세트 사용 수준 또는 추정형 정리뿐이라 제외."
+  },
+  "이태원 클라쓰": {
+    "rows": 11,
+    "filled": 4,
+    "blank": 7,
+    "note": "TraveltoDrama, 경기뉴스, 건축사 공식 글, 언론 기사에서 주소와 실제 장면을 확인. hanlyu-map 결과는 금지 출처라 배제."
+  },
+  "이태원클라쓰": {
+    "rows": 1,
+    "filled": 0,
+    "blank": 1,
+    "note": "표기 변형 1행은 목록 수준 출처만 확인되어 빈칸 유지. hanlyu-map은 금지 출처라 배제."
+  },
+  "역도요정 김복주": {
+    "rows": 8,
+    "filled": 1,
+    "blank": 7,
+    "note": "Hellokpop에서 이월드와 준형·복주의 놀이공원 장면을 확인. 대학·해변·전망대는 배경 목록 수준이라 제외."
+  },
+  "사이코지만괜찮아": {
+    "rows": 7,
+    "filled": 0,
+    "blank": 7,
+    "note": "TraveltoDrama와 검색 결과에서 C행 장소는 목록/역할만 확인되고 실제 장면 서술은 금지 출처 hanlyu-map에만 있어 전부 빈칸 유지."
+  },
+  "도깨비": {
+    "rows": 7,
+    "filled": 3,
+    "blank": 4,
+    "note": "TraveltoDrama의 주소·장면 및 송도 촬영장면 글을 대조. 나주 세트는 입력의 세부 구역까지 확인되지 않아 제외."
+  },
+  "나빌레라": {
+    "rows": 6,
+    "filled": 0,
+    "blank": 6,
+    "note": "작품명 중의성 탓에 신뢰할 회차별 정리 글을 확보하지 못했고, C행은 장소 목록 수준만 확인되어 전부 빈칸 유지."
+  },
+  "갯마을 차차차": {
+    "rows": 6,
+    "filled": 1,
+    "blank": 5,
+    "note": "경북매일 기사에서 이가리 닻 전망대의 11화 사진 촬영 장면을 확인. 주소가 없는 해변·언덕 행은 보수적으로 제외."
+  },
+  "오징어게임3": {
+    "rows": 4,
+    "filled": 0,
+    "blank": 4,
+    "note": "네 곳 모두 검색 결과에서 구체 장면과 주소가 함께 확인되지 않아 전부 빈칸 유지."
+  },
+  "스위트홈 2": {
+    "rows": 3,
+    "filled": 0,
+    "blank": 3,
+    "note": "Naver 회차별 글은 검색 결과에서 본문을 검증하지 못했고, 다른 결과도 세 장소의 실제 장면을 특정하지 못해 전부 빈칸 유지."
+  },
+  "눈물의 여왕": {
+    "rows": 2,
+    "filled": 0,
+    "blank": 2,
+    "note": "TraveltoDrama에서 문경새재는 과거 회상 수준, 봉천사는 입력 주소와 출처 주소가 달라 구체 장면을 확정하지 않고 둘 다 빈칸 유지."
+  },
+  "지금 거신 전화는": {
+    "rows": 2,
+    "filled": 0,
+    "blank": 2,
+    "note": "KoreaTravelPost 등 전체 정리 글을 확인했지만 숭례문·남산서울타워의 구체 장면을 찾지 못해 둘 다 빈칸 유지."
+  },
+  "아파트": {
+    "rows": 1,
+    "filled": 0,
+    "blank": 1,
+    "note": "와인컬렉터 삼성점과 작품의 실제 장면을 연결하는 신뢰 출처를 찾지 못해 빈칸 유지."
+  },
+  "친애하는 X": {
+    "rows": 1,
+    "filled": 0,
+    "blank": 1,
+    "note": "선호 Naver 회차별 글은 본문 검증이 막혔고, 다른 출처에서도 클럽 크로마의 실제 장면을 확인하지 못해 빈칸 유지."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "status": "completed",
+  "started_at": "2026-07-31T01:20:38+09:00",
+  "updated_at": "2026-07-31T03:32:49+09:00",
+  "completed_at": "2026-07-31T03:32:49+09:00",
+  "input_stats": {
+    "ranked_drama_rows": 5385,
+    "movie_rows": 125,
+    "missing_name_rows": 0,
+    "unique_combos": 5023,
+    "missing_both_coordinates": 478
+  },
+  "processed_combos": 5023,
+  "remaining_combos": 0,
+  "confidence": {
+    "high": 2114,
+    "mid": 844,
+    "low": 378,
+    "failed": 1687
+  },
+  "verification": {
+    "mismatch": 3,
+    "not_matched": 1636,
+    "precheck:closed_place_name": 35,
+    "precheck:enumerated_area_name": 16,
+    "verified": 3333
+  },
+  "verification_error_count": 0,
+  "mismatch_count": 3,
+  "match_policy_version": 4,
+  "reevaluation": {
+    "status": "completed",
+    "policy_version": 4,
+    "target_records": 1862,
+    "processed_records": 1862,
+    "before": {
+      "high": 844,
+      "mid": 225,
+      "low": 107,
+      "failed": 686
+    },
+    "after": {
+      "high": 844,
+      "mid": 229,
+      "low": 103,
+      "failed": 686
+    },
+    "old_high_downgraded": 0,
+    "detail_cache_before": 1179,
+    "detail_cache_after": 1179
+  },
+  "blocked_occurred": false,
+  "blocked_event_count": 0,
+  "blocked_events": [],
+  "last_error": "",
+  "detail_cache_records": 3027,
+  "detail_requests_this_run": 703
+}
