@@ -1,6 +1,6 @@
 ---
-source: "[[2026년도 AI·SW마에스트로 제17기 프로젝트 기획서(mz2az).pdf]]"
-source_path: "01_Raw/Project/피보팅/2026년도 AI·SW마에스트로 제17기 프로젝트 기획서(mz2az).md"
+source: "[[01_Raw/Project/02_피보팅/2026년도 AI·SW마에스트로 제17기 프로젝트 기획서(mz2az).pdf]]"
+source_path: 01_Raw/Project/피보팅/2026년도 AI·SW마에스트로 제17기 프로젝트 기획서(mz2az).md
 author: 팀공동
 date: 2026-07-14
 type: raw-transcription
