@@ -134,14 +134,14 @@ dedupe로 병합된 이름들이 여기 보존된다.
 
 ### `content`
 
-| 컬럼 | 타입 | 비고 |
-|---|---|---|
-| `id` | BIGSERIAL PK | |
-| `category` | TEXT | `drama` / `movie` / `variety` / `kpop` |
-| `broadcaster` | TEXT NULL | |
-| `poster_url` | TEXT NULL | |
-| `popularity_score` | NUMERIC DEFAULT 0 | 정렬값. 적재 시 직접 계산해 입력 |
-| `created_at` / `updated_at` | TIMESTAMPTZ | |
+| 컬럼                          | 타입                | 비고                                     |
+| --------------------------- | ----------------- | -------------------------------------- |
+| `id`                        | BIGSERIAL PK      |                                        |
+| `category`                  | TEXT              | `drama` / `movie` / `variety` / `kpop` |
+| `broadcaster`               | TEXT NULL         |                                        |
+| `poster_url`                | TEXT NULL         |                                        |
+| `popularity_score`          | NUMERIC DEFAULT 0 | 정렬값. 적재 시 직접 계산해 입력                    |
+| `created_at` / `updated_at` | TIMESTAMPTZ       |                                        |
 
 **수집 원본 지표는 DB에 저장하지 않는다.** `score_total` · `en_views_12m` · `audience_acc` · `rank` · `is_top100` · `wikidata_qid` 는 작품마스터 CSV에 있지만 컬럼으로 두지 않는다.
 
@@ -249,16 +249,16 @@ dedupe로 병합된 이름들이 여기 보존된다.
 
 ### `user_event` (MVP2)
 
-| 컬럼 | 타입 | 비고 |
-|---|---|---|
-| `id` | BIGSERIAL PK | |
-| `user_id` | BIGINT NULL | 비로그인 허용 |
-| `session_id` | TEXT | 중복 제거 |
-| `event_type` | TEXT | `impression` / `search` / `click` / `view` / `save` / `route_add` / `review` |
-| `entity_type` / `entity_id` | TEXT / BIGINT | |
-| `query` | TEXT NULL | |
-| `position` | INT NULL | 목록 순번 · CTR 보정 |
-| `created_at` | TIMESTAMPTZ | |
+| 컬럼                          | 타입            | 비고                                                                           |
+| --------------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `id`                        | BIGSERIAL PK  |                                                                              |
+| `user_id`                   | BIGINT NULL   | 비로그인 허용                                                                      |
+| `session_id`                | TEXT          | 중복 제거                                                                        |
+| `event_type`                | TEXT          | `impression` / `search` / `click` / `view` / `save` / `route_add` / `review` |
+| `entity_type` / `entity_id` | TEXT / BIGINT |                                                                              |
+| `query`                     | TEXT NULL     |                                                                              |
+| `position`                  | INT NULL      | 목록 순번 · CTR 보정                                                               |
+| `created_at`                | TIMESTAMPTZ   |                                                                              |
 
 `impression` 과 `position` 은 소급 수집이 불가능하므로 로깅 시작 시점부터 포함해야 한다.
 
