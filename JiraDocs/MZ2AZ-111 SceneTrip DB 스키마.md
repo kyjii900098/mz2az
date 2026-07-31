@@ -1,11 +1,16 @@
 ---
-title: "SceneTrip DB 스키마"
+title: SceneTrip DB 스키마
 type: design
 status: draft
 updated: 2026-07-30
-source: ["[[MZ2AZ-111 촬영지 데이터 수집용 스키마]]", "[[촬영지 수집 스키마 15컬럼]]"]
-related: ["[[데이터 3계층 전략]]", "[[MVP1 데이터 모델 (7·24 화이트보드)]]"]
+source:
+  - "[[MZ2AZ-111 촬영지 데이터 수집용 스키마]]"
+  - "[[촬영지 수집 스키마 15컬럼]]"
+related:
+  - "[[데이터 3계층 전략]]"
+  - "[[MVP1 데이터 모델 (7·24 화이트보드)]]"
 ---
+JIRA:MZ2AZ-138
 
 > [!summary] 수집용 15컬럼 CSV를 적재할 DB 구조. 테이블 14개 + 머티리얼라이즈드 뷰 1개.
 > `i18n` = internationalization(국제화). 언어별로 갈리는 값을 담는 테이블.
