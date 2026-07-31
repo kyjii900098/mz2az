@@ -1,12 +1,12 @@
 ---
-title: "kdramamap 촬영지 수집 · 상위 100편 선정 방법론"
+title: kdramamap 촬영지 수집 · 상위 100편 선정 방법론
 type: methodology
 status: draft
 created: 2026-07-29
 author: 김태환
 source:
-  - "https://kdramamap.com/"
-  - "[[2026-07-28]]"
+  - https://kdramamap.com/
+  - "[[00_회의록/Daily/2026-07-28]]"
   - "[[프로젝트 결정사항]]"
 ---
 

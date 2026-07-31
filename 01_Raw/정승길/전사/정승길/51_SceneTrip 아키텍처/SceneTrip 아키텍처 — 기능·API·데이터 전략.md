@@ -14,7 +14,7 @@ visual_review: n-a
 - 다이어그램: `SceneTrip 기능-API 아키텍처.excalidraw.md` / `.drawio.svg` (같은 그림, 두 포맷)
   - 7/28 갱신분 반영: TourAPI 박스 `맛집 후보 풀` → **`맛집 · 메뉴 · 영업시간`**, Google Places 박스 `리뷰 · 사진 · 메뉴` → **`리뷰 · 평점만`**
   - ⚠️ excalidraw는 그림 데이터가 `compressed-json`이라 **텍스트 블록만 수정** 했다. Obsidian에서 한 번 열어 저장해 동기화할 것 (drawio.svg는 완전 반영됨)
-- 관련: [[2026년 7월 27일 Sprint Planning]] · `11_schema/schema.md`
+- 관련: [[(1주차)2026년 7월 27일 Sprint Planning]] · `11_schema/schema.md`
 
 ---
 
