@@ -2,7 +2,7 @@
 title: SceneTrip DB 스키마
 type: design
 status: draft
-updated: 2026-07-30
+updated: 2026-07-31
 source:
   - "[[MZ2AZ-111 촬영지 데이터 수집용 스키마]]"
   - "[[촬영지 수집 스키마 15컬럼]]"
@@ -180,6 +180,8 @@ dedupe로 병합된 이름들이 여기 보존된다.
 | `id` | BIGSERIAL PK |
 | `created_at` | TIMESTAMPTZ |
 
+**사람 자체에는 직군을 붙이지 않는다.** 배우/감독 구분은 `content_cast.role_type` 에 있다 — 이유는 해당 절 참조.
+
 ### `person_i18n`
 
 | 컬럼 | 타입 | 비고 |
@@ -198,7 +200,20 @@ dedupe로 병합된 이름들이 여기 보존된다.
 |---|---|---|
 | `content_id` | BIGINT FK | PK (복합) |
 | `person_id` | BIGINT FK | PK (복합) |
+| `role_type` | TEXT | PK (복합) · `actor` / `director` |
 | `sort_order` | INT | `title_cast` 나열 순서 = 비중 |
+
+`role_type` 은 이 사람이 **이 작품에서** 배우였는지 감독이었는지를 담는다. 검색 결과에서 &ldquo;봉준호&rdquo;가 출연진으로 섞여 나오지 않게 하고, 작품 상세에서 출연진과 감독을 다른 줄에 표시하기 위한 값이다.
+
+`person` 이 아니라 여기에 두는 이유는 **겸업 때문** 이다. 하정우·정우성처럼 연출과 연기를 겸하는 인물이 있어 사람마다 값을 하나만 붙이면 한쪽이 지워진다. 하정우를 `actor` 로 넣으면 그가 연출한 작품에서 감독으로 안 잡히고, `director` 로 넣으면 출연작 전부에서 배우로 안 잡힌다. 역할은 사람의 속성이 아니라 **사람과 작품 사이의 속성** 이므로 관계 테이블이 제자리다.
+
+배역명(`role_name`)과는 다른 값이다. `role_type` 은 직군(배우냐 감독이냐)이고, `role_name` 은 맡은 배역(&ldquo;백현우&rdquo;)이다. 후자는 두지 않는다 — 아래 참조.
+
+**현재 수집분은 전량 `actor` 가 된다.** 인물 소스가 `title_cast`(배우 나열) 하나뿐이라 감독 정보가 어느 CSV에도 없다. 감독을 채우려면 별도 수집이 필요하다.
+
+`sort_order` 는 `role_type` 별로 따로 매긴다. 감독과 배우가 한 목록에서 순서를 다투면 의미가 없기 때문이다.
+
+PK가 `(content_id, person_id, role_type)` 로 세 컬럼이 된 것도 겸업 때문이다. 한 작품에서 연출과 주연을 함께 맡는 경우(하정우 『허삼관』)가 있어 `(content_id, person_id)` 만으로는 두 역할이 한 행을 놓고 충돌한다.
 
 **작품 단위 출연진만 저장한다.** 장면별 출연진은 저장하지 않는다. `title_cast` 는 CSV에 작품마다 반복되므로 작품별 1회만 적재한다.
 
@@ -308,7 +323,7 @@ dedupe로 병합된 이름들이 여기 보존된다.
 | `title` | `content_i18n.title` (`lang='ko'`) |
 | `title_aliases` | `content_alias` — `;` 분리 + 언어 판별 |
 | `title_category` | `content.category` |
-| `title_cast` | `person` + `person_i18n` + `content_cast` — `;` 분리, 작품별 1회 |
+| `title_cast` | `person` + `person_i18n` + `content_cast` — `;` 분리, 작품별 1회 · `content_cast.role_type` 은 `actor` 고정 |
 | `place_name` | `place_i18n.name` (`lang='ko'`) |
 | `place_type` | `place.type` (코드 변환) |
 | `place_address` | `place_i18n.address` (`lang='ko'`) · **dedupe 키** |
