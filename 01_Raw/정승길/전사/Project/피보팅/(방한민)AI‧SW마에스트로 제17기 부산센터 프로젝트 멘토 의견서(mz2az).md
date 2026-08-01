@@ -1,6 +1,6 @@
 ---
-source: "[[(방한민)AI‧SW마에스트로 제17기 부산센터 프로젝트 멘토 의견서(mz2az).pdf]]"
-source_path: "01_Raw/Project/피보팅/(방한민)AI‧SW마에스트로 제17기 부산센터 프로젝트 멘토 의견서(mz2az).md"
+source: "[[01_Raw/Project/02_피보팅/(방한민)AI‧SW마에스트로 제17기 부산센터 프로젝트 멘토 의견서(mz2az).pdf]]"
+source_path: 01_Raw/Project/피보팅/(방한민)AI‧SW마에스트로 제17기 부산센터 프로젝트 멘토 의견서(mz2az).md
 author: 외부-멘토
 date: 2026-07-14
 type: raw-transcription

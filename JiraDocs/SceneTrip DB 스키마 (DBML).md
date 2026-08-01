@@ -50,7 +50,16 @@ Enum trans_status {
   human
 }
 
-Enum entity_type {
+// search_term 과 user_event 는 값이 같아도 별개 Enum이다.
+// 서로 참조하지 않고 늘어날 방향이 다르다 —
+// search 쪽은 region·role(검색 대상), event 쪽은 route·review(행동 대상).
+Enum search_entity_type {
+  place
+  content
+  person
+}
+
+Enum event_entity_type {
   place
   content
   person
@@ -60,7 +69,6 @@ Enum event_type {
   impression
   search
   click
-  view
   save
   route_add
   review
@@ -261,7 +269,7 @@ Table place_content_i18n {
 Table search_term {
   term_norm varchar [note: '소문자 + 공백·특수문자 제거']
   term_display varchar
-  entity_type entity_type
+  entity_type search_entity_type
   entity_id bigint
   lang lang [null]
   weight int [note: '기본가중치 + popularity_score/10']
@@ -284,10 +292,10 @@ Table user_event {
   user_id bigint [null, note: '비로그인 허용']
   session_id varchar
   event_type event_type
-  entity_type entity_type
-  entity_id bigint
-  query varchar
-  position int [note: '목록 순번 · CTR 보정']
+  entity_type event_entity_type [null, note: '대상 없는 이벤트는 NULL (search)']
+  entity_id bigint [null]
+  query varchar [null, note: 'search 전용']
+  position int [null, note: '목록 순번 · CTR 보정']
   created_at timestamptz
 
   Indexes {
@@ -377,15 +385,16 @@ TableGroup "검색·로그" {
 | 정렬 인덱스 | `popularity_score DESC, id DESC` | DBML에 `DESC` 문법이 없어 note로 표기. **DDL 생성 후 직접 붙일 것** |
 | `search_term` | MATERIALIZED VIEW | DBML에 뷰 개념이 없어 Table로 표현. **DDL 그대로 쓰면 안 됨** |
 | GIN/GiST | 인덱스 종류 | DBML `[type: gin]` 지원. 단 연산자 클래스(`gin_trgm_ops`)는 미지원 → note |
+| `entity_type` | `search_term` · `user_event` 각각 `TEXT` (독립) | Enum으로 표현하되 `search_entity_type` / `event_entity_type` 로 **분리**. 값은 같지만 두 칸은 서로 참조하지 않고 늘어날 방향이 다르다(검색 쪽 `region`·`role`, 로그 쪽 `route`·`review`). 하나로 공유하면 한쪽에 값을 추가할 때 다른 쪽에도 허용되고, PostgreSQL Enum은 값 제거가 어렵다 |
 
 `Export to PostgreSQL` 로 뽑은 DDL은 위 3가지를 손봐야 실행된다.
 
 ## 아직 DBML에 없는 것 (결정 대기)
 
-| 항목 | 상태 |
-|---|---|
-| `search_term.subtitle` | 동명이인(&ldquo;한강&rdquo;이 장소·작품 둘 다) 구별용으로 제안했으나 추가 확정 안 됨 |
-| `user_event.surface` | 어느 화면(검색/지도/상세)에서 난 이벤트인지 구분용으로 제안했으나 추가 확정 안 됨 |
-| `scene_image` | 작품별 장면 스틸 — [[MZ2AZ-111 SceneTrip DB 스키마]] §`place_image` 아래 메모 참조. 저작권 문제로 미도입 |
-| `route` / `route_item` | 루트(코스) 기능. MVP1 8/10~8/14 주차 예정이나 아직 미설계 |
-| 사용자 테이블 (`app_user` 등) | `saved_place.user_id` · `user_event.user_id` 가 참조할 대상이 스키마에 없음 |
+| 항목                     | 상태                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| `search_term.subtitle` | 동명이인(&ldquo;한강&rdquo;이 장소·작품 둘 다) 구별용으로 제안했으나 추가 확정 안 됨                         |
+| `user_event.surface`   | 어느 화면(검색/지도/상세)에서 난 이벤트인지 구분용으로 제안했으나 추가 확정 안 됨                                 |
+| `scene_image`          | 작품별 장면 스틸 — [[MZ2AZ-111 SceneTrip DB 스키마]] §`place_image` 아래 메모 참조. 저작권 문제로 미도입 |
+| `route` / `route_item` | 루트(코스) 기능. MVP1 8/10~8/14 주차 예정이나 아직 미설계                                        |
+| 사용자 테이블 (`app_user` 등) | `saved_place.user_id` · `user_event.user_id` 가 참조할 대상이 스키마에 없음                  |
