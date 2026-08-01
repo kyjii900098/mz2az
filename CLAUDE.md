@@ -35,6 +35,10 @@ Notes flow one direction: `01_Raw` → `02_Wiki` → `03_MOC`. `00_Inbox` holds 
 
 A note is promoted from draft to stable in three steps: (1) hallucination check against `01_Raw`, (2) resolve or delete each `[!question] 확인 필요` callout, (3) flip `status: draft` → `status: stable`. Only stable notes belong in `02_Wiki`.
 
+## JiraDocs
+
+`JiraDocs/` is the record of deliverables per Jira story/task. The single source of truth for its format and procedure is `JiraDocs/JiraDocs.md` — when asked to create or update a JiraDocs document (e.g. "JiraDocs 스토리 MZ2AZ-NNN 작성해줘"), read that file first and follow it exactly. The `jiradocs` skill (`.claude/skills/jiradocs/`) triggers this automatically.
+
 ## Markdown formatting convention
 
 When bold text (`**word**`) is immediately followed by a Korean particle/postposition, insert a space before the particle to avoid rendering breakage, e.g. `**단어** 다` (not `**단어**다`).

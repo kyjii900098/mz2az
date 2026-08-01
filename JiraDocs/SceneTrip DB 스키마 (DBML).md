@@ -2,7 +2,7 @@
 title: SceneTrip DB 스키마 (DBML)
 type: design
 status: draft
-updated: 2026-07-30
+updated: 2026-07-31
 source:
   - "[[MZ2AZ-111 SceneTrip DB 스키마]]"
 ---
@@ -37,6 +37,11 @@ Enum content_category {
   movie
   variety
   kpop
+}
+
+Enum role_type {
+  actor
+  director
 }
 
 Enum trans_status {
@@ -183,6 +188,8 @@ Table content_alias {
 Table person {
   id bigserial [pk]
   created_at timestamptz
+
+  Note: '사람 자체에는 직군을 붙이지 않음. 배우/감독 구분은 content_cast.role_type'
 }
 
 Table person_i18n {
@@ -198,18 +205,26 @@ Table person_i18n {
 Table content_cast {
   content_id bigint
   person_id bigint
-  sort_order int [note: 'title_cast 나열 순서 = 비중']
+  role_type role_type [not null, note: '이 작품에서의 직군 — 배우/감독']
+  sort_order int [note: 'title_cast 나열 순서 = 비중. role_type 별로 따로 매김']
 
   Indexes {
-    (content_id, person_id) [pk]
+    (content_id, person_id, role_type) [pk]
     person_id [note: '배우 → 작품 역방향']
   }
 
   Note: '''
   작품 단위 출연진만. 장면별 출연진은 저장하지 않음.
   is_main 은 sort_order <= 2 로 계산되므로 두지 않음.
+
+  role_type 을 person 이 아니라 여기 둔 이유 — 겸업(하정우·정우성 등).
+  역할은 사람의 속성이 아니라 사람과 작품 사이의 속성.
+  PK에 role_type 이 들어간 것도 한 작품에서 연출·주연을 겸하는 경우 때문.
+  현재 수집분은 전량 actor (감독 정보가 CSV에 없음. 별도 수집 필요).
+
   role_name(배역명)은 수집 데이터에 없어 전량 NULL이 되므로 두지 않음 —
-  배역명 검색을 지원할 때 search_term 소스·다국어 테이블과 함께 설계.
+  role_type(직군)과는 다른 값. 배역명 검색을 지원할 때
+  search_term 소스·다국어 테이블과 함께 설계.
   '''
 }
 

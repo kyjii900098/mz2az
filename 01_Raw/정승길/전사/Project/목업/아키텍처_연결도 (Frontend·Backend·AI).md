@@ -1,6 +1,6 @@
 ---
-source: "[[아키텍처_연결도_김태환.html]]"
-source_path: "01_Raw/Project/목업/아키텍처_연결도_김태환.html"
+source: "[[목업_초안_아키텍처_연결도_김태환.html]]"
+source_path: 01_Raw/Project/목업/아키텍처_연결도_김태환.html
 author: 김태환
 date_est: 2026-07-28
 type: raw-transcription

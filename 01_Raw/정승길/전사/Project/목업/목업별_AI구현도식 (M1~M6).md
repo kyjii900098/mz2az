@@ -1,6 +1,6 @@
 ---
-source: "[[목업별_AI구현도식_김태환.html]]"
-source_path: "01_Raw/Project/목업/목업별_AI구현도식_김태환.html"
+source: "[[목업_초안_목업별_AI구현도식_김태환.html]]"
+source_path: 01_Raw/Project/목업/목업별_AI구현도식_김태환.html
 author: 김태환
 date_est: 2026-07-28
 type: raw-transcription

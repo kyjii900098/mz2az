@@ -1,6 +1,6 @@
 ---
-source: "[[2026년 7월 27일 Sprint Planning.md]]"
-source_path: "01_Raw/정권호/Jira/2026년 7월 27일 Sprint Planning.md"
+source: "[[01_Raw/정승길/전사/정권호/Jira/2026년 7월 27일 Sprint Planning]]"
+source_path: 01_Raw/정권호/Jira/2026년 7월 27일 Sprint Planning.md
 author: 정권호
 date: 2026-07-27
 type: raw-transcription

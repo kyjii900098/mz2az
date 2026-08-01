@@ -1,6 +1,6 @@
 ---
-source: "[[기획_가이드라인_for_codex.md]]"
-source_path: "01_Raw/Project/기획심의/기획_가이드라인_for_codex.md"
+source: "[[01_Raw/정승길/전사/Project/기획심의/기획_가이드라인_for_codex]]"
+source_path: 01_Raw/Project/기획심의/기획_가이드라인_for_codex.md
 author: 팀공동
 date_est: 2026-06-15
 type: raw-transcription

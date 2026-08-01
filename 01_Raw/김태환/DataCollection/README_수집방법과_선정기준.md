@@ -1,13 +1,13 @@
 ---
-title: "kdramamap 촬영지 수집 · 상위 100편 선정 방법론"
+title: kdramamap 촬영지 수집 · 상위 100편 선정 방법론
 type: methodology
 status: draft
 created: 2026-07-29
 author: 김태환
 source:
-  - "https://kdramamap.com/"
-  - "[[2026-07-28]]"
-  - "[[프로젝트 결정사항]]"
+  - https://kdramamap.com/
+  - "[[00_기록/Daily(태환작성)/2026-07-28]]"
+  - "[[00_기록/SSoma(승길작성)/프로젝트 결정사항]]"
 ---
 
 > [!summary] kdramamap 드라마 탭 전수 수집(476편 / 20,080곳) → 외국인 인기도 점수화 → 상위 100편 선정 → 해당 100편의 장면 설명 수집.
