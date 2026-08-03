@@ -14,7 +14,7 @@ JIRA:MZ2AZ-138
 
 > [!summary] 수집용 15컬럼 CSV를 적재할 DB 구조. 테이블 14개 + 머티리얼라이즈드 뷰 1개.
 > `i18n` = internationalization(국제화). 언어별로 갈리는 값을 담는 테이블.
-> ERD·DDL 생성용 DBML은 [[SceneTrip DB 스키마 (DBML)]] 참조.
+> ERD·DDL 생성용 DBML은 [[MZ2AZ-111 SceneTrip DB 스키마 (DBML)]] 참조.
 
 ---
 
