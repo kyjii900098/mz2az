@@ -53,22 +53,12 @@ JIRA:MZ2AZ-179
 
 | 항목 | 값 | 비고 |
 | --- | --- | --- |
-| 프레임워크 | Spring Boot **4.1.0** | 아래 [!warning] 참조 |
+| 프레임워크 | Spring Boot **4.1.0** | |
 | 자바 | **21** (Temurin 21.0.11) | LTS |
 | 빌드 도구 | **Gradle 9.5.1**, Kotlin DSL | `build.gradle.kts` |
 | DB | PostgreSQL **17.6** + PostGIS **3.5.3** | |
 | 마이그레이션 | **Flyway** | |
 | 도커 | Engine 29.6.2 · Compose v5.3.1 | Docker Desktop |
-
-> [!warning] Spring Boot 3.x 로는 프로젝트를 만들 수 없다
-> 프로젝트 생성기(start.spring.io)가 **Boot 4.0 미만을 더 이상 받지 않는다** (`compatibility range is >=4.0.0`). 그래서 처음 계획한 3.5.x 대신 최신 정식판인 4.1.0 으로 정했다. 지금 4.0 으로 시작하면 프로젝트 중간에 한 번 올려야 하므로 최신 줄기를 택했다.
->
-> **Boot 4 에서 라이브러리 이름이 바뀌었다.** 인터넷 예제를 그대로 붙여넣으면 빌드가 깨지니 주의할 것.
->
-> | Boot 3 까지 | Boot 4 |
-> | --- | --- |
-> | `spring-boot-starter-web` | `spring-boot-starter-webmvc` |
-> | `spring-boot-starter-test` | `spring-boot-starter-webmvc-test` 등 기능별로 쪼개짐 |
 
 ### 결정과 이유
 
@@ -128,23 +118,7 @@ DB 컨테이너가 "실행 중"인 것과 "접속을 받을 준비가 된" 것�
 > `pg_available_extensions` 를 조회했더니 `vector` 가 없었다. 아키텍처 문서([[아키텍처 5계층 구조]])의 RAG 검색은 pgvector 를 전제로 한다.
 > MVP1 범위에는 벡터 검색이 없으므로 지금은 문제가 되지 않는다. **MVP2 에서 RAG 를 붙일 때** 확장이 더 들어 있는 태그(`imresamu/postgis:17-3.5-bundle0`)로 바꿀지, 우리 이미지를 직접 만들지 정해야 한다.
 >
-> **지도 검색과는 무관하다.** PostGIS 와 pgvector 는 이름이 비슷하지만 하는 일이 다르다.
->
-> | 확장 | 다루는 것 | 우리 기능 | 지금 상태 |
-> | --- | --- | --- | --- |
-> | PostGIS | 좌표·거리·영역 | 화면 기준 촬영지 검색, 내 주변 N km | **있음** |
-> | pgvector | 문장의 의미를 숫자로 바꾼 벡터 | AI 가이드가 후기·장면 설명에서 근거 찾기 | 없음 (MVP2) |
->
-> 즉 **지도 화면 기준 검색은 지금 구성으로 전부 된다.** 실제로 확인한 쿼리는 아래와 같다.
->
-> ```sql
-> -- ST_MakeEnvelope 로 지도 화면 네 귀퉁이를 사각형으로 만들고,
-> -- 그 안에 촬영지 좌표가 들어오는지 본다.
-> SELECT ST_Within(
->   ST_SetSRID(ST_MakePoint(126.9780, 37.5665), 4326),     -- 서울시청
->   ST_MakeEnvelope(126.90, 37.50, 127.05, 37.60, 4326)    -- 화면 박스
-> );  -- → t (부산역 좌표를 넣으면 f)
-> ```
+> **지도 검색과는 무관하다.** 좌표·거리·영역은 PostGIS 가 처리하고 pgvector 는 문장의 의미를 다루는 별개의 확장이다. 화면 기준 촬영지 검색은 지금 구성으로 전부 된다.
 
 ---
 
@@ -266,6 +240,148 @@ cd backend && ./gradlew test
 
 ---
 
+## 새 서비스를 컨테이너로 추가하기
+
+> [!info] 이 절은 사람과 코딩 에이전트가 같이 읽는 지침이다
+> 각자 만드는 것(Flutter 앱, 데이터 파이프라인, AI 서비스)을 같은 방식으로 컨테이너에 얹기 위한 규칙이다.
+> 에이전트에게 시킬 때는 **"`JiraDocs/MZ2AZ-157 Docker 개발 환경 구성.md` 의 '새 서비스를 컨테이너로 추가하기' 절을 그대로 따라서 `{서비스 이름}` 을 추가해라"** 라고 지시한다.
+> 이미 돌아가는 `backend` 와 `db` 가 이 규칙을 그대로 따르고 있으니, 판단이 서지 않으면 **`backend/Dockerfile` 과 `docker-compose.yml` 의 `backend` 블록을 본보기로 삼는다.**
+
+### 먼저 판단할 것 — 이걸 정말 컨테이너로 만들어야 하나
+
+모든 작업물을 컨테이너에 넣을 필요는 없다. 아래 기준으로 먼저 가른다.
+
+| 성격 | 컨테이너로? | 예 |
+| --- | --- | --- |
+| 계속 떠 있고 다른 서비스가 네트워크로 호출한다 | **그렇다** | 백엔드 API, AI 추론 서버, DB |
+| 개발자 기기에서 직접 실행해야 한다 | **아니다** | Flutter 모바일 앱 (에뮬레이터·실기기 필요) |
+| 가끔 한 번씩 돌리는 작업이다 | 컨테이너로 만들되 **기본 기동에서 제외** | 데이터 적재 배치, 크롤러 |
+| 결과가 정적 파일이고 팀에 공유하고 싶다 | 그렇다 | Flutter **웹** 빌드 결과 |
+
+가끔 돌리는 작업은 compose 의 `profiles` 로 묶어 둔다. 그러면 `docker compose up` 에는 안 뜨고, 필요할 때만 `docker compose --profile batch up loader` 로 부른다. 배치 작업이 매번 같이 떠서 자원을 먹는 것을 막기 위함이다.
+
+### 반드시 지킬 규칙
+
+| # | 규칙 | 이유 |
+| --- | --- | --- |
+| 1 | 새 서비스는 저장소 최상위에 자기 폴더를 갖는다. **폴더 이름과 compose 서비스 이름을 같게** 쓴다 | 이름이 어긋나면 남이 파일을 찾지 못한다 |
+| 2 | 빌드 방법은 그 폴더의 `Dockerfile` 에만 쓴다. 루트 compose 에는 `build: context: ./{폴더}` 만 적는다 | 루트 파일이 비대해지면 아무도 못 고친다 |
+| 3 | **다른 사람의 서비스 정의를 수정하지 않는다.** 자기 블록만 새로 추가한다 | JiraDocs 의 섹션 소유권 규칙과 같다 |
+| 4 | 컨테이너끼리는 **서비스 이름** 으로 부른다 (`db`, `backend`). `localhost` 를 쓰지 않는다 | 컨테이너 안에서 `localhost` 는 자기 자신이라 접속이 실패한다 |
+| 5 | 바뀔 수 있는 값(포트·계정·외부 API 키)을 코드나 compose 에 직접 쓰지 않는다. `.env` 로 빼고 **`.env.example` 에 견본을 반드시 추가** 한다 | `.env` 는 깃에 없다. 견본을 안 넣으면 남이 클론했을 때 뜨지 않는다 |
+| 6 | 호스트 포트는 `"${이름_PORT:-기본값}:내부포트"` 형태로 쓴다 | 팀원 노트북마다 이미 쓰는 포트가 다르다 |
+| 7 | DB 가 준비돼야 도는 서비스는 `depends_on` 에 `condition: service_healthy` 를 건다 | 준비 전에 붙으면 그대로 죽는다 |
+| 8 | Dockerfile 을 **빌드 단계와 실행 단계로 나눈다.** 최종 이미지에 빌드 도구를 남기지 않는다 | 이미지가 몇 배로 커지고 공격 면이 넓어진다 |
+| 9 | 실행 단계는 root 가 아닌 전용 계정으로 돌린다 | 컨테이너가 뚫렸을 때 피해를 줄인다 |
+| 10 | 의존성 설치 결과는 `--mount=type=cache` 로 재사용한다 | 없으면 소스 한 줄 고칠 때마다 전부 다시 받는다 |
+| 11 | 소스가 아닌 것(빌드 산출물·캐시·`.env`)은 `.dockerignore` 로 제외한다 | 빌드가 느려지고 비밀값이 이미지에 섞인다 |
+| 12 | 베이스 이미지가 **arm64 를 지원하는지 확인** 한다 | 팀 노트북이 애플 실리콘이다. 안 되면 에뮬레이션으로 느려진다 |
+
+12번은 이 티켓에서 실제로 걸렸던 문제다. 공식 `postgis/postgis` 가 arm64 빌드를 내지 않아 다른 이미지로 바꿨다. 확인 방법은 아래와 같다.
+
+```bash
+docker pull {이미지}
+docker image inspect --format '{{.Os}}/{{.Architecture}}' {이미지}
+# linux/arm64 가 나와야 한다. linux/amd64 면 에뮬레이션이므로 대안을 찾는다.
+```
+
+### 절차
+
+| 단계 | 할 일 |
+| --- | --- |
+| 1 | `{서비스}/Dockerfile` 을 만든다 (아래 골격 참고) |
+| 2 | `{서비스}/.dockerignore` 를 만든다 |
+| 3 | 루트 `docker-compose.yml` 의 `services:` 아래에 블록을 **추가** 한다 |
+| 4 | 새로 쓴 환경변수를 `.env.example` 에 추가한다 |
+| 5 | 아래 검증을 모두 통과시킨다 |
+| 6 | 루트 `README.md` 의 저장소 구조 표에 한 줄 추가한다 |
+
+### 골격
+
+Dockerfile 은 언어와 상관없이 이 모양을 지킨다.
+
+```dockerfile
+# 1단계: 빌드 — 컴파일러·패키지 관리자가 있는 이미지에서 실행물을 만든다.
+FROM {빌드용 이미지} AS build
+WORKDIR /workspace
+COPY {의존성 정의 파일} ./
+COPY {소스} ./
+RUN --mount=type=cache,target={그 언어의 캐시 경로} \
+	{빌드 명령}
+
+# 2단계: 실행 — 실행에 필요한 최소한만 있는 이미지로 옮긴다.
+FROM {실행용 이미지}
+WORKDIR /app
+RUN useradd --system --create-home --uid 10001 app
+COPY --from=build /workspace/{결과물} ./
+USER app
+EXPOSE {포트}
+ENTRYPOINT [{실행 명령}]
+```
+
+compose 블록은 이 모양을 지킨다.
+
+```yaml
+  {서비스이름}:
+    build:
+      context: ./{폴더}
+    container_name: scenetrip-{서비스이름}
+    environment:
+      TZ: Asia/Seoul
+      # 백엔드를 부른다면 주소는 localhost 가 아니라 backend 다.
+      API_BASE_URL: http://backend:8080
+    ports:
+      - "${그이름_PORT:-포트}:내부포트"
+    depends_on:          # DB 나 백엔드가 먼저 떠야 한다면
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+```
+
+언어별로 다른 부분은 아래 정도만 채우면 된다.
+
+| 언어 | 빌드용 이미지 | 실행용 이미지 | 캐시 경로 |
+| --- | --- | --- | --- |
+| Java (참고: `backend/Dockerfile`) | `eclipse-temurin:21-jdk` | `eclipse-temurin:21-jre` | `/root/.gradle` |
+| Python | `python:3.12-slim` | `python:3.12-slim` | `/root/.cache/pip` |
+| Flutter 웹 | Flutter 공식 이미지 | `nginx:alpine` | 이미지 문서 참조 |
+
+### 검증 — 아래를 모두 통과해야 끝난 것이다
+
+```bash
+cd ~/SceneTrip
+
+# 1. compose 파일 문법과 변수 치환이 맞는지 본다.
+docker compose config --quiet          # 아무것도 출력되지 않아야 통과
+
+# 2. 새 서비스만 띄운다.
+docker compose up -d --build {서비스}
+
+# 3. 상태를 본다. Exited 나 Restarting 이면 실패다.
+docker compose ps
+
+# 4. 로그에 오류가 없는지 본다.
+docker compose logs {서비스}
+
+# 5. 기존 서비스를 깨뜨리지 않았는지 확인한다. 이 응답이 그대로 나와야 한다.
+curl http://localhost:8080/api/ping
+```
+
+마지막 항목을 빠뜨리지 말 것. 루트 compose 는 팀 공용 파일이라 자기 서비스만 확인하고 끝내면 남의 환경을 깨뜨린 채로 올리게 된다.
+
+### 자주 나오는 실수
+
+| 실수 | 증상 | 바로잡기 |
+| --- | --- | --- |
+| 다른 컨테이너를 `localhost` 로 부름 | `Connection refused` | 서비스 이름으로 바꾼다 (`http://backend:8080`) |
+| 포트를 숫자로 고정 | 다른 팀원이 `port is already allocated` | `${이름_PORT:-기본값}` 으로 바꾼다 |
+| `.env.example` 을 갱신하지 않음 | 남이 클론하면 안 뜬다 | 새 변수를 견본에 추가한다 |
+| `.env` 를 커밋 | 나중에 API 키가 깃 기록에 남는다 | 커밋 전에 `git status` 로 확인한다 |
+| 남의 서비스 블록을 고침 | 남의 환경이 깨진다 | 자기 블록만 추가한다 |
+| arm64 미지원 이미지 사용 | 눈에 띄게 느림 | `docker image inspect` 로 확인 후 대안을 찾는다 |
+
+---
+
 ## 다음 작업
 
 | 할 일 | 관련 |
@@ -274,16 +390,3 @@ cd backend && ./gradlew test
 | V6 CSV 데이터 적재 | 데이터 확정 후 |
 | API 명세서 작성 — 프론트가 기다리는 산출물 | [[(2주차)2026년 8월 3일 Sprint Planning]] 2-3 |
 | `app/` 에 Flutter 프로젝트 추가 | MZ2AZ-160 |
-| 좌표 컬럼을 다루려면 Hibernate Spatial 추가 필요 | `V2` 작업 시 함께 (아래 참조) |
-
-> [!note] Hibernate Spatial 을 왜 넣어야 하나
-> JPA 는 자바 클래스와 DB 테이블을 자동으로 변환해 준다. `String` 은 `varchar` 로, `Long` 은 `bigint` 로 바꿀 줄 안다. 그런데 **PostGIS 의 좌표 타입(`geography`)은 모른다.** 그래서 엔티티에 좌표 필드를 그냥 선언할 수 없다.
-> Hibernate Spatial 은 그 변환 규칙을 더해 주는 모듈이다. 넣으면 엔티티에 좌표를 바로 쓸 수 있다.
->
-> ```java
-> @Column(columnDefinition = "geography(Point,4326)")
-> private Point geom;      // org.locationtech.jts.geom.Point
-> ```
->
-> 넣지 않으면 좌표를 위도·경도 두 개의 실수 컬럼으로 쪼개 저장하게 되는데, 그러면 **PostGIS 공간 인덱스를 쓰지 못해 화면 기준 검색이 전체 훑기로 바뀐다.** 지금 데이터 규모에서는 티가 안 나지만 구조를 그렇게 잡을 이유가 없다.
-> 버전은 따로 적지 않아도 된다. Spring Boot 4.1 이 Hibernate 7.4.1 을 쓰고 같은 번호의 `hibernate-spatial` 이 나와 있어서, `build.gradle.kts` 에 `implementation("org.hibernate.orm:hibernate-spatial")` 한 줄이면 맞춰진다.
