@@ -1,0 +1,573 @@
+<title>SceneTrip 기획·BM 진단 리포트</title>
+<style>
+  :root {
+    --paper:#F6F7F9; --surface:#FFFFFF;
+    --ink:#14171C; --ink-2:#454C57; --ink-3:#6E7681;
+    --rule:#DDE1E7; --rule-2:#EDF0F3;
+    --accent:#1F4E79; --accent-soft:#E8EFF6;
+    --crit:#9E2B2B; --crit-soft:#FAECEA;
+    --warn:#8A5A0B; --warn-soft:#FBF2E0;
+    --good:#1B6144; --good-soft:#E6F2EC;
+    --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#101317; --surface:#171B21;
+      --ink:#E8EBEF; --ink-2:#A9B1BC; --ink-3:#7C848F;
+      --rule:#2A303A; --rule-2:#20262E;
+      --accent:#7FB2DC; --accent-soft:#17232E;
+      --crit:#E88C86; --crit-soft:#2A1A19;
+      --warn:#E0B266; --warn-soft:#2A2115;
+      --good:#7FC8A4; --good-soft:#16261F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101317; --surface:#171B21;
+    --ink:#E8EBEF; --ink-2:#A9B1BC; --ink-3:#7C848F;
+    --rule:#2A303A; --rule-2:#20262E;
+    --accent:#7FB2DC; --accent-soft:#17232E;
+    --crit:#E88C86; --crit-soft:#2A1A19;
+    --warn:#E0B266; --warn-soft:#2A2115;
+    --good:#7FC8A4; --good-soft:#16261F;
+  }
+  :root[data-theme="light"]{
+    --paper:#F6F7F9; --surface:#FFFFFF;
+    --ink:#14171C; --ink-2:#454C57; --ink-3:#6E7681;
+    --rule:#DDE1E7; --rule-2:#EDF0F3;
+    --accent:#1F4E79; --accent-soft:#E8EFF6;
+    --crit:#9E2B2B; --crit-soft:#FAECEA;
+    --warn:#8A5A0B; --warn-soft:#FBF2E0;
+    --good:#1B6144; --good-soft:#E6F2EC;
+  }
+
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:52rem;margin:0 auto;padding:4rem 1.5rem 6rem;
+    display:flex;flex-direction:column;gap:3.5rem;}
+  .prose{max-width:44rem;}
+
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 .75rem;}
+
+  h1{font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.2;letter-spacing:-.02em;
+    font-weight:700;text-wrap:balance;margin:0 0 1rem;}
+  h2{font-size:clamp(1.35rem,3.2vw,1.65rem);line-height:1.3;letter-spacing:-.015em;
+    font-weight:700;text-wrap:balance;margin:0 0 1.25rem;
+    padding-bottom:.6rem;border-bottom:2px solid var(--ink);}
+  h3{font-size:1.08rem;line-height:1.45;font-weight:700;margin:0 0 .5rem;text-wrap:balance;}
+  h4{font-size:.95rem;font-weight:700;margin:0 0 .35rem;color:var(--ink-2);}
+  p{margin:0 0 1.1rem;}
+  p:last-child{margin-bottom:0;}
+  strong{font-weight:700;}
+  del{color:var(--ink-3);}
+  a{color:var(--accent);text-underline-offset:3px;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  code{font-family:var(--mono);font-size:.86em;background:var(--rule-2);padding:.1em .35em;border-radius:2px;}
+
+  header .lede{font-size:1.1rem;color:var(--ink-2);max-width:40rem;margin:0;}
+  .meta{font-family:var(--mono);font-size:.75rem;color:var(--ink-3);
+    margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;}
+
+  section{display:flex;flex-direction:column;gap:1.5rem;}
+  .block{display:flex;flex-direction:column;gap:1rem;}
+
+  .verdict{background:var(--surface);border:1px solid var(--rule);
+    border-top:4px solid var(--accent);padding:2rem 1.75rem;
+    display:flex;flex-direction:column;gap:1.25rem;}
+  .verdict h2{border:0;padding:0;margin:0;font-size:1.3rem;}
+  .vlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1rem;}
+  .vlist li{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:baseline;}
+  .vnum{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--accent);
+    letter-spacing:.05em;padding-top:.15rem;}
+
+  .finding{background:var(--surface);border:1px solid var(--rule);
+    border-left:4px solid var(--ink-3);padding:1.4rem 1.5rem;
+    display:flex;flex-direction:column;gap:.9rem;}
+  .finding.crit{border-left-color:var(--crit);}
+  .finding.warn{border-left-color:var(--warn);}
+  .finding.good{border-left-color:var(--good);}
+  .fhead{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;}
+  .tag{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.1em;
+    text-transform:uppercase;padding:.2rem .5rem;border-radius:2px;white-space:nowrap;}
+  .tag.crit{background:var(--crit-soft);color:var(--crit);}
+  .tag.warn{background:var(--warn-soft);color:var(--warn);}
+  .tag.good{background:var(--good-soft);color:var(--good);}
+  .tag.info{background:var(--accent-soft);color:var(--accent);}
+  .fhead h3{margin:0;flex:1;min-width:14rem;}
+
+  .tw{overflow-x:auto;border:1px solid var(--rule);background:var(--surface);}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:min(100%,26rem);}
+  th,td{padding:.6rem .85rem;text-align:left;border-bottom:1px solid var(--rule-2);
+    vertical-align:top;}
+  thead th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:700;
+    background:var(--rule-2);border-bottom:1px solid var(--rule);}
+  tbody tr:last-child td{border-bottom:0;}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);
+    font-size:.85rem;white-space:nowrap;}
+  tr.hi td{background:var(--accent-soft);font-weight:700;}
+  tr.hi td.num{color:var(--accent);}
+  tr.bad td{background:var(--crit-soft);}
+  caption{caption-side:bottom;text-align:left;padding:.7rem .85rem;
+    font-size:.78rem;color:var(--ink-3);border-top:1px solid var(--rule);}
+
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:1rem 1.2rem;font-size:.95rem;}
+  .note.crit{border-left-color:var(--crit);background:var(--crit-soft);}
+  .note.warn{border-left-color:var(--warn);background:var(--warn-soft);}
+  .note .lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:700;display:block;margin-bottom:.4rem;color:var(--ink-2);}
+  blockquote{margin:0;padding:.2rem 0 .2rem 1.1rem;border-left:2px solid var(--rule);
+    color:var(--ink-2);font-size:.95rem;}
+
+  ul.body,ol.body{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.55rem;}
+  ul.body li::marker{color:var(--ink-3);}
+  ol.body li::marker{font-family:var(--mono);font-size:.85rem;color:var(--accent);font-weight:700;}
+
+  .steps{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0;}
+  .steps li{display:grid;grid-template-columns:2.2rem 1fr;gap:1rem;
+    padding:1.1rem 0;border-bottom:1px solid var(--rule);align-items:start;}
+  .steps li:first-child{border-top:1px solid var(--rule);}
+  .snum{font-family:var(--mono);font-size:.8rem;font-weight:700;color:var(--accent);
+    padding-top:.15rem;font-variant-numeric:tabular-nums;}
+  .sbody p{margin:.3rem 0 0;font-size:.92rem;color:var(--ink-2);}
+
+  .src{font-size:.82rem;color:var(--ink-3);line-height:1.9;}
+  .src a{color:var(--ink-2);}
+
+  hr{border:0;border-top:1px solid var(--rule);margin:0;}
+
+  @media (max-width:600px){
+    .wrap{padding:2.5rem 1.1rem 4rem;gap:2.75rem;}
+    .verdict{padding:1.5rem 1.2rem;}
+    .finding{padding:1.15rem 1.1rem;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">mz2az · AI·SW 마에스트로 17기 · 2판</p>
+    <h1>SceneTrip 기획·비즈니스 모델 진단</h1>
+    <p class="lede">설문 원본 69건을 직접 집계하고 레퍼럴 파트너를 조사했다. 초판에 파싱 오류가 있어 독립 검토 후 전면 정정했다. 결론 하나가 반대로 뒤집혔다.</p>
+    <div class="meta">
+      <span>2026-08-03 · 2판</span>
+      <span>설문 CSV 69건 · 27컬럼 · 2지 분기</span>
+      <span>1차 MVP까지 14 영업일</span>
+    </div>
+  </header>
+
+  <div class="verdict" style="border-top-color:var(--crit)">
+    <p class="eyebrow" style="margin:0">초판에서 정정된 것</p>
+    <h2>무엇이 틀렸었나</h2>
+    <p style="margin:0;font-size:.95rem;color:var(--ink-2)">초판 집계에 파싱 오류 두 건이 있었다. <code>csv.DictReader</code>가 <strong>중복 헤더를 병합</strong>해 분기 문항 한쪽(20명)이 통째로 사라졌고 — 그 20명이 방한 경험자 15명 + 예약 확정자 3명, 즉 <strong>이 문서가 타겟이라 부른 집단 전체</strong>였다. 또 복수응답 구분자를 <code>,</code>로 잘못 써서(실제는 <code>;</code>) 조합 응답이 쪼개지지 않았다.</p>
+    <ul class="vlist">
+      <li><span class="vnum">뒤집힘</span><span><strong>"탐색 고통이 약하다"는 반대였다.</strong> 실제로는 <strong>70.3%가 불편을 겪었고 언어 장벽이 42.2%로 1위</strong>다. 기획서 문제인식 3번을 교체하라는 초판 권고는 <strong>철회</strong>한다.</span></li>
+      <li><span class="vnum">반증됨</span><span><strong>"12.5%가 레퍼럴 고객"은 틀렸다.</strong> 그 8명 중 6명이 같은 설문에서 "아무것도 돈 낸 적 없음", 가이드 투어 지출자 0명, 7명이 계획 없음이다.</span></li>
+      <li><span class="vnum">보류</span><span><strong>"10달러 정정" 권고는 성급했다.</strong> 김상규 인용(7/13 Reddit)과 이 CSV(7/22 surveyswap)는 별개 설문일 가능성이 높다.</span></li>
+      <li><span class="vnum">교체</span><span><strong>"첫 상품 하나를 고른다"는 틀 자체를 버린다.</strong> eSIM 우선 권고는 철회하고, <strong>화면 ↔ 상품 대응표</strong>로 대체한다. 화면마다 자연스러운 상품이 다르고, 클릭률은 여러 상품을 걸어야 배울 수 있다.</span></li>
+      <li><span class="vnum">불가</span><span><strong>초판 assignment는 실행 불가.</strong> 이메일 남긴 8명 중 예약·계획 확정자는 0명이다.</span></li>
+    </ul>
+  </div>
+
+  <div class="verdict">
+    <p class="eyebrow" style="margin:0">정정 후 결론</p>
+    <h2>다섯 문장 요약</h2>
+    <ul class="vlist">
+      <li><span class="vnum">01</span><span><strong>기획서의 언어 장벽 판단이 데이터로 가장 강하게 지지된다.</strong> 겪은 불편 1위가 언어 장벽(42.2%)이다. 다국어를 전제 조건으로 승격한 것은 옳았다.</span></li>
+      <li><span class="vnum">02</span><span><strong>8/29 MVP1은 현재 범위로 불가능하다.</strong> 실가용 14 영업일에 3명. 커뮤니티를 넣으면 스토어 심사와 직렬로 묶인다.</span></li>
+      <li><span class="vnum">03</span><span><strong>레퍼럴 BM의 방향은 맞다.</strong> Trazy가 이미 작품 단위 투어를 팔고 있어 "전환 맥락이 명확하다"가 실행 가능함이 확인됐다. 상품은 하나로 고르지 말고 <strong>화면 ↔ 상품 대응표</strong>대로 붙인다.</span></li>
+      <li><span class="vnum">04</span><span><strong>이 단계 목표는 매출이 아니라 전환율이다.</strong> 3개월 안에 레퍼럴 매출은 사용자 1,000명당 $78 수준이다.</span></li>
+      <li><span class="vnum">05</span><span><strong>도달이 유일한 미해결 문제다.</strong> 69명 중 예약·계획 확정자는 3명뿐이고, 그 3명은 $11 이상 지불 의사 0명에 이메일도 남기지 않았다.</span></li>
+    </ul>
+  </div>
+
+  <section>
+    <h2>1. 근거 자료</h2>
+    <div class="prose block">
+      <div class="note">
+        <span class="lbl">설문 원본은 볼트에 있다</span>
+        <p style="margin:0"><code>01_Raw/정권호/K-Content Travel — 90-Second Fan Survey (Anonymous).csv</code> · <strong>69건 · 27컬럼 · 2지 분기 구조</strong></p>
+        <p style="margin:.7rem 0 0">볼트 3곳(<code>02_Wiki/Reddit 설문과 10달러 지불 의사.md</code>, <code>02_Wiki/설문대행 이용.md</code>, <code>04_Story/4막</code>)이 "원본이 어디에도 없다"고 기록하고 있으나 사실이 아니다. 갱신이 필요하다.</p>
+      </div>
+      <p>다만 기획서 본문은 <strong>"설문 응답 87건"</strong>이라 적고 CSV는 69건이다. <strong>18건(21%)의 행방이 확인되지 않았다.</strong> 이 데이터로 다른 문서를 정정하기 전에 먼저 풀어야 할 문제다.</p>
+      <h3>설문 설계 자체는 잘 됐다</h3>
+      <p>멘토들이 경고한 <em>"있으면 쓸 것 같아요"</em> 함정을 피하도록 행동 기반 문항으로 짜여 있다. "실제로 겪은 일은?", "실제로 돈 낸 적 있나?", "지난번 검색에 몇 분 걸렸나?" 형태다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. 설문이 말하는 것</h2>
+
+    <div class="finding good">
+      <div class="fhead"><span class="tag good">기획서 지지</span><h3>언어 장벽이 1위 — 다국어 판단이 옳았다</h3></div>
+      <div class="tw">
+        <table>
+          <caption>겪은 불편 · n=64 · 두 분기 합산 · 복수응답</caption>
+          <thead><tr><th>항목</th><th class="num">인원</th><th class="num">비율</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td>언어 장벽 (한국어 정보만)</td><td class="num">27</td><td class="num">42.2%</td></tr>
+            <tr><td>정보가 흩어져 찾기 어려움</td><td class="num">21</td><td class="num">32.8%</td></tr>
+            <tr><td>겪은 것 없음</td><td class="num">19</td><td class="num">29.7%</td></tr>
+            <tr><td>정확한 주소를 못 찾음</td><td class="num">15</td><td class="num">23.4%</td></tr>
+            <tr><td>정보가 구버전</td><td class="num">12</td><td class="num">18.8%</td></tr>
+            <tr><td>교통편을 파악 못 함</td><td class="num">7</td><td class="num">10.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>하나 이상 겪은 사람이 70.3%다.</strong> 기획서가 <code>[추가]</code>로 넣은 항목 — <em>"촬영지 정보 대부분이 한국어로만 존재해 외국인 단독 탐색이 사실상 불가능함 → 다국어 제공이 선택이 아닌 전제 조건"</em> — 이 데이터로 가장 강하게 뒷받침된다.</p>
+      <div class="tw">
+        <table>
+          <caption>분기별 비교 — 실제로 가본 집단일수록 불편을 많이 겪었다</caption>
+          <thead><tr><th>항목</th><th class="num">방한 경험자·예약자 n=20</th><th class="num">계획 없음 n=44</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td>하나 이상 겪음</td><td class="num">85.0%</td><td class="num">63.6%</td></tr>
+            <tr><td>언어 장벽</td><td class="num">45.0%</td><td class="num">40.9%</td></tr>
+            <tr><td>겪은 것 없음</td><td class="num">15.0%</td><td class="num">36.4%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note crit">
+        <span class="lbl">초판 정정</span>
+        <p style="margin:0">초판은 "겪은 것 없음 34.1%가 단일 최다 → 탐색 고통이 약하다 → 기획서 문제인식 3번을 교체하라"고 썼다. <strong>파싱 오류에 따른 오판이었고, 실행하면 맞는 서술을 지우게 된다.</strong> 해당 권고를 철회한다.</p>
+      </div>
+    </div>
+
+    <div class="finding info">
+      <div class="fhead"><span class="tag info">검증됨</span><h3>지불 의사 — 인용할 때 분모를 밝힐 것</h3></div>
+      <div class="tw">
+        <table>
+          <caption>큐레이션된 1일 코스에 얼마를 낼 의향이 있나 · n=64</caption>
+          <thead><tr><th>응답</th><th class="num">비율</th></tr></thead>
+          <tbody>
+            <tr><td>무료면만 쓰겠다</td><td class="num">28.1%</td></tr>
+            <tr><td>$5 미만</td><td class="num">20.3%</td></tr>
+            <tr><td>$5–10</td><td class="num">15.6%</td></tr>
+            <tr class="hi"><td>$11–15</td><td class="num">14.1%</td></tr>
+            <tr class="hi"><td>$16–20</td><td class="num">9.4%</td></tr>
+            <tr><td>차라리 사람 가이드 투어에 더 내겠다 <span style="color:var(--ink-3)">(가격대 아님)</span></td><td class="num">12.5%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>$11 이상은 <strong>64명 기준 23.4%</strong>, 가격을 답한 <strong>56명 기준 26.8%</strong>. 마지막 항목은 가격대가 아니므로 어느 분모를 쓰든 함께 밝혀야 한다.</p>
+      <div class="note warn">
+        <span class="lbl">초판 정정 — "10달러" 정정 권고는 보류</span>
+        <p style="margin:0">초판은 기획서 서술의 즉시 정정을 최우선 액션으로 올렸으나 근거가 불충분하다.</p>
+        <ul class="body" style="margin:.8rem 0 0">
+          <li>김상규 인용은 <strong>2026-07-13</strong>, "Reddit 외국인 대상 빠른 설문", 대상은 <strong>기획안 서비스 전반</strong></li>
+          <li>이 CSV는 <strong>surveyswap 결제 7/22</strong> 건으로 보이며, 문항은 <strong>"큐레이션된 1일 코스"라는 특정 단품 가격</strong></li>
+        </ul>
+        <p style="margin:.8rem 0 0">시점·경로·측정 대상이 모두 다른 <strong>별개 설문일 가능성이 높다.</strong> 팀 노트 <code>SceneTrip 사용자 페르소나와 앱 사용 시나리오.md</code>에 이미 <em>"두 설문의 대상·문항이 달라 직접 비교는 어렵다"</em>고 적혀 있다. <strong>"재검토 필요"가 맞는 수위이며 "원본이 반박한다"는 과했다.</strong></p>
+        <p style="margin:.8rem 0 0">순서: ① 87건 원본 확인 → ② 김상규가 인용한 설문 특정 → ③ 그다음 정정 여부 판단.</p>
+      </div>
+    </div>
+
+    <div class="finding crit">
+      <div class="fhead"><span class="tag crit">BM 최대 리스크</span><h3>확보한 응답자는 퍼널 상단에 몰려 있다</h3></div>
+      <div class="tw">
+        <table>
+          <caption>한국 여행에 대해 지금 어느 단계인가 · n=69</caption>
+          <thead><tr><th>응답</th><th class="num">인원</th><th class="num">비율</th></tr></thead>
+          <tbody>
+            <tr><td>가고 싶지만 구체적 계획 없음</td><td class="num">44</td><td class="num">63.8%</td></tr>
+            <tr><td>최근 5년 내 방한 경험</td><td class="num">15</td><td class="num">21.7%</td></tr>
+            <tr><td>방문 의향 없음</td><td class="num">5</td><td class="num">7.2%</td></tr>
+            <tr class="bad"><td>예약했거나 적극적으로 계획 중</td><td class="num">3</td><td class="num">4.3%</td></tr>
+            <tr><td>최근 3년 내 방한 경험</td><td class="num">2</td><td class="num">2.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>레퍼럴 수익은 퍼널 하단(예약)에서 발생하는데 응답자는 상단에 몰려 있다. 그리고 그 <strong>3명의 지불 의사는 $5–10 / 무료만 / $5 미만 — $11 이상 0명</strong>이며, <strong>셋 다 이메일을 남기지 않았다.</strong> 타겟 세그먼트만 보면 지불 의사가 전체 평균보다 오히려 낮다.</p>
+    </div>
+
+    <div class="finding crit">
+      <div class="fhead"><span class="tag crit">초판 반증</span><h3>"12.5%가 레퍼럴 고객"은 성립하지 않는다</h3></div>
+      <p>초판은 <em>"차라리 사람 가이드 투어에 더 내겠다"를 고른 12.5%가 '앱엔 안 내지만 진짜 투어는 산다'는 뜻이며 정확히 레퍼럴 고객"</em>이라고 굵게 강조했다. 그 8명을 개별 추적한 결과:</p>
+      <div class="tw">
+        <table>
+          <caption>"차라리 가이드 투어에 더 내겠다"를 고른 8명의 실제 행동</caption>
+          <thead><tr><th>확인 항목</th><th class="num">결과</th></tr></thead>
+          <tbody>
+            <tr class="bad"><td>같은 설문에서 "아무것도 돈 낸 적 없음"</td><td class="num">6 / 8</td></tr>
+            <tr class="bad"><td>가이드 K-pop·K-드라마 투어에 지출한 적 있음</td><td class="num">0 / 8</td></tr>
+            <tr class="bad"><td>"가고 싶지만 구체적 계획 없음"</td><td class="num">7 / 8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>이들은 "진짜 투어는 산다"고 답한 적이 없다. <strong>가상의 선호를 말했을 뿐이다.</strong> 같은 CSV의 행동 데이터(지출 이력)가 이 해석을 반증한다. 이 문서가 바로 앞에서 "행동 기반 설계라 좋다"고 칭찬한 기준을, BM을 떠받치는 신호에서 스스로 어긴 것이다.</p>
+    </div>
+
+    <div class="finding info">
+      <div class="fhead"><span class="tag info">검증됨</span><h3>실제 방한 경험자 15명의 고통</h3></div>
+      <div class="tw">
+        <table>
+          <caption>최근 방한 경험자 · n=15 · 복수응답 · 모든 비율은 6.67%의 배수</caption>
+          <thead><tr><th>가장 불편했던 것</th><th class="num">인원</th><th class="num">비율</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td>대중교통 정보 혼란 (지하철 출구·버스 정류장)</td><td class="num">7</td><td class="num">46.7%</td></tr>
+            <tr class="hi"><td>영어 검색 실패 (정확한 한글·영문을 쳐야만 나옴)</td><td class="num">7</td><td class="num">46.7%</td></tr>
+            <tr><td>상세정보 언어장벽 (리뷰·메뉴·안내가 한국어)</td><td class="num">4</td><td class="num">26.7%</td></tr>
+            <tr><td>부정확·구버전 경로</td><td class="num">4</td><td class="num">26.7%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>사용 지도 앱은 네이버 8명, 구글 7명, 카카오 3명, Apple Maps 2명, 기타 1명. 두 주요 지도 모두 <strong>K-콘텐츠 축이 없다</strong>는 것이 SceneTrip의 자리다.</p>
+      <div class="note warn">
+        <span class="lbl">발표에 쓸 때</span>
+        <p style="margin:0"><strong>n=15에서 46.7%와 26.7%는 통계적으로 구분되지 않는다</strong>(95% 신뢰구간 ±25pp). "15명 중 7명"으로 쓰는 편이 정직하고, 심사에서 반박당하지 않는다.</p>
+      </div>
+    </div>
+
+    <div class="finding info">
+      <div class="fhead"><span class="tag info">검증됨</span><h3>앱을 열 이유 — 검색과 지도가 1·2위</h3></div>
+      <div class="tw">
+        <table>
+          <caption>이 앱이 다 된다면 무엇 때문에 열겠나 · 최대 3개 선택 · n=64</caption>
+          <thead><tr><th>기능</th><th class="num">비율</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td>검증된 방문 정보가 있는 지도</td><td class="num">60.9%</td></tr>
+            <tr class="hi"><td>작품·아티스트·장면으로 촬영지 검색</td><td class="num">54.7%</td></tr>
+            <tr><td>AI가 내가 고른 장소로 동선 구성</td><td class="num">39.1%</td></tr>
+            <tr><td>커뮤니티 (팬 팁·방문 인증·루트 공유)</td><td class="num">35.9%</td></tr>
+            <tr><td>포토스팟 가이드</td><td class="num">31.2%</td></tr>
+            <tr><td>팀이 만든 완성 코스를 그냥 따라가기</td><td class="num">21.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>MVP1이 검색·지도를 주력으로 잡은 것은 데이터와 정확히 맞는다.</p>
+    </div>
+
+    <div class="finding info">
+      <div class="fhead"><span class="tag info">검증됨</span><h3>코스는 따라가기보다 고치기</h3></div>
+      <div class="tw">
+        <table>
+          <caption>여행 스타일 선호 · n=55 · 단일선택</caption>
+          <thead><tr><th>항목</th><th class="num">비율</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td>완성 루트를 주되 내가 고칠 수 있어야</td><td class="num">40.0%</td></tr>
+            <tr><td>100% 직접 구성</td><td class="num">23.6%</td></tr>
+            <tr><td>즉흥적으로 핀만 찍고 감</td><td class="num">18.2%</td></tr>
+            <tr><td>전문가·팬이 만든 일정을 그대로 따름</td><td class="num">18.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>팀 큐레이션 루트는 완성품이 아니라 출발점으로 위치시킬 것.</strong> 힘은 편집 경험에 싣는다.</p>
+      <p style="font-size:.9rem;color:var(--ink-3)">초판은 이 표에 "최대 3개 복수응답(n=64)" 항목을 섞어 순위를 매겼다. 분모와 응답 형식이 다른 숫자였다. 위 표는 단일선택 문항만으로 재작성했으며 결론은 그대로 성립한다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. 확정한 정체성과 전제</h2>
+    <div class="prose block">
+      <blockquote>"우리 어플은 성지순례 여행 계획을 잡기 쉽도록 도와주는 서비스가 맞는 것 같아. 우리가 교통까지 제공해주게 되면 범위가 너무 커져."</blockquote>
+      <p>여행 계획을 세우는 순간이 곧 투어·패스가 예약되는 순간이므로, 계획 도구로 범위를 확정하면 타겟과 수익 지점이 같은 자리에 놓인다. <strong>다만 이것이 도달 문제를 푸는 것은 아니다</strong> — 계획 중인 방한 확정자를 어떻게 만나느냐는 여전히 미해결이다.</p>
+      <ol class="body">
+        <li><strong>여행 계획 도구</strong>다. 여행 중 기능은 MVP2 이후이거나 하지 않는다.</li>
+        <li>MVP1 주력은 <strong>검색·지도와 코스</strong>다.</li>
+        <li>수익은 <strong>레퍼럴</strong>, 대상은 "계획 중인 방한 확정자". 앱 자체 유료화는 하지 않는다.</li>
+        <li>교통·영업시간은 자체 보유하지 않고 <strong>네이버 지도로 연결</strong>한다.</li>
+      </ol>
+      <div class="note">
+        <span class="lbl">전제 4의 대가</span>
+        <p style="margin:0">방한 경험자가 꼽은 1위 불편이 대중교통 혼란(15명 중 7명)인데 이를 네이버에 위임한다. 지도 API 약관과 일정을 고려하면 옳은 판단이지만, SceneTrip의 가치가 <strong>"찾아주는 것"이지 "데려다주는 것"이 아니라는 점</strong>을 팀이 합의하고 있어야 한다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. 레퍼럴 파트너 조사</h2>
+    <div class="prose block">
+      <p>기획서 부록 C 미결 14번("레퍼럴 제휴처 선정")에 대한 조사 결과다. 개인 제휴 계약 없이 지금 가입 가능한 프로그램이 여럿 있다.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <caption>공개 어필리에이트 프로그램 · 2026년 8월 공개 정보 기준, 가입 시 재확인 필요</caption>
+        <thead><tr><th>파트너</th><th class="num">수수료</th><th class="num">쿠키</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>GetYourGuide</td><td class="num">5–8%</td><td class="num">30–31일</td><td>Travelpayouts 8% / Awin 7%. 요율 최고</td></tr>
+          <tr><td>Klook</td><td class="num">투어 6.5%</td><td class="num">30일</td><td>한국 상품 최다. Ecomobi·Involve Asia 경유</td></tr>
+          <tr class="hi"><td>Trazy</td><td class="num">~4%</td><td class="num">—</td><td>한국 특화. K-드라마 투어 직접 운영</td></tr>
+          <tr><td>KKday</td><td class="num">2.62%</td><td class="num">30일</td><td>요율 최저</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding good">
+      <div class="fhead"><span class="tag good">기회</span><h3>Trazy가 이미 작품 단위 투어를 판다</h3></div>
+      <ul class="body">
+        <li><strong>눈물의 여왕 투어</strong> — 아르보리툼 이월, 더현대 서울(퀸즈 백화점), 여의도공원, 아쿠아플라넷 일산(프러포즈 장면)</li>
+        <li><strong>선재 업고 튀어 투어</strong> — 스타필드 수원, 용연 자전거 장면, 수원화성 화홍문, 캐릭터 집이었던 카페</li>
+        <li>포함: 왕복 교통, 영어·중국어 스태프, 입장료 / 최소 3인, 월요일 제외</li>
+      </ul>
+      <p>레퍼럴로 걸 상품을 만들 필요가 없고, <strong>기획서가 주장한 "우리는 어디에 어떤 순서로 가는지 알기에 전환 맥락이 명확하다"가 실행 가능함이 확인됐다.</strong> 눈물의 여왕 촬영지를 보는 사용자에게 눈물의 여왕 투어를 거는 것이 실제로 가능하다.</p>
+      <p>동시에 경쟁 신호다. Klook은 이미 Fandom Tour와 K-드라마 촬영지 블로그를 운영 중이다. <strong>기획서 시장분석의 경쟁자 목록에 Klook·Trazy를 추가해야 한다</strong> — K-Spot·DUCPIC·트리플보다 이쪽이 실질적 경쟁자다.</p>
+    </div>
+
+    <div class="finding info">
+      <div class="fhead"><span class="tag info">작동 방식</span><h3>레퍼럴이 실제로 어떻게 돈이 되나</h3></div>
+      <p>용어 혼선을 막기 위해 한 장면으로 적는다. 프랑스 거주 사용자가 <code>Queen of Tears</code>를 검색해 <strong>더현대 서울</strong>(극중 퀸즈 백화점) 상세 화면에 들어간다. 그 화면 맨 아래에 줄 하나가 붙는다.</p>
+      <div class="tw">
+        <table>
+          <caption>촬영지 상세 화면 하단에 붙는 한 줄</caption>
+          <tbody>
+            <tr><td style="border:0;padding:1.1rem 1.2rem">
+              <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.5rem">이 촬영지가 포함된 투어</div>
+              <div style="font-weight:700;margin-bottom:.2rem">눈물의 여왕 1일 투어 · Trazy</div>
+              <div style="font-size:.88rem;color:var(--ink-2)">₩89,000 · 왕복 교통 + 영어 가이드</div>
+              <div style="margin-top:.8rem;display:inline-block;font-family:var(--mono);font-size:.75rem;font-weight:700;color:var(--accent);border:1px solid var(--accent);padding:.35rem .8rem;border-radius:2px">보러 가기 →</div>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>누르면 <strong>Trazy 예약 페이지가 브라우저로 열린다.</strong> SceneTrip 안에서 결제하지 않으므로 자체 결제 모듈이 필요 없다. 링크 주소에 SceneTrip 식별 코드가 붙어 있어 Trazy가 유입 출처를 안다. 30일 안에 예약이 일어나면 <strong>Trazy가 SceneTrip에 약 4%(₩3,500)를 지급</strong>한다. 사용자 부담은 없다 — 파트너가 원래 마케팅비로 쓰는 예산에서 나간다.</p>
+      <div class="tw">
+        <table>
+          <caption>이 문서에서 쓰는 용어</caption>
+          <thead><tr><th>용어</th><th>실제 의미</th></tr></thead>
+          <tbody>
+            <tr><td>상품</td><td>외국인이 돈 주고 사는 실물. 위 예시의 ₩89,000 투어. 그 외 교통패스·입장권·액티비티</td></tr>
+            <tr><td>맥락</td><td>그 줄이 붙는 <strong>화면과 거기 떠 있는 내용</strong></td></tr>
+            <tr><td>노출 / 클릭 / 전환</td><td>줄이 떴다 / 눌렀다 / 실제 예약까지 갔다</td></tr>
+            <tr><td>파트너</td><td>상품을 파는 회사 (Trazy, Klook)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="finding good">
+      <div class="fhead"><span class="tag good">권고</span><h3>화면 ↔ 상품 대응표</h3></div>
+      <p><strong>상품을 하나로 정하지 않는다.</strong> 화면마다 자연스러운 것이 다르므로 대응표를 미리 정해두고 그대로 붙인다. 즉흥으로 붙이면 광고판이 된다.</p>
+      <div class="tw">
+        <table>
+          <caption>지금 정해두는 것은 개발 비용 0 — 실제 링크 연동과는 별개</caption>
+          <thead><tr><th>화면 맥락</th><th>붙일 상품</th><th>파트너</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td>특정 작품 촬영지 상세</td><td>그 작품 투어</td><td>Trazy</td></tr>
+            <tr><td>서울 외 촬영지 (부산·강원·수원)</td><td>지역 데이투어 · 교통패스</td><td>Klook</td></tr>
+            <tr><td>촬영지 여러 개를 담은 코스 화면</td><td>전일 가이드 투어</td><td>Klook · Trazy</td></tr>
+            <tr><td>촬영지 근처 카페·식당</td><td><strong>없음</strong> (네이버 지도 링크만)</td><td>—</td></tr>
+            <tr><td>계획 시작 단계</td><td>입장권 · 패스</td><td>Klook</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ol class="body">
+        <li><strong>한 화면에 한 줄만.</strong> 여러 개 쌓으면 광고판이 된다</li>
+        <li><strong>맞는 상품이 없으면 안 띄운다.</strong> 빈 슬롯이 억지 매칭보다 낫다</li>
+        <li><strong>파트너는 둘까지.</strong> Klook 하나로 투어·패스·입장권·액티비티가 커버되고, Trazy는 작품 단위 투어 때문에 추가한다. 어필리에이트는 회사마다 가입·승인·링크 형식·대시보드가 따로라 늘릴수록 3명에게 부담이다</li>
+      </ol>
+      <p>이 방식은 기획서의 원래 원칙과 일치한다 — <em>"광고성 무차별 노출이 아니라 해당 작품·동선과 연관된 상품만 큐레이션하여 신뢰도 유지"</em>.</p>
+      <div class="note">
+        <span class="lbl">초판 수정 — "측정을 위해 하나로 집중"은 약한 논리였다</span>
+        <p style="margin:0"><strong>클릭 → 예약 전환율</strong>은 상품을 하나로 몰아도 이 트래픽 규모에서 유의미한 숫자가 나오지 않는다. 반면 <strong>노출 → 클릭률</strong>은 훨씬 적은 표본으로 측정 가능하고, <strong>화면 종류별로 배우려면 오히려 여러 상품을 걸어야 한다.</strong> 대응표 방식이 배움의 양에서 더 낫다.</p>
+        <p style="margin:.7rem 0 0">중간발표에 들고 갈 숫자는 <strong>화면 종류별 클릭률</strong>로 잡는다.</p>
+      </div>
+    </div>
+
+    <div class="finding warn">
+      <div class="fhead"><span class="tag warn">초판 철회</span><h3>eSIM 우선 권고를 거둔다</h3></div>
+      <p>초판은 "첫 레퍼럴 상품은 투어가 아니라 eSIM(수수료 20%, 구매율 거의 전원)"을 최대 발견으로 제시했다. 세 가지 문제가 있다.</p>
+      <ul class="body">
+        <li><strong>구매율 "거의 전원"은 설문에 문항이 없는 추정이다.</strong> 투어 쪽 22%는 실측치인데 한쪽만 가정을 썼고, 투어에는 전환율 2%를 곱하면서 eSIM에는 아무것도 곱하지 않았다.</li>
+        <li><strong>귀속이 어렵다.</strong> eSIM은 대개 항공권 예약 직후 Klook·Airalo에서 직접, 혹은 공항에서 산다. 쿠키 30일 안에 SceneTrip을 거칠 이유가 없다.</li>
+        <li><strong>이 기획의 방어논리를 무효화한다.</strong> "어디에 어떤 순서로 가는지 안다"는 우위가 eSIM에는 아무 값도 갖지 못한다. 눈물의 여왕 촬영지를 보는 사용자에게 유심칩을 들이미는 것은 여행 블로그도 똑같이 할 수 있다.</li>
+      </ul>
+      <p>영영 배제하는 것은 아니다. 위 대응표에 "여행 준비 체크리스트" 같은 화면이 생기면 그때 붙인다. <strong>우선순위가 낮을 뿐이다.</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. 이 단계 목표는 매출이 아니다</h2>
+    <div class="prose block">
+      <p>수수료 6.5%, 투어 객단가 $60, 노출 대비 예약 전환 2%(여행 어필리에이트로는 낙관적)를 가정하면 <strong>사용자 1,000명당 약 $78</strong>. MVP1에 사용자 1,000명을 모으는 것 자체가 도전인데, 모아도 10만 원 남짓이다.</p>
+      <p>3개월 안에 의미 있는 매출은 나지 않으며, <strong>목표를 매출로 잡으면 반드시 실패한다.</strong> 목표는 전환율이라는 숫자를 실측하는 것이어야 한다. 정문창 멘토가 요구한 바와 같다.</p>
+      <blockquote>패스·단품 가격과 <strong>구매 전환율(%) 목표를 숫자로</strong> 제시하고 조기 실측할 것</blockquote>
+      <div class="note warn">
+        <span class="lbl">범위 변경으로 기록할 것</span>
+        <p style="margin:0">기획서 부록 A는 <strong>"MVP1에서는 상품 노출 영역만 UI에 확보하고, 실제 제휴 링크 연동은 MVP2에서 붙인다"</strong>로 정해 두었다. 링크와 이벤트 추적을 MVP1으로 당기려면 "기존 방침 그대로"가 아니라 <strong>명시적 범위 변경</strong>으로 기록해야 한다. 파트너 승인, 이벤트 수집, 노출 UI 정책(부록 C #15 미결)이 딸려 온다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. 8/29 MVP1은 현재 범위로 불가능하다</h2>
+    <div class="prose block">
+      <p>실제 가용 평일은 <strong>14 영업일</strong>이다. 8/4~8/8(5) + 8/11~8/14(4, 광복절 제외) + 8/24~8/28(5). 8/17~21은 AWS 교육 주간. "3주"는 과대 표기다.</p>
+      <p>이 14일에 들어가야 하는 것: 촬영지 데이터셋 구축 + 별칭·로마자 검색 + 지도 뷰포트 탐색 + 편집 가능 코스 + 커뮤니티 + OAuth + 마이페이지 + 3개국어 + Flutter 크로스 플랫폼. <strong>학생 3명 기준, 각 대형 기능에 1인당 5영업일 미만이 배정되는 셈이다.</strong></p>
+      <div class="note crit">
+        <span class="lbl">놓친 선행 조건 둘</span>
+        <ul class="body" style="margin:0">
+          <li><strong>부록 C #0 "초기 수집 대상 작품 목록 확정" 미결.</strong> 성공지표 1("쿼리셋 100개에서 90% 정답 반환")은 정답이 존재해야 측정 가능한데, 촬영지 DB가 없으면 정답이 없다.</li>
+          <li><strong>부록 C #4 "작품 별칭 저장 방식" 보류.</strong> 최소 진입점으로 고른 "별칭·배우명·로마자 검색"이 이 보류 항목에 물려 있다.</li>
+        </ul>
+      </div>
+      <div class="note crit">
+        <span class="lbl">직렬 연결 위험</span>
+        <p style="margin:0">앱스토어·구글플레이 심사가 <strong>커뮤니티 구현 이후 단계</strong>에 배치돼 있다(기획서 210행). 커뮤니티를 MVP1에 넣으면 <strong>8/29 마감이 스토어 심사와 직렬로 묶인다.</strong></p>
+      </div>
+      <h3>제안</h3>
+      <p>8/29 MVP1을 <strong>검색 + 지도 + 코스 조회·편집 + 익명 사용</strong>으로 자르고, 로그인·마이페이지·커뮤니티·어필리에이트를 9월 버퍼(8/31~9/12)로 미룬다. 이미 "주력은 검색·지도와 코스"라고 판정했으므로 <strong>판정과 범위를 일치시키는 것뿐이다.</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>7. 지금 할 일</h2>
+    <ol class="steps">
+      <li><span class="snum">01</span><div class="sbody"><h4>MVP1 범위 재조정</h4><p>커뮤니티·로그인·마이페이지를 9월 버퍼로. 스토어 심사가 8/29 마감과 직렬로 묶이는 것을 끊는다.</p></div></li>
+      <li><span class="snum">02</span><div class="sbody"><h4>부록 C #0·#4를 즉시 확정</h4><p>초기 작품 목록과 작품 별칭 저장 방식. 둘 다 쐐기 기능(관대한 검색)의 선행 조건인데 미결·보류 상태다.</p></div></li>
+      <li><span class="snum">03</span><div class="sbody"><h4>설문 87건 원본 확인 + 김상규 인용 설문 특정</h4><p>이게 끝나야 "10달러" 정정 여부를 판단할 수 있다. 순서를 지킬 것.</p></div></li>
+      <li><span class="snum">04</span><div class="sbody"><h4>볼트 노트 3건 갱신</h4><p>설문 원본이 없다는 기록을 정정한다.</p></div></li>
+      <li><span class="snum">05</span><div class="sbody"><h4>시장분석에 Klook·Trazy 추가</h4><p>K-Spot·트리플보다 이쪽이 실질적 경쟁자다.</p></div></li>
+      <li><span class="snum">06</span><div class="sbody"><h4>화면 ↔ 상품 대응표 확정</h4><p>4번 섹션의 표를 팀이 확정한다. 지금 정해두는 것은 개발 비용 0이고, 나중에 즉흥으로 붙이는 것을 막는다.</p></div></li>
+      <li><span class="snum">07</span><div class="sbody"><h4>Klook·Trazy 어필리에이트 가입 신청</h4><p>파트너는 둘까지. 승인에 시간이 걸리니 먼저 넣어둔다.</p></div></li>
+      <li><span class="snum">08</span><div class="sbody"><h4>인터뷰 대상을 새로 모집</h4><p>이메일 남긴 8명에는 예약·계획 확정자가 0명이다. <code>r/koreatravel</code> 일정 질문 스레드에서 찾는다.</p></div></li>
+    </ol>
+    <p class="prose" style="color:var(--ink-3);font-size:.9rem"><del>초판 04 — 기획서 문제인식 3번 교체</del> → <strong>철회.</strong> 해당 서술은 데이터가 지지한다.</p>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>8. 한 장으로</h2>
+    <div class="prose block">
+      <h3>바꾸지 않아도 되는 것</h3>
+      <p>레퍼럴 BM의 <strong>방향은 맞다.</strong> MVP1이 검색·지도를 주력으로 잡은 것도, 다국어를 전제 조건으로 올린 것도 데이터와 일치한다. 설문도 잘 만들었다.</p>
+      <h3>바꿔야 하는 것</h3>
+      <p>딱 하나다 — <strong>MVP1 범위.</strong> 14 영업일에 6개 기능은 성립하지 않고, 커뮤니티가 스토어 심사를 마감에 물고 온다.</p>
+      <h3>이 문서를 어떻게 쓰나</h3>
+      <ul class="body">
+        <li><strong>팀 회의</strong> — 6번(실현 가능성)을 띄워놓고 무엇을 9월로 미룰지 정한다</li>
+        <li><strong>멘토 미팅</strong> — 정문창 멘토에게는 5번(전환율이 목표), 김상규 멘토에게는 2번의 언어 장벽 표</li>
+        <li><strong>중간발표</strong> — 언어 장벽 42.2%를 문제인식의 축으로 쓴다. 데이터가 가장 강하게 받치는 지점이다</li>
+      </ul>
+      <div class="note crit">
+        <span class="lbl">숫자를 인용할 때 반드시 지킬 것</span>
+        <p style="margin:0">CSV는 <strong>27컬럼, 분기 문항 5쌍이 중복 헤더</strong>다. <code>csv.DictReader</code>로 읽으면 중복 키가 병합돼 한쪽 분기가 통째로 사라진다 — 이 문서 초판이 그렇게 틀렸다. <code>csv.reader</code>로 인덱스를 직접 다룰 것. 복수응답 구분자는 <code>;</code>다.</p>
+        <p style="margin:.7rem 0 0">문항별 응답 수가 다르다(n=15 / 20 / 44 / 55 / 56 / 64 / 69). <strong>분모를 항상 함께 밝힐 것.</strong> 표본은 자기선택된 온라인 팬 집단이며, n=69에서 60.9%의 95% 신뢰구간은 대략 ±12pp, n=15에서 46.7%는 ±25pp다. <strong>소수점 표기가 데이터에 없는 정밀도를 암시한다.</strong></p>
+        <p style="margin:.7rem 0 0">응답자 구성: 여성 72%(41/57), 18–24세 24/57, 거주지 유럽 23·북미 14·동남아 14. <strong>동아시아는 3명</strong> — 다국어 계획의 일본어 근거는 이 데이터에 없다.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>부록 · 출처</h2>
+    <div class="prose src">
+      <p style="margin:0 0 .8rem"><strong>볼트 내부</strong> — <code>01_Raw/정권호/K-Content Travel — 90-Second Fan Survey (Anonymous).csv</code> (69건, 직접 재집계) · <code>01_Raw/정권호/2026-07-27 프로젝트 기획서 (수정본 v2).md</code> · <code>01_Raw/정권호/SceneTrip 사용자 페르소나와 앱 사용 시나리오.md</code> · <code>04_Story/4막 — 페인포인트 검증과 설문조사.md</code> · <code>02_Wiki/경로마켓에서 레퍼럴로.md</code> · <code>02_Wiki/Reddit 설문과 10달러 지불 의사.md</code> · <code>02_Wiki/설문대행 이용.md</code></p>
+      <p style="margin:0"><strong>외부</strong> —
+        <a href="https://ecomobi.com/klook-affiliate-program-review/">Klook 어필리에이트 요율</a> ·
+        <a href="https://affiliate.klook.com/help/">Klook 어필리에이트 안내</a> ·
+        <a href="https://getlasso.co/niche/travel/">GetYourGuide·KKday 요율</a> ·
+        <a href="https://www.trazy.com/affiliate">Trazy 어필리에이트</a> ·
+        <a href="https://www.trazy.com/experience/detail/k-drama-filming-location-1-day-tour-from-seoul">Trazy K-드라마 투어</a> ·
+        <a href="https://www.klook.com/en-AU/blog/klook-fandom-tour-kdrama/">Klook Fandom Tour</a> ·
+        <a href="https://www.notion.com/templates/south-korea-travel">Notion 한국 여행 템플릿</a>
+      </p>
+      <p style="margin:1.2rem 0 0;color:var(--ink-3)">2판 정정 경위: 초판 발행 후 독립 검토 에이전트가 CSV를 재파싱해 수치를 대조했고, 지적된 오류를 작성자가 재확인해 반영했다. 검증된 수치(여행 단계·지불 의사·지출 이력·앱 열 이유·여행 스타일·n=15 전 항목)는 초판과 동일하다. 정정된 것은 "겪은 불편" 집계, 검색 시간의 분모, 코스 표의 분모 혼용, 그리고 그로부터 도출된 권고 세 건이다.</p>
+    </div>
+  </section>
+
+</div>
