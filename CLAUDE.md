@@ -39,6 +39,19 @@ A note is promoted from draft to stable in three steps: (1) hallucination check 
 
 `JiraDocs/` is the record of deliverables per Jira story/task. The single source of truth for its format and procedure is `JiraDocs/JiraDocs.md` — when asked to create or update a JiraDocs document (e.g. "JiraDocs 스토리 MZ2AZ-NNN 작성해줘"), read that file first and follow it exactly. The `jiradocs` skill (`.claude/skills/jiradocs/`) triggers this automatically.
 
+## Writing for the reader
+
+These rules apply to everything written for a human — chat answers, `02_Wiki` notes, `JiraDocs` documents, meeting notes. Compression that saves the writer time but costs the reader a second pass is a net loss; err toward one more sentence.
+
+1. **Name the subject.** Every sentence should make clear *who or what* is doing the thing. Korean drops subjects easily, so re-read each sentence and ask "이게 누구/무엇 얘기지?" — if the answer comes from the previous sentence rather than this one, write it out. e.g. "저장 후 검증한다" → "서버가 저장한 뒤 클라이언트가 응답을 검증한다".
+2. **Unpack stacked nouns.** Do not chain three or more nouns into one phrase ("추천 파이프라인 캐시 무효화 정책"). Break it into a sentence with a verb: "추천 파이프라인의 캐시를 언제 비울지 정하는 규칙".
+3. **Explain a term the first time it appears.** Abbreviations, internal names, and library/API names get a short gloss on first use in each document — "PostGIS(공간 데이터를 다루는 PostgreSQL 확장)". Afterwards the bare term is fine. If a plain Korean word says the same thing, use the plain word instead of the jargon.
+4. **Prefer a full sentence to a fragment.** Bullet lists and tables carry facts but not reasoning. Put a sentence before or after them saying what the list means and why it matters — never end a section with a bare table.
+5. **Say why, not only what.** When recording a decision or a change, add the reason in the same breath: "A를 골랐다" 대신 "B는 좌표 검색이 느려서 A를 골랐다".
+6. **Keep sentences short and one-idea.** If a sentence has two `그리고`/`~하고` joints, split it.
+
+Tone stays as it is today: chat answers are conversational and explanatory, while note bodies keep the vault's plain declarative style (`~다`). Applying these rules should make note bodies clearer, not chattier.
+
 ## Markdown formatting convention
 
 When bold text (`**word**`) is immediately followed by a Korean particle/postposition, insert a space before the particle to avoid rendering breakage, e.g. `**단어** 다` (not `**단어**다`).
