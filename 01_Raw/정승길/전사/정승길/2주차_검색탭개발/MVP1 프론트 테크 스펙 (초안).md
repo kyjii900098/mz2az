@@ -1,16 +1,19 @@
 ---
-source: "[[2주차_검색탭개발/MVP1 프론트 테크 스펙 (초안)]]"
-source_path: "01_Raw/정승길/2주차_검색탭개발/MVP1 프론트 테크 스펙 (초안).md"
+source: "[[MVP1 프론트 테크 스펙 (초안)]]"
+source_path: 01_Raw/정승길/2주차_검색탭개발/MVP1 프론트 테크 스펙 (초안).md
 author: 정승길
 date: 2026-08-04
 type: raw-transcription
 method: native-md
 visual_review: n-a
 original_frontmatter:
-  title: "MVP1 프론트 테크 스펙 (초안)"
+  title: MVP1 프론트 테크 스펙 (초안)
   type: spec
   status: draft
-  source: ["[[(2주차)2026년 8월 3일 Sprint Planning]]", "[[(1주차)2026년 7월 27일 Sprint Planning]]", "[[MZ2AZ-116 작품검색 목업 기능 명세]]"]
+  source:
+    - "[[(2주차)2026년 8월 3일 Sprint Planning]]"
+    - "[[(1주차)2026년 7월 27일 Sprint Planning]]"
+    - "[[MZ2AZ-116 작품검색 목업 기능 명세]]"
 ---
 
 # MVP1 프론트 테크 스펙 (초안)
