@@ -1,0 +1,274 @@
+﻿id,place_name,kakao_url,kakao_lat,kakao_lng,verdict
+st_00054,서순라길,http://place.map.kakao.com/2088609864,37.5728085419,126.9931174628,adopt
+st_01448,한길육교,http://place.map.kakao.com/103886338,37.7270872901,126.7603095194,adopt
+st_02533,남계대교,http://place.map.kakao.com/1325875301,38.0037328346,127.0120371623,adopt
+st_02899,한밤마을,http://place.map.kakao.com/25392559,36.0581112535,128.6515355716,adopt
+st_03650,서울로인 여의도점,http://place.map.kakao.com/104844448,37.5218050224,126.9256513576,adopt
+st_03710,한류월드로,http://place.map.kakao.com/26201160,37.6604673725,126.7585110906,adopt
+st_03716,일산수목장,http://place.map.kakao.com/596087834,37.7039844152,126.8259430849,adopt
+st_04212,용연리(1),http://place.map.kakao.com/25329035,36.7773064978,128.1758889538,adopt
+st_04222,위만리(1),http://place.map.kakao.com/25336532,36.6364730425,128.3029672227,adopt
+st_04223,위만리(2),http://place.map.kakao.com/25336532,36.6364730425,128.3029672227,adopt
+st_04237,사유원,http://place.map.kakao.com/1901668504,36.0921530061,128.6811606019,adopt
+st_04300,강남역사거리,http://place.map.kakao.com/8160898,37.4979521721,127.0276383484,adopt
+st_05098,공촌4교,http://place.map.kakao.com/27401855,37.5417223681,126.6118058509,adopt
+st_05125,금광테크노벨리,http://place.map.kakao.com/40296335,37.6397017567,126.6818567559,adopt
+st_05171,세종호수공원,http://place.map.kakao.com/18397976,36.4980696378,127.2733013065,adopt
+st_05217,미추홀타워,http://place.map.kakao.com/1091150051,37.3817744013,126.6537563961,adopt
+st_05260,덕수궁돌담길,http://place.map.kakao.com/23209304,37.5649765828,126.9756646289,adopt
+st_05400,오름,http://place.map.kakao.com/2129204021,37.2798607858,127.0064498391,adopt
+st_05407,아로미마실,http://place.map.kakao.com/1629783340,35.8443956323,127.1302295146,adopt
+st_06028,논현로,http://place.map.kakao.com/26522819,37.5054574713,127.0347617556,adopt
+st_06051,자작도해수욕장,http://place.map.kakao.com/8056959,38.3086839105,128.5427295799,adopt
+st_06379,여의도IFC,http://place.map.kakao.com/1937697445,37.5251355579,126.9249081985,adopt
+st_06381,여의도한강공원,http://place.map.kakao.com/1075952894,37.5170278971,126.9347890259,adopt
+st_06394,용산아이파크몰 달주차장,http://place.map.kakao.com/1678245449,37.5309773874,126.964896046,adopt
+st_06419,그랜드 워커힐 서울 더파빌리온,http://place.map.kakao.com/13564451,37.5551331745,127.1108980909,adopt
+st_06427,인천공항,http://place.map.kakao.com/27502646,37.4540777221,126.4178501563,adopt
+st_06428,인천공항 2터미널,http://place.map.kakao.com/698163025,37.4688011263,126.4336431422,adopt
+st_06451,가평대교,http://place.map.kakao.com/2146968579,37.7046865905,127.4956455321,adopt
+st_06478,신창풍차해안도로,http://place.map.kakao.com/26239274,33.3430810267,126.1742060466,adopt
+st_06978,군산초등학교,http://place.map.kakao.com/8201427,35.9906986892,126.7065863398,adopt
+st_07213,새마을금고,http://place.map.kakao.com/27367053,37.6016161655,126.9300281267,adopt
+st_07237,세명대학교 학술정보원,http://place.map.kakao.com/12476182,37.1803648798,128.1937830806,adopt
+st_07409,을지로2가교차로,http://place.map.kakao.com/15139462,37.5661281044,126.9875400981,adopt
+st_07416,디디피,http://place.map.kakao.com/971739341,37.5637097086,127.0135664567,adopt
+st_07728,인하대학교 본관,http://place.map.kakao.com/11972517,37.4493503367,126.6543153771,adopt
+st_07773,신선대,http://place.map.kakao.com/10522191,34.7382272038,128.6627589866,adopt
+st_08284,청와대,http://place.map.kakao.com/8167380,37.5826760997,126.9732338129,adopt
+st_08291,강남대로,http://place.map.kakao.com/19294146,37.4950289749,127.0290213963,adopt
+st_08468,신광사,http://place.map.kakao.com/11306896,37.5711644222,127.0009972668,adopt
+st_08791,아크레도 청담점,http://place.map.kakao.com/1411312080,37.5230543586,127.0421954041,adopt
+st_09517,정릉풍림아이원아파트 125동,http://place.map.kakao.com/26725908,37.6165667957,127.0098110948,adopt
+st_09521,아크레도 청담점,http://place.map.kakao.com/1411312080,37.5230543586,127.0421954041,adopt
+st_09555,수원천,http://place.map.kakao.com/25727612,37.2784682669,127.0187763535,adopt
+st_09564,아야진해수욕장,http://place.map.kakao.com/7990660,38.2768350126,128.5533730075,adopt
+st_10117,마포진짜원조최대포본점,http://place.map.kakao.com/14615423,37.5476184574,126.9430605196,adopt
+st_10153,강변북로,http://place.map.kakao.com/19294181,37.5394794951,127.017845895,adopt
+st_10299,삼양라운드힐,http://place.map.kakao.com/1894798093,37.7359259651,128.7245462181,adopt
+st_10317,칠포항,http://place.map.kakao.com/1579153082,36.1432844136,129.3963507841,adopt
+st_10450,신촌설렁탕,http://place.map.kakao.com/1770798831,37.5577165379,126.9371325595,adopt
+st_11241,경희초등학교,http://place.map.kakao.com/8183210,37.5949323112,127.0491477063,adopt
+st_11256,제물량로,http://place.map.kakao.com/26522940,37.4701393742,126.6262254404,adopt
+st_11498,빈티지샵,http://place.map.kakao.com/1579035113,37.534579375,126.9975221942,adopt
+st_11615,이앤비하이코,http://place.map.kakao.com/10538550,37.5247045914,126.90794865,adopt
+st_11840,미켈레커피 여의도점,http://place.map.kakao.com/1842280497,37.5253975426,126.9191361493,adopt
+st_11863,이촌한강공원,http://place.map.kakao.com/1907155714,37.5219784514,126.9574975078,adopt
+st_12061,인하대학교 하이데거의숲,http://place.map.kakao.com/26817399,37.4482192358,126.6551263509,adopt
+st_12062,투썸플레이스 송도센트럴파크점,http://place.map.kakao.com/444197906,37.3922591202,126.6456993943,adopt
+st_12092,헌화로,http://place.map.kakao.com/9647091,37.6649469183,129.0527363251,adopt
+st_12205,닌,http://place.map.kakao.com/1767666801,37.5792718513,126.9878458378,adopt
+st_12232,장군보쌈,http://place.map.kakao.com/13321945,37.5673956068,126.9796300697,adopt
+st_13239,신선대,http://place.map.kakao.com/10522191,34.7382272038,128.6627589866,adopt
+st_13240,IBK기업은행365,http://place.map.kakao.com/309029890,37.5493568356,126.8772214486,adopt
+st_13983,디디피,http://place.map.kakao.com/971739341,37.5637097086,127.0135664567,adopt
+st_14014,신양수대교,http://place.map.kakao.com/15154786,37.5365194094,127.3161972887,adopt
+st_14030,광안대교,http://place.map.kakao.com/170421478,35.1474701652,129.130066852,adopt
+st_14209,지환이네수산물,http://place.map.kakao.com/1709156069,33.3787816682,126.8791770752,adopt
+st_14217,해비치CC클럽하우스,http://place.map.kakao.com/21483549,33.3589288829,126.7272940043,adopt
+st_14226,신화가든,http://place.map.kakao.com/1779713684,33.3019484852,126.316085724,adopt
+st_14331,인천공항,http://place.map.kakao.com/27502646,37.4540777221,126.4178501563,adopt
+st_14345,메가박스 인천학익점,http://place.map.kakao.com/74759074,37.4417894647,126.6486469815,adopt
+st_14363,킨텍스,http://place.map.kakao.com/1917220238,37.6689332955,126.7458026012,adopt
+st_14365,한류월드로,http://place.map.kakao.com/26201160,37.6604673725,126.7585110906,adopt
+st_14383,광안대교,http://place.map.kakao.com/170421478,35.1474701652,129.130066852,adopt
+st_14384,부산역,http://place.map.kakao.com/8329752,35.1152034062,129.0415498519,adopt
+st_14921,미레에셋센터원,http://place.map.kakao.com/13057692,37.567383819,126.9851719246,adopt
+st_14925,리플린,http://place.map.kakao.com/89203325,37.5814657309,126.980765157,adopt
+st_14977,한국테크노링,http://place.map.kakao.com/1311290003,36.6492175628,126.3383812238,adopt
+st_14979,채석강,http://place.map.kakao.com/1377489336,35.6295474119,126.471493279,adopt
+st_14985,명선도,http://place.map.kakao.com/11487047,35.3860043158,129.3505196568,adopt
+st_15687,아크레도 청담점,http://place.map.kakao.com/1411312080,37.5230543586,127.0421954041,adopt
+st_16059,디디피,http://place.map.kakao.com/971739341,37.5637097086,127.0135664567,adopt
+st_16063,도곡로,http://place.map.kakao.com/26225659,37.4973689783,127.0562397549,adopt
+st_16119,광안대교,http://place.map.kakao.com/170421478,35.1474701652,129.130066852,adopt
+st_16158,카페 나인티플러스,http://place.map.kakao.com/1761585708,37.4769767902,126.6284117756,adopt
+st_16173,화랑의언덕,http://place.map.kakao.com/130383717,35.7701770091,129.0891183877,adopt
+st_16370,인하대학교 본관,http://place.map.kakao.com/11972517,37.4493503367,126.6543153771,adopt
+st_16436,세븐일레븐 평택고덕산업단지점,http://place.map.kakao.com/1996226653,37.0445974793,127.052774481,adopt
+st_16441,경천섬공원,http://place.map.kakao.com/21997970,36.4399243534,128.259711894,adopt
+st_16450,김밥천국,http://place.map.kakao.com/16161233,37.4851353845,126.7892880687,adopt
+st_16562,벨라45컨트리클럽,http://place.map.kakao.com/1769002908,37.4778937585,127.8562800605,adopt
+st_16567,헌화로,http://place.map.kakao.com/9647091,37.6649469183,129.0527363251,adopt
+st_16957,인중로,http://place.map.kakao.com/26523055,37.4694377623,126.62319034,adopt
+st_17494,강남대로,http://place.map.kakao.com/19294146,37.4950289749,127.0290213963,adopt
+st_17504,도성사,http://place.map.kakao.com/27338232,37.9141206951,127.3164841254,adopt
+st_17563,경희초등학교,http://place.map.kakao.com/8183210,37.5949323112,127.0491477063,adopt
+st_17565,백사마을(1),http://place.map.kakao.com/23181294,37.6434052637,127.0869651251,adopt
+st_17826,노량진역,http://place.map.kakao.com/774775056,37.513573925,126.9408264541,adopt
+st_17834,선운각,http://place.map.kakao.com/891083645,37.6557267273,126.9998322784,adopt
+st_17845,센터필드 교차로,http://place.map.kakao.com/15141339,37.5025590024,127.0427957031,adopt
+st_17872,헤리티지실버케어 파주,http://place.map.kakao.com/1482294935,37.750243054,126.8590722065,adopt
+st_17875,아소산,http://place.map.kakao.com/11101762,37.6592024602,126.7826319052,adopt
+st_17880,인터불고엑스코 그랑파티오,http://place.map.kakao.com/419954624,35.9070035022,128.6112782258,adopt
+st_17885,한도교,http://place.map.kakao.com/1931727700,33.4687497355,126.9270363915,adopt
+st_17932,행운맨션,http://place.map.kakao.com/1952449354,37.4363578389,127.1618183517,adopt
+st_17980,웨스턴빌리프,http://place.map.kakao.com/386896156,37.6549949217,126.7730841537,adopt
+st_17985,에어로피스,http://place.map.kakao.com/13929428,37.6174190279,126.5759692917,adopt
+st_17991,광주공원묘원,http://place.map.kakao.com/8199820,37.3454098174,127.2753276825,adopt
+st_18081,노량진역,http://place.map.kakao.com/774775056,37.513573925,126.9408264541,adopt
+st_18149,부남해변,http://place.map.kakao.com/7899940,37.3621625448,129.2511284087,adopt
+st_18389,재인폭포,http://place.map.kakao.com/8062094,38.0769325167,127.1433657084,adopt
+st_18450,용산역 달주차장,http://place.map.kakao.com/8014275,37.5300763646,126.9648240618,adopt
+st_18468,비스타워커힐,http://place.map.kakao.com/261929556,37.5544643906,127.111157395,adopt
+st_18476,선릉역사거리,http://place.map.kakao.com/1387055292,37.5046679113,127.0483601312,adopt
+st_18487,위크엔드 라운지,http://place.map.kakao.com/765416512,37.4748490029,126.624827286,adopt
+st_18498,로지모텔,http://place.map.kakao.com/16338243,37.4612592597,126.6830201061,adopt
+st_18520,킨텍스로,http://place.map.kakao.com/26114572,37.6656903769,126.7486063649,adopt
+st_18522,한류월드로(2),http://place.map.kakao.com/26201160,37.6604673725,126.7585110906,adopt
+st_18545,블루포트 장안대학교점,http://place.map.kakao.com/948315857,37.2140174312,126.9480383286,adopt
+st_18784,고산정 나루터,http://place.map.kakao.com/723680905,36.766866788,128.8915785909,adopt
+st_18833,장환마을,http://place.map.kakao.com/21218424,34.5656718913,127.0027896464,adopt
+st_18835,주교좌계산대성당,http://place.map.kakao.com/12760576,35.8679578794,128.5878135121,adopt
+st_20072,사창리터미널,http://place.map.kakao.com/351175756,38.0715307789,127.5228532599,adopt
+st_20081,이가리 닻 전망대,http://place.map.kakao.com/446522573,36.1878660302,129.3791089827,adopt
+st_20082,카페1703,http://place.map.kakao.com/768374447,36.2560223333,129.3732980058,adopt
+st_20085,석병1리 방파제,http://place.map.kakao.com/718040376,36.0127422331,129.5790845317,adopt
+st_20087,구룡포해수욕장,http://place.map.kakao.com/1021301355,35.9971250909,129.5660738768,adopt
+st_20089,월포해수욕장,http://place.map.kakao.com/17408382,36.201648218,129.3712544823,adopt
+st_20090,곤륜산 활공장,http://place.map.kakao.com/265736642,36.1350173536,129.3917431193,adopt
+st_20111,팜랜드,http://place.map.kakao.com/17202018,36.9913166187,127.1935165577,adopt
+st_20143,글로리호텔,http://place.map.kakao.com/968793637,36.1033008083,127.1049019755,adopt
+st_20148,한성전기,http://place.map.kakao.com/951548456,36.1027144811,127.1055119904,adopt
+st_20151,동매집,http://place.map.kakao.com/951574204,36.1030840191,127.1054680629,adopt
+st_20158,학인당,http://place.map.kakao.com/10862964,35.8121475659,127.1518438273,adopt
+st_20160,세운상가(세운청계상가),http://place.map.kakao.com/23883388,37.5678117334,126.995422513,adopt
+st_20181,레스케이프 호텔,http://place.map.kakao.com/1657876963,37.559988495,126.9795109836,adopt
+st_20188,나주향교,http://place.map.kakao.com/11277082,35.0336760578,126.7114329382,adopt
+st_20208,인천중앙공원,http://place.map.kakao.com/8054295,37.4517547503,126.7007360013,adopt
+st_20210,돼지각시와 연탄불,http://place.map.kakao.com/10282997,37.2734440104,127.0455238799,adopt
+st_20252,안동 하회마을 부용대,http://place.map.kakao.com/7907799,36.5428515687,128.5166154867,adopt
+st_20278,경희대학교 평화의전당,http://place.map.kakao.com/17561258,37.5986824731,127.0527738146,adopt
+st_20280,캐틀앤비 양재천점,http://place.map.kakao.com/1125385629,37.478799729,127.0419760489,adopt
+st_20284,와동육교,http://place.map.kakao.com/1645807466,37.7451917122,126.7686109822,adopt
+st_20285,서울중앙지방법원,http://place.map.kakao.com/8364878,37.4961816229,127.0119190392,adopt
+st_20286,오크우드 프리미어 인천,http://place.map.kakao.com/24976409,37.3891434526,126.6442167072,adopt
+st_20290,가톨릭대학교 의정부성모병원,http://place.map.kakao.com/16693898,37.7587076602,127.077785304,adopt
+st_20292,안국빌딩,http://place.map.kakao.com/7987031,37.5759664769,126.9834993259,adopt
+st_20294,콘래드 서울,http://place.map.kakao.com/18206183,37.5254187245,126.9267439814,adopt
+st_20297,그랑시티 시그니처타워,http://place.map.kakao.com/1150330701,37.2858004148,126.8282911812,adopt
+st_20315,지혜의숲,http://place.map.kakao.com/514954723,37.7084774355,126.6867852877,adopt
+st_20318,제부도 워터워크,http://place.map.kakao.com/420560217,37.1747033988,126.6554692821,adopt
+st_20319,메디테리움 의학박물관,http://place.map.kakao.com/512130494,37.7155851697,126.6919067264,adopt
+st_20322,인천국제공항,http://place.map.kakao.com/10751028,37.449167859,126.4509203694,adopt
+st_20324,당진문예의전당,http://place.map.kakao.com/10257551,36.8901343048,126.6380738906,adopt
+st_20328,스위스 그랜드 호텔,http://place.map.kakao.com/1610123513,37.5888190434,126.9341320182,adopt
+st_20329,에어플레인모드,http://place.map.kakao.com/472245030,37.5577056333,126.938669509,adopt
+st_20330,웅진플레이도시,http://place.map.kakao.com/17183821,37.4999380378,126.7441351654,adopt
+st_20337,상주중앙시장,http://place.map.kakao.com/18558773,36.41322081,128.1616194249,adopt
+st_20361,국립중앙박물관,http://place.map.kakao.com/8830150,37.5239224936,126.9801871613,adopt
+st_20364,순복음강남교회,http://place.map.kakao.com/7998770,37.4932762633,127.0333901092,adopt
+st_20375,불암산 애기봉,http://place.map.kakao.com/458106395,37.6608147811,127.1018139304,adopt
+st_20383,꿈의숲아트센터,http://place.map.kakao.com/11696074,37.6214739817,127.0385865742,adopt
+st_20386,덕성여자고등학교,http://place.map.kakao.com/7837386,37.5781432376,126.9832045055,adopt
+st_20387,북촌마을안내소,http://place.map.kakao.com/103527547,37.5795379731,126.9831815503,adopt
+st_20389,서울어린이대공원 정문,http://place.map.kakao.com/18164729,37.5493852002,127.0763066092,adopt
+st_20392,고양종합터미널,http://place.map.kakao.com/18237043,37.6432752144,126.7897588324,adopt
+st_20394,스탠포드호텔 서울,http://place.map.kakao.com/21318113,37.5823679731,126.8866953498,adopt
+st_20395,수원지방법원 안산지원,http://place.map.kakao.com/7965346,37.3119222317,126.8263625755,adopt
+st_20396,상동호수공원,http://place.map.kakao.com/7923766,37.5029673925,126.7450521971,adopt
+st_20397,서울영등포경찰서,http://place.map.kakao.com/12441003,37.5258522072,126.9009445799,adopt
+st_20398,건국대학교 청심대,http://place.map.kakao.com/17807568,37.5423931056,127.0768358305,adopt
+st_20399,서울특별시 보라매병원,http://place.map.kakao.com/7891587,37.4937801332,126.9241740493,adopt
+st_20400,YTN 뉴스퀘어,http://place.map.kakao.com/12818617,37.5790395171,126.8922702767,adopt
+st_20401,서울의료원,http://place.map.kakao.com/12997914,37.612831519,127.0980471333,adopt
+st_20403,서대문형무소역사관,http://place.map.kakao.com/7936297,37.5746086942,126.9556122276,adopt
+st_20414,벡스코,http://place.map.kakao.com/17813985,35.1691716212,129.1362561626,adopt
+st_20415,수영만요트경기장,http://place.map.kakao.com/821880371,35.1602617011,129.141272642,adopt
+st_20417,부산외국어대학교 남산동캠퍼스,http://place.map.kakao.com/23525667,35.2676221855,129.0792663495,adopt
+st_20418,국립부산국악원,http://place.map.kakao.com/9663960,35.1712647866,129.0542461181,adopt
+st_20420,충무동 새벽시장,http://place.map.kakao.com/18525064,35.0931664295,129.0247707082,adopt
+st_20421,부산광역시 교통정보서비스센터,http://place.map.kakao.com/12404102,35.1849317551,129.1057543956,adopt
+st_20429,건국대학교(일감호),http://place.map.kakao.com/17574291,37.5407427574,127.0763996367,adopt
+st_20439,도봉산,http://place.map.kakao.com/8259558,37.6988420639,127.0154585932,adopt
+st_20491,남산서울타워,http://place.map.kakao.com/1717794753,37.55112113,126.9878685172,adopt
+st_20495,부산항연안여객터미널,http://place.map.kakao.com/1251071023,35.1028780514,129.0414978704,adopt
+st_20514,서울시립미술관 서소문본관,http://place.map.kakao.com/10507051,37.5641057989,126.9736988635,adopt
+st_20516,N서울타워,http://place.map.kakao.com/1629378951,37.5513049703,126.9882306221,adopt
+st_20519,인천대학교 송도캠퍼스,http://place.map.kakao.com/11376334,37.3768589506,126.6347569451,adopt
+st_20520,한국민속촌,http://place.map.kakao.com/8135083,37.2596152254,127.1198007203,adopt
+st_20522,동대문디자인플라자,http://place.map.kakao.com/25022134,37.5671843131,127.0099110139,adopt
+st_20524,63스퀘어,http://place.map.kakao.com/541663011,37.5199996228,126.9403123411,adopt
+st_20557,모로미쿠시 광교카페거리점,http://place.map.kakao.com/27002870,37.2947266956,127.0537742695,adopt
+st_20568,이마트 트레이더스 킨텍스점,http://place.map.kakao.com/2111508200,37.6616010849,126.7441139945,adopt
+st_20580,아야진해변,http://place.map.kakao.com/1805073287,38.2772526606,128.552785393,adopt
+st_20603,하조대해변,http://place.map.kakao.com/1812698478,38.0214864534,128.7262519892,adopt
+st_20610,삼성역교차로(코엑스 교차로),http://place.map.kakao.com/10825880,37.514035551,127.0603378203,adopt
+st_20616,삽교호놀이동산,http://place.map.kakao.com/143538080,36.8898430387,126.822629479,adopt
+st_20629,서울식물원,http://place.map.kakao.com/2034985788,37.5681685037,126.8336182532,adopt
+st_20666,여유도예공방,http://place.map.kakao.com/699659853,34.7792220396,127.7453044879,adopt
+st_20668,3917마중,http://place.map.kakao.com/849000646,35.0335789475,126.7107757543,adopt
+st_20669,울산대학교,http://place.map.kakao.com/11359943,35.5437883322,129.2570149103,adopt
+st_20670,국립경국대학교 안동캠퍼스,http://place.map.kakao.com/1223179296,36.542680153,128.7967481633,adopt
+st_20674,미미옥 신용산점,http://place.map.kakao.com/256180379,37.5262843768,126.9629524215,adopt
+st_20675,미메시스 아트 뮤지엄,http://place.map.kakao.com/13272490,37.716792732,126.6889188346,adopt
+st_20683,쓰리팝 PC방 대방점,http://place.map.kakao.com/30067041,37.5121166001,126.9317314687,adopt
+st_20684,CU 공군호텔점,http://place.map.kakao.com/630679080,37.5108885239,126.9229318076,adopt
+st_20685,한온시스템 생활관(구 한라공조 생활관),http://place.map.kakao.com/8148994,36.4447479886,127.4094498425,adopt
+st_20688,책마을 경기광주점,http://place.map.kakao.com/21133801,37.4123231065,127.2545069848,adopt
+st_20690,루하스사우나,http://place.map.kakao.com/27387876,37.6341735166,126.9176985625,adopt
+st_20692,지후아타네호,http://place.map.kakao.com/18533456,37.390146501,127.0932123034,adopt
+st_20694,서울여자대학교 50주년기념관,http://place.map.kakao.com/20348051,37.6263215436,127.0930533125,adopt
+st_20695,삼거마을삼성래미안1차아파트,http://place.map.kakao.com/7920002,37.2991301671,127.1116467492,adopt
+st_20698,세종대로,http://place.map.kakao.com/26523146,37.5661625938,126.9771674005,adopt
+st_20710,안산올림픽기념관,http://place.map.kakao.com/8001559,37.3261707784,126.8273317109,adopt
+st_20712,송도IBS타워,http://place.map.kakao.com/14918475,37.3980213428,126.6339382595,adopt
+st_20720,달빛애견글램핑,http://place.map.kakao.com/1252315189,37.9650223409,127.337656224,adopt
+st_20729,연세대학교 신촌캠퍼스 연희관,http://place.map.kakao.com/17557536,37.5672843228,126.9390487705,adopt
+st_20738,용인대학교,http://place.map.kakao.com/9279310,37.2263321964,127.1688031067,adopt
+st_20740,서울과학기술대학교,http://place.map.kakao.com/9108449,37.6318810008,127.0802789639,adopt
+st_20741,삼육대학교,http://place.map.kakao.com/7927244,37.6431063094,127.1055288599,adopt
+st_20742,한국체육대학교,http://place.map.kakao.com/11219441,37.5201630107,127.1308119907,adopt
+st_20743,서울시립미술관 서소문본관,http://place.map.kakao.com/10507051,37.5641057989,126.9736988635,adopt
+st_20744,이월드,http://place.map.kakao.com/10821532,35.8548550531,128.5648212095,adopt
+st_20751,황매산군립공원,http://place.map.kakao.com/25019761,35.4966394918,127.9833202191,adopt
+st_20784,남산서울타워,http://place.map.kakao.com/43972424,37.5511932119,126.9878888756,adopt
+st_20791,김경숙해바라기농장,http://place.map.kakao.com/26842880,33.4773866326,126.627632775,adopt
+st_20793,스카이다이브 코리아,http://place.map.kakao.com/1836465377,37.1937518822,127.7435587677,adopt
+st_20805,동광극장,http://place.map.kakao.com/134620832,37.908604593,127.052288253,adopt
+st_20835,YTN 뉴스퀘어,http://place.map.kakao.com/12818617,37.5790395171,126.8922702767,adopt
+st_20846,이월드,http://place.map.kakao.com/10821532,35.8548550531,128.5648212095,adopt
+st_20847,숭례문,http://place.map.kakao.com/7813430,37.5600030089,126.9753131242,adopt
+st_20861,대천해수욕장,http://place.map.kakao.com/24925403,36.3102317301,126.5134815928,adopt
+st_20862,계명대학교 동산병원,http://place.map.kakao.com/27600680,35.8538900333,128.4801263968,adopt
+st_20880,놀뫼시민장례식장,http://place.map.kakao.com/1598380383,36.1789376368,127.0964433194,adopt
+st_20882,삽교호 놀이동산,http://place.map.kakao.com/143538080,36.8898430387,126.822629479,adopt
+st_20929,원마운트,http://place.map.kakao.com/12937327,37.664554098,126.7545264687,adopt
+st_20930,NC백화점 강서점,http://place.map.kakao.com/23893436,37.559975362,126.8405166914,adopt
+st_20932,목포근대역사관 1관,http://place.map.kakao.com/11739604,34.7875323065,126.3820864651,adopt
+st_20935,서울대공원,http://place.map.kakao.com/7939405,37.4364515677,127.0138982536,adopt
+st_20936,롯데월드타워,http://place.map.kakao.com/23444676,37.5126044784,127.1025555866,adopt
+st_20938,한양대학교 ERICA캠퍼스,http://place.map.kakao.com/11318845,37.2964379196,126.8351660042,adopt
+st_20941,일산호수공원,http://place.map.kakao.com/26298671,37.6561360416,126.764141544,adopt
+st_20956,국립청주박물관,http://place.map.kakao.com/8830152,36.6497619239,127.511969495,adopt
+st_20963,서울대공원,http://place.map.kakao.com/7939405,37.4364515677,127.0138982536,adopt
+st_20968,더화이트베일,http://place.map.kakao.com/11024925,37.4835883905,127.017864251,adopt
+st_01450,일산호수공원선인장전시관,http://place.map.kakao.com/11127467,37.6575035974,126.7613878845,adopt
+st_09581,김천실내수영장,http://place.map.kakao.com/8236829,36.1442203742,128.0882002738,adopt
+st_14987,나사등대,http://place.map.kakao.com/181162029,35.3559302432,129.3395996936,adopt
+st_15179,금호대우아파트203동,http://place.map.kakao.com/26721765,37.5466758444,127.0227078365,adopt
+st_15261,종각역4번출구,http://place.map.kakao.com/8073430,37.5700596144,126.9839375636,adopt
+st_16187,나정감포모래해변,http://place.map.kakao.com/8223627,35.7822895514,129.4914989847,adopt
+st_18006,마마티라,http://place.map.kakao.com/2015375582,37.4731615628,129.1642931671,adopt
+st_20282,호텔 나루 서울 엠갤러리,http://place.map.kakao.com/1215458894,37.5374206796,126.9443943468,adopt
+st_20283,송도 트리플스트리트,http://place.map.kakao.com/27497408,37.3799951417,126.6609975037,adopt
+st_20288,고양 선인장전시관,http://place.map.kakao.com/11127467,37.6575035974,126.7613878845,adopt
+st_20291,경희대 국제캠퍼스,http://place.map.kakao.com/24254845,37.2429102066,127.0811899551,adopt
+st_20302,송도라마다호텔,http://place.map.kakao.com/8178578,37.4139911849,126.6553002889,adopt
+st_20320,성신여자대학교 운정그린캠퍼스,http://place.map.kakao.com/17811289,37.6319520109,127.0272709943,adopt
+st_20332,잉글랜드돈까스,http://place.map.kakao.com/10746846,37.474223387,126.6310210393,adopt
+st_20335,알로프트 서울 명동,http://place.map.kakao.com/705470702,37.5622927355,126.9819087154,adopt
+st_20416,다대포해수욕장,http://place.map.kakao.com/14503506,35.0462878797,128.9681138085,adopt
+st_20502,서울중앙지법,http://place.map.kakao.com/8364878,37.4961816229,127.0119190392,adopt
+st_20521,인천시립박물관,http://place.map.kakao.com/8052890,37.420759623,126.6531499531,adopt
+st_20525,반포한강공원,http://place.map.kakao.com/27601644,37.5077328949,126.9927253253,adopt
+st_20527,경희대학교 평화의전당,http://place.map.kakao.com/17561258,37.5986824731,127.0527738146,adopt
+st_20618,여의도한강공원 물빛광장,http://place.map.kakao.com/867818456,37.5314573841,126.9269813204,adopt
+st_20640,가든갤러리 팔당덕소본점,http://place.map.kakao.com/8113534,37.5878576038,127.1740895796,adopt
+st_20667,삽교호놀이동산,http://place.map.kakao.com/143538080,36.8898430387,126.822629479,adopt
+st_20866,서울드래곤시티,http://place.map.kakao.com/485944812,37.5318164677,126.9627641396,adopt
+st_20872,경희대학교 평화의전당,http://place.map.kakao.com/17561258,37.5986824731,127.0527738146,adopt
+st_20950,문화제조창,http://place.map.kakao.com/27158741,36.655723291,127.4924188317,adopt
+st_20951,수암골 벽화마을,http://place.map.kakao.com/12428602,36.647336884,127.4942877814,adopt
+st_20962,인천문학경기장 암벽장,http://place.map.kakao.com/17572807,37.433978318,126.6932093572,adopt
+st_20964,하늘공원 메타세쿼이아길,http://place.map.kakao.com/25037568,37.5653468255,126.8834432025,adopt

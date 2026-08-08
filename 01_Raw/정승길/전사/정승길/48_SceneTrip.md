@@ -1,6 +1,6 @@
 ---
-source: "[[48_SceneTrip.md]]"
-source_path: "01_Raw/정승길/history/48_SceneTrip.md"
+source: "[[01_Raw/정승길/전사/정승길/48_SceneTrip]]"
+source_path: 01_Raw/정승길/history/48_SceneTrip.md
 author: 정승길
 date: 2026-07-25
 type: raw-transcription

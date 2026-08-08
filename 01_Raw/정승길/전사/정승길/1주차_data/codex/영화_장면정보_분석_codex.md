@@ -1,6 +1,6 @@
 ---
-source: "[[1주차_data/codex/영화_장면정보_분석_codex]]"
-source_path: "01_Raw/정승길/1주차_data/codex/영화_장면정보_분석_codex.md"
+source: "[[01_Raw/정승길/전사/정승길/1주차_data/codex/영화_장면정보_분석_codex]]"
+source_path: 01_Raw/정승길/1주차_data/codex/영화_장면정보_분석_codex.md
 author: 정승길
 date: 2026-07-30
 type: raw-transcription

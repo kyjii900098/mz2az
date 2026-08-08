@@ -10,8 +10,8 @@ topic:
   - 데이터확보
 adopted: yes
 source:
-  - "[[1주차_data/codex/작업진행_codex|1주차_data/codex/작업진행_codex]]"
-  - "[[2026-07-30-1600-codex-촬영지리서치-위임]]"
+  - "[[01_Raw/정승길/(1주차)data/codex/작업진행_codex|1주차_data/codex/작업진행_codex]]"
+  - "[[01_Raw/정승길/(1주차)data/logs/2026-07-30-1600-codex-촬영지리서치-위임]]"
 related:
   - 촬영지 데이터 v1~v6 계보
 ---

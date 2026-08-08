@@ -1,6 +1,6 @@
 ---
-source: "[[1주차_data/codex/RESEARCH/영화_촬영지_장면정보_codex_20260730_030302/README]]"
-source_path: "01_Raw/정승길/1주차_data/codex/RESEARCH/영화_촬영지_장면정보_codex_20260730_030302/README.md"
+source: "[[01_Raw/정승길/전사/정승길/1주차_data/codex/RESEARCH/영화_촬영지_장면정보_codex_20260730_030302/README]]"
+source_path: 01_Raw/정승길/1주차_data/codex/RESEARCH/영화_촬영지_장면정보_codex_20260730_030302/README.md
 author: 정승길
 date: 2026-07-30
 type: raw-transcription

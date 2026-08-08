@@ -1,6 +1,6 @@
 ---
-source: "[[SceneTrip 아키텍처 — 기능·API·데이터 전략.md]]"
-source_path: "01_Raw/정승길/history/51_SceneTrip 아키텍처/SceneTrip 아키텍처 — 기능·API·데이터 전략.md"
+source: "[[01_Raw/정승길/전사/정승길/51_SceneTrip 아키텍처/SceneTrip 아키텍처 — 기능·API·데이터 전략]]"
+source_path: 01_Raw/정승길/history/51_SceneTrip 아키텍처/SceneTrip 아키텍처 — 기능·API·데이터 전략.md
 author: 정승길
 date: 2026-07-28
 type: raw-transcription

@@ -1,6 +1,6 @@
 ---
-source: "[[1주차_data/README]]"
-source_path: "01_Raw/정승길/1주차_data/README.md"
+source: "[[01_Raw/정승길/전사/정승길/1주차_data/README]]"
+source_path: 01_Raw/정승길/1주차_data/README.md
 author: 정승길
 date: 2026-07-30
 type: raw-transcription

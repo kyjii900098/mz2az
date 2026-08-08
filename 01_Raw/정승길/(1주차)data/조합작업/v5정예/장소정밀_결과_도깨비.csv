@@ -1,0 +1,38 @@
+﻿id,정정명칭,naver_place_url,lat,lng,scene_description,source_url,비고
+st_05200,,,,,,,빈칸목록이 장소사진뿐이라 이번 작업 범위 아님(정정명칭 참고용: 순보석)
+st_05209,,,,,,,빈칸목록이 장소사진뿐이라 이번 작업 범위 아님(정정명칭 참고용: 송림휴먼시아)
+st_05212,,,,,,,빈칸목록이 장소사진뿐이라 이번 작업 범위 아님(정정명칭 참고용: 인천의료원)
+st_05221,,,,,,,빈칸목록이 장소사진뿐이라 이번 작업 범위 아님(정정명칭 참고용: 미광세탁소)
+st_05222,BBQ치킨 대청점,https://map.naver.com/p/entry/place/11798820,,,,https://map.naver.com/p/entry/place/11798820,"주소(일원로9길 8 1층) 완전 일치, 네이버 예약 연동 중인 영업중 매장으로 확인됨. 원 place_name 'BBQ'는 지점명 없는 축약 표기였던 것으로 보임"
+st_05225,,https://map.naver.com/p/entry/place/12002109,,,,https://map.naver.com/p/entry/place/12002109,"교명 동일. 다만 검색결과 도로명주소는 '서울 중구 환일길 47'(원 데이터는 마포구 환일길 48)로 자치구 표기가 달랐음 - 좌표는 원 데이터와 근접(오차 약150m 이내)하여 동일 학교로 판단, 자치구 불일치는 원본 주소 필드 오류 가능성 있어 비고로만 남김"
+st_05226,,,,,,https://blog.naver.com/bl85219/220948995978,"주소(대신동 143-24) 정확 지점에 등록된 네이버 place 없음(로컬검색 total:0). 블로그(bl85219, 2017)에 따르면 이 일대는 '신촌 굴다리(토끼굴)'로 불리며 도깨비 촬영지로 실제 이용되었다고 확인되나, 지하보도 구조물 자체라 특정 place ID가 없어 URL 확보 불가"
+st_05227,,,,,,https://blog.naver.com/bl85219/220948995978,"st_05226과 동일한 지하보도(신촌 토끼굴)의 반대편 입구로 추정. 주소(신촌동 81-19) 지점 네이버 place 미등록, 특정 place ID 없어 URL 확보 불가"
+st_05228,폐업 - 현재는 광일프라자 건물에 올리브영 서초우성점·손상원클라이밍짐 강남역점 등 입점,,,,,https://search.naver.com/search.naver?query=%EC%84%9C%EC%B4%88%EA%B5%AC%20%EA%B0%95%EB%82%A8%EB%8C%80%EB%A1%9C%20331,해당 주소(강남대로 331) 네이버 로컬검색 결과 베스킨라빈스는 없고 올리브영(id 2034697224)·클라이밍짐(id 1169859106) 등이 조회됨 - 폐업/업종변경 확인. 원 장소 place ID 없어 naver_place_url 공란
+st_05231,홍익대부속중고등학교입구(버스정류장),https://map.naver.com/p/entry/place/105250,,,,https://map.naver.com/p/entry/place/105250,"버스정류장 POI. 좌표(127.0016490,37.5933506)가 원 데이터(127.001707,37.593393)와 5m 이내로 일치. 정류장 ARS번호 08231. 반대방향 정류장(id 105227)도 존재하나 좌표 일치도는 이쪽이 더 높음"
+st_05232,써브웨이 여의도KBS본관점,https://map.naver.com/p/entry/place/99496800,,,,https://map.naver.com/p/entry/place/99496800,"주소(국회대로62길 25 교육시설재난공제회관) 완전 일치, 영업중 확인. 네이버 공식 표기는 '써브웨이'(원 데이터 '서브웨이'는 일반 표기)"
+st_05233,국회의사당,https://map.naver.com/p/entry/place/11583151,,,,https://map.naver.com/p/entry/place/11583151,장소명은 '국회의사당옆길'(도로/거리)이나 별도 도로 POI가 없어 주소(의사당대로 1) 완전 일치하는 국회의사당 본청 POI로 연결. 실제 촬영 지점은 이 건물 인근 도로로 추정
+st_05235,하루,https://map.naver.com/p/entry/place/1513962801,,,,https://map.naver.com/p/entry/place/1513962801,'퍼스트루머'에서 사주카페 '하루'로 업종변경(계동길 125 1층). 지번·좌표 정확 일치(오차 1m 미만). 인근 중앙고등학교(도깨비 은탁 학교 외관 촬영지)와 근접해 있어 scene_description의 '학교' 표현과 연결됨
+st_05243,,,,,,,지번(안국동 177-2)으로 네이버 플레이스 검색 시 등록 업체 없음(0건). 이 구간은 블로그(busanpen) 확인 결과 도깨비 등하교길 촬영지로 알려진 '(구)덕성여고~(구)풍문여고 사이 돌담골목'과 일치. 구 풍문여고 자리는 현재 서울공예박물관(안국동 175-112)으로 재건축되어 개별 상가가 아닌 공공기관 부지일 가능성이 있으나 177-2 지번 자체를 확정하지 못해 빈칸 처리. source: https://blog.naver.com/busanpen/220886991407
+st_05244,,https://map.naver.com/p/entry/place/1058683842,,,,https://map.naver.com/p/entry/place/1058683842,"원래 상호 '북촌사진관' 그대로 현재도 영업 중(윤보선길 65 지하층, 사진/스튜디오). 지번·좌표 정확 일치(오차 1~6m)"
+st_05245,희녹 북촌 플래그십 스토어,https://map.naver.com/p/entry/place/1811660409,,,,https://map.naver.com/p/entry/place/1811660409,'스튜디오호세'에서 화장품 브랜드 '희녹' 매장으로 업종변경(윤보선길 69 1층). 지번·좌표 정확 일치(오차 2m 미만)
+st_05246,푸드떼,https://map.naver.com/p/entry/place/1603381706,,,,https://map.naver.com/p/entry/place/1603381706,원래 place_name이 '푸드떼옆'(기준점)이며 기준업체 '푸드떼'(카페/한옥)는 현재도 영업 중. 네이버 등록 지번은 율곡로1길 40-37 한옥으로 원본(40-31)과 번지는 다르나 좌표 차이 약 20m로 동일 한옥 골목 내 인접 건물로 판단
+st_05248,SVA Seoul Office / 앤드류장 갤러리,https://map.naver.com/p/entry/place/1191823005,,,,https://map.naver.com/p/entry/place/1191823005,'이니스프리' 폐점 후 갤러리 겸 사무실로 변경(율곡로3길 73). 지번·좌표 정확 일치(오차 1m 미만)
+st_05249,배스킨라빈스 삼청마당점,https://map.naver.com/p/entry/place/1908165652,,,,https://map.naver.com/p/entry/place/1908165652,'피케이엠북스'에서 아이스크림 프랜차이즈로 업종변경(율곡로3길 74-1). 지번·좌표 정확 일치(오차 3m 미만)
+st_05250,솔트24 북촌점,https://map.naver.com/p/entry/place/1979892243,,,,https://map.naver.com/p/entry/place/1979892243,"원래 표기 '솔트24앞'과 동일 업체, 정식 지점명 '솔트24 북촌점'으로 계속 영업 중(카페/디저트). 지번·좌표 정확 일치(오차 3m 미만)"
+st_05199,,,,,,https://ififollowme.blogspot.com/2017/11/cafe-hwayoil.html; https://search.naver.com/search.naver?query=신포로23번길 80,"원 상호는 ""문화살롱 카페 화(花)요일""(2017년 블로그 확인, 주소 일치). 현재 폐업 추정. naver.me 단축링크가 가리키던 place ID(13448171)는 현재 서울 간데메공원으로 재할당되어 사용 불가(ID 재사용 확인됨). 같은 주소에 현재 ""패밀리산도""·""서니구락부"" 두 카페가 등록돼 있으나 후신 특정 근거 부족해 URL 미기재"
+st_05203,,,,,,https://ififollowme.blogspot.com/2017/11/jeon-dong-jung-gu-incheon.html,"특정 상호 없는 골목/주택가. 주소(전동로6번길 2-7)는 2017년 블로그로 확정. 네이버 지도에 등록된 place ID 없음(주소 단위 핀만 존재, 검색형 URL 금지 규정상 미기재)"
+st_05208,,,,,,https://ififollowme.blogspot.com/2018/03/seoheung-elementary-school-bus-station.html; https://search.naver.com,"네이버 지도 버스정류장 ID(map.naver.com/p/entry/bus-station/152188) 후보를 2018년 도깨비 촬영지 전문 블로그의 naver.me 단축링크에서 확인했으나, 같은 방식으로 얻은 1번 항목 ID가 재사용된 사례가 있어 완전히 신뢰하기 어려워 미기재. 참고: 서흥초등학교 자체 place ID는 12322473(37.4793661,126.6444314)"
+st_05210,,,37.478592,126.650770,,https://ififollowme.blogspot.com/2018/03/songlim-dong-dong-gu-incheon.html,"상호 ""금벨세탁"" 자체는 재확인 못했으나 주소(인중로716번길 1)는 확정. 네이버 지도에 등록 place 없음(폐업/철거 추정)이라 URL 미기재. 좌표는 해당 주소 구글 스트리트뷰 카메라 위치 기준 근사치"
+st_05211,,,37.478638,126.650812,,https://ififollowme.blogspot.com/2018/03/bluebird-piano-academy.html,"원문에 ""(철거)""로 명시된 철거 장소. 주소(인중로716번길 6) 확정. place ID 없어 URL 미기재. 좌표는 스트리트뷰 근사치"
+st_05213,인천광역시의료원,https://map.naver.com/p/entry/place/12176412,,,,https://map.naver.com/p/api/place/summary/12176412 (주소 인천 제물포구 방축로 217 완전 일치),"횡단보도 자체는 개별 place가 아니므로 바로 앞 랜드마크인 인천광역시의료원(인천의료원) place ID 기재. 도로명주소가 방축로 217로 원 주소와 완전 일치, 좌표(37.4787429,126.66875)도 기존 좌표와 거의 동일"
+st_05214,인천스타트업파크(구 투모로우시티),https://map.naver.com/p/entry/place/16634389,,,,https://www.donga.com/news/article/all/20200225/99875700/1; https://map.naver.com/p/api/place/summary/16634389,"2020년경 ""투모로우시티""가 창업 지원 공간으로 리브랜딩되어 현재 ""인천스타트업파크""로 운영 중. 주소(컨벤시아대로 204) 완전 일치"
+st_05220,한샘마트(구 홈누리마트 부개점 추정),https://map.naver.com/p/entry/place/1948536664,37.4914328,126.7397043,,https://search.naver.com/search.naver?query=수변로57번길 9; https://ififollowme.blogspot.com/2017/11/home-nuri-mart.html; https://map.naver.com/p/api/place/summary/1948536664,"도로명주소 DB상 ""수변로57번길 9""가 지번 부개동 513, (홈누리마트) 로 등록되어 있고, 현재 부개동 513에는 ""한샘마트""가 영업 중(같은 지번, 도로명 상세번지는 21로 다름 - 같은 건물단지 내 다른 출입구 추정). 완전한 동일업체 확정은 아님"
+st_05253,창신동달커피,https://map.naver.com/p/entry/place/1393350137,,,,https://map.naver.com/p/entry/place/1393350137,"도로명주소(창신6가길 48)·좌표(37.5761,127.0128) 사실상 일치 확인. 정식 상호는 창신동달커피"
+st_05255,,,,,,,개인 사유 골목(지번 23-407)으로 특정 상호 없음. 네이버 검색/블로그로 정확한 랜드마크를 찾지 못해 빈칸 처리(주변에 카페 낙타 등 일반 상점 있으나 이 지번과 직접 매칭 안 됨)
+st_05256,,,,,,,써니(유인나) 개인 소유 주택으로 정확한 주소 비공개(era0823 블로그 '개인 소유의 집이라 정확한 주소는 나와있지 않다' 확인). 상호/네이버플레이스 없음
+st_05257,할리스 청계천점(구 BBQ 종로관철점 자리),https://map.naver.com/p/entry/place/1745656613,,,,https://map.naver.com/p/entry/place/1745656613,"원 촬영지 BBQ 프리미엄카페 종로관철점(주소: 청계천로81/관철동11-5, inspireyou7 블로그로 확인)은 네이버플레이스에서 사라짐(폐업 추정). 동일 도로명주소에 현재 할리스커피 청계천점이 영업 중"
+st_05258,갤러리1,https://map.naver.com/p/entry/place/1794735523,,,,https://map.naver.com/p/entry/place/1794735523,도로명주소(팔판길 1-12)·좌표 거의 일치. 정식명은 갤러리1이며 방영 당시 '갤러리원'으로 소개된 것으로 추정
+st_05260,,https://map.naver.com/p/entry/place/980043048,,,,https://map.naver.com/p/entry/place/980043048,네이버지도에 '드라마[도깨비]촬영지'(카테고리: 촬영장소)로 별도 등록된 지점 발견. 주소(덕수궁길 116) 완전 일치
+st_20429,,https://map.naver.com/p/entry/place/18834131,,,,https://map.naver.com/p/entry/place/18834131,"'일감호'로 등록된 건국대 캠퍼스 내 저수지. 도로명주소(능동로 120 건국대학교) 일치, 좌표는 호수 반대편이라 약 300m 차이"
+st_20431,삼청동문화거리,https://map.naver.com/p/entry/place/18671005,,,,https://map.naver.com/p/entry/place/18671005,"정식명은 삼청동문화거리(주소: 팔판동), 좌표 거의 일치. 인근 '삼청동길'(place 13513604, 삼청로156)은 좌표가 약 900m 멀어 제외"
+st_20432,,,,,16화(마지막회)에서 30년 후 형사가 된 왕여와 여배우가 된 써니의 재회를 김신이 지켜보는 장면,https://blog.naver.com/hs21589/220938465414,신뢰 출처(hs21589) 블로그에서 '한강시민공원 반포지구' 촬영지로 명시적으로 확인. 16화는 별도 검색으로 마지막회 왕여-형사/써니-여배우 재회 에필로그임을 교차 확인

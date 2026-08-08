@@ -1,6 +1,6 @@
 ---
-source: "[[1주차_data/codex/작업진행_codex]]"
-source_path: "01_Raw/정승길/1주차_data/codex/작업진행_codex.md"
+source: "[[01_Raw/정승길/전사/정승길/1주차_data/codex/작업진행_codex]]"
+source_path: 01_Raw/정승길/1주차_data/codex/작업진행_codex.md
 author: 정승길
 date: 2026-07-30
 type: raw-transcription

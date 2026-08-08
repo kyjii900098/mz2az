@@ -1,0 +1,38 @@
+﻿id,search_key,naver_url,confidence,matched_name
+st_04131,더현대서울 정류장,,failed,
+st_04132,더현대서울 YPHAUS라운지,,failed,
+st_04139,서울드래곤시티 랑데부,,failed,
+st_04150,앰배서더 서울 풀만 호텔 클럽 앰배서더 라운지,,failed,
+st_04199,"안내식당(폐업, '정육점식당' 세트로 사용됨)",,failed,
+st_04200,왕지3길 신안농원쪽,,failed,
+st_04201,왕지3길 정부지원농산물간이집하장 쪽,,failed,
+st_04205,왕림리,,failed,
+st_04210,용연길 다리,,failed,
+st_04211,용연길 다리지나서,,failed,
+st_04212,용연리(1),,failed,
+st_04213,용연리삼거리,,low,
+st_04214,용연리(2),https://map.naver.com/p/entry/place/15394348,coord,용연리마을회관
+st_04215,용연리(2-2),https://map.naver.com/p/entry/place/15394329,coord,용연교회
+st_04216,용연리(3),https://map.naver.com/p/entry/place/15394348,coord,용연리마을회관
+st_04217,용연리(4),https://map.naver.com/p/entry/place/15394348,coord,용연리마을회관
+st_04218,용연리(5),https://map.naver.com/p/entry/place/15394348,coord,용연리마을회관
+st_04219,용연리(6),https://map.naver.com/p/entry/place/15394348,coord,용연리마을회관
+st_04220,용연리(7),https://map.naver.com/p/entry/place/15394348,coord,용연리마을회관
+st_04221,용연리(8),,failed,
+st_05199,카페 화요일,,low,
+st_05203,인천 중구 전동,,low,
+st_05208,서흥초등학교 버스정류장,,failed,
+st_05210,금벨세탁,,low,
+st_05211,파랑새 피아노학원,,low,
+st_05226,신촌설렁탕앞,,failed,
+st_05227,토끼굴,,low,
+st_05228,폐업 - 현재는 광일프라자 건물에 올리브영 서초우성점·손상원클라이밍짐 강남역점 등 입점,,failed,
+st_05243,덕성여고앞,,failed,
+st_05255,창신동골목,,low,
+st_05256,창신동집,,low,
+st_15315,코다차야 홍대점(폐업 확인),,failed,
+st_15319,써스티몽크맞은편,,failed,
+st_15332,어썸스피릿 이태원별밤(구 클럽 펌킨),,failed,
+st_15335,더부스 광화문점(폐업 추정),,failed,
+st_20358,가람마루 전망대(건지마을 전망대),,failed,
+mv_6958_04,코엑스 K-POP 광장(K-POP SQUARE MEDIA),,failed,

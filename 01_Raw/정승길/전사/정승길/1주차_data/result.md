@@ -1,6 +1,6 @@
 ---
-source: "[[1주차_data/result]]"
-source_path: "01_Raw/정승길/1주차_data/result.md"
+source: "[[01_Raw/정승길/전사/정승길/1주차_data/result]]"
+source_path: 01_Raw/정승길/1주차_data/result.md
 author: 정승길
 date: 2026-08-02
 type: raw-transcription

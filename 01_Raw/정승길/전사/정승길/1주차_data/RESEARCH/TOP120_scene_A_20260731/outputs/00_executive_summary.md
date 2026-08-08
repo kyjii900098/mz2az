@@ -1,6 +1,6 @@
 ---
-source: "[[1주차_data/RESEARCH/TOP120_scene_A_20260731/outputs/00_executive_summary]]"
-source_path: "01_Raw/정승길/1주차_data/RESEARCH/TOP120_scene_A_20260731/outputs/00_executive_summary.md"
+source: "[[01_Raw/정승길/전사/정승길/1주차_data/RESEARCH/TOP120_scene_A_20260731/outputs/00_executive_summary]]"
+source_path: 01_Raw/정승길/1주차_data/RESEARCH/TOP120_scene_A_20260731/outputs/00_executive_summary.md
 author: 정승길
 date: 2026-07-31
 type: raw-transcription
