@@ -7,4 +7,7 @@
 01_Raw/정승길/1주차_data/RESEARCH/
 01_Raw/정승길/1주차_data/조합작업/
 01_Raw/정승길/1주차_data/codex/
+# 지명 이표기 — 외부에서 받은 원본 덤프(33MB). 스크립트로 다시 받을 수 있다
+01_Raw/정승길/지명 외래어표기/data/geonames_kr_raw.tsv
+01_Raw/정승길/지명 외래어표기/data/geonames_kr_altnames_raw.tsv
 .gstack/
